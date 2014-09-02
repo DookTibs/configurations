@@ -1,0 +1,5 @@
+" this should live in my home directory
+source ~/development/configurations/vim/plugins.vim
+source ~/development/configurations/vim/functions.vim
+source ~/development/configurations/vim/main.vim
+source ~/development/configurations/vim/carleton.vim

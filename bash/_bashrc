@@ -1,0 +1,18 @@
+# If not running interactively, don't do anything
+[[ "$-" != *i* ]] && return
+
+if [ -f "${HOME}/development/configurations/bash/functions.bash" ]; then
+	source "${HOME}/development/configurations/bash/functions.bash"
+fi
+
+if [ -f "${HOME}/development/configurations/bash/sensitive_data.bash" ]; then
+	source "${HOME}/development/configurations/bash/sensitive_data.bash"
+fi
+
+if [ -f "${HOME}/development/configurations/bash/main.bash" ]; then
+	source "${HOME}/development/configurations/bash/main.bash"
+fi
+
+if [ -f "${HOME}/development/configurations/bash/carleton.bash" ]; then
+	source "${HOME}/development/configurations/bash/carleton.bash"
+fi
