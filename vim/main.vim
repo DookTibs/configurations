@@ -26,7 +26,8 @@ set noexpandtab
 set incsearch
 set hlsearch
 syntax on
-filetype on
+" filetype on
+filetype plugin indent on
 
 " set working directory to whatever we just opened, interesting...
 set autochdir
