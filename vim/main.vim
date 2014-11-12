@@ -26,8 +26,13 @@ set noexpandtab
 set incsearch
 set hlsearch
 syntax on
-" filetype on
-filetype plugin indent on
+filetype on
+
+" I don't like this type of behavior as much...makes auto-indent not-so-hot
+" when doing stuff like editing javascript/css embedded in another page. (of
+" course, if I wanted to enforce that type of separation, adding this back in
+" would be good incentive!)
+" filetype plugin indent on
 
 " set working directory to whatever we just opened, interesting...
 set autochdir
@@ -43,12 +48,20 @@ map <Space> :call ShowTagPrototype()<enter>
 " also have some in ~/.vim/bundle like vim-colors-solarized (along with other plugins)
 " colorscheme torteTibs
 " colorscheme torte
-colorscheme solarized " see https://github.com/altercation/vim-colors-solarized / http://ethanschoonover.com/solarized
+" colorscheme solarized " see https://github.com/altercation/vim-colors-solarized / http://ethanschoonover.com/solarized
 " colorscheme torte
+
+" new way - decide on solarized/torte on the fly. have to use "execute" to
+" build up the command dynamically
+let appropriateColorScheme = system("selectAppropriateVimColorScheme.sh")
+execute 'colorscheme' appropriateColorScheme
+
+
 if g:colors_name == "solarized"
 	" syntax enable
 	set background=dark
 endif
+
 
 " airline
 " always show the status line

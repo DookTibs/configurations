@@ -5,6 +5,20 @@ alias vit='vim -t' # start with a tag
 alias ls='ls -ltrG'
 alias tmux='tmux -2' # force tmux to recognize 256 color display
 
+if [ ${OSTYPE} = "cygwin" ]; then
+	declare -x TOM_OS="cygwin"
+elif [ `uname` = "Darwin" ]; then
+	declare -x TOM_OS="osx"
+fi
+
+if [ ${TOM_OS} = "cygwin" ]; then
+	declare -x CHROMIX='/cygdrive/c/development/tools/chromix-master'
+elif [ ${TOM_OS} = "osx" ]; then
+	declare -x CHROMIX="/usr/local/lib/node_modules/chromix/snapshots/"
+	alias chromelog='tail -f /Users/tfeiler/Library/Application\ Support/Google/Chrome/chrome_debug.log'
+	alias chromelogClean='chromelog | filterChromeConsole.sh'
+fi
+
 # use vi for shell editing
 set -o vi
 

@@ -14,15 +14,18 @@ alias smount_comps="mountSsh.sh $_CARL_MY_USERNAME@$_LIVE_COMPS_SERVERNAME:$_SER
 # ssh shortcuts
 alias ssh_wsg="ssh -2 $_CARL_MY_USERNAME@$_DEV_MOODLE_SERVERNAME"
 alias ssh_vent="ssh -2 $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME"
-alias ssh_persia="ssh -2 $_CARL_MY_USERNAME@$_LIVE_COMPS_SERVERNAME" # comps.carleton.edu production (no dev, no qa)
-alias ssh_chi="ssh -2 $_CARL_MY_USERNAME@$_LIVE_APPS_SERVERNAME"	# apps.carleton.edu
-alias ssh_chi5="ssh -2 $_CARL_MY_USERNAME@$_LIVE_WWW_SERVERNAME"	# www.carleton.edu
+alias ssh_persia="ssh -2 $_CARL_MY_USERNAME@$_LIVE_COMPS_SERVERNAME"
+alias ssh_chi="ssh -2 $_CARL_MY_USERNAME@$_LIVE_APPS_SERVERNAME"
+alias ssh_chi5="ssh -2 $_CARL_MY_USERNAME@$_LIVE_WWW_SERVERNAME"
+alias ssh_mitre="ssh -2 $_CARL_MY_USERNAME@mitre.clamp-it.org"
 
 # mysql aliases
 alias mysql_vent="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS $_DEV_RSN_DB_NAME_MYDEV'"
 alias mysql_ventTest="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS $_DEV_RSN_DB_NAME_TEST'"
 alias mysql_mbsOld="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DEV_MBS_DB_USER -p$_DEV_MBS_DB_PASS $_DEV_MBS_DB_NAME'"
 alias mysql_moodle="ssh -t $_CARL_MY_USERNAME@$_DEV_MOODLE_SERVERNAME 'mysql -u$_DEV_MOODLE_DB_USER -p$_DEV_MOODLE_DB_PASS $_DEV_MOODLE_DB_NAME'"
+alias mysql_thor="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS $_DEV_RSN_DB_NAME_THORDEV'"
+alias mysql_doc="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DOC_DB_USER -p$_DOC_DB_PASS $_DOC_DB_NAME -h$_CARLETON_LIVE_MYSQL_SERVER'"
 
 alias errorlog_vent="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'tail -f $_SERVPATH_ERRLOG'"
 
