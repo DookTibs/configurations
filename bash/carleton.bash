@@ -10,6 +10,7 @@ alias smount_wsg="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_MOODLE_SERVERNAME:$_SERVP
 alias smount_vent="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME:$_SERVPATH_SLOTE ventnorTfeilerReason 22"
 alias smount_clamp="mountSsh.sh $_CARL_MY_USERNAME@$_CLAMP_SERVERNAME:$_SERVPATH_CLAMP mitreClampHome 22"
 alias smount_comps="mountSsh.sh $_CARL_MY_USERNAME@$_LIVE_COMPS_SERVERNAME:$_SERVPATH_COMPS persiaComps 22"
+alias smount_omeka="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_OMEKA_SERVERNAME:$_SERVPATH_OMEKA wsgOmeka 22"
 
 # ssh shortcuts
 alias ssh_wsg="ssh -2 $_CARL_MY_USERNAME@$_DEV_MOODLE_SERVERNAME"
@@ -34,3 +35,4 @@ alias moodleCheck='~/development/moodle/tools/PHP_CodeSniffer-2.0.0a2/scripts/ph
 alias goremotes='cd ~/remotes/'
 alias goslote='cd ~/remotes/ventnorTfeilerReason/'
 alias goform='cd ~/development/jsloteFormBuilder/formbuilder-rsn'
+alias goomeka='cd ~/remotes/wsgOmeka/'

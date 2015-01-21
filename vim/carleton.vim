@@ -71,8 +71,8 @@ elseif stridx(currentDir, "/Users/tfeiler/development") == 0
 	elseif stridx(currentDir, "/Users/tfeiler/development/jsloteFormBuilder/formbuilder-rsn") == 0
 		map <backspace> :call ReloadChromeTab("formbuilder-rsn/index.html")<enter>
 		" map <backspace> :call ReloadChromeTab("slote.test.carleton.edu/reason/index.php")<enter>
-		" map \ :call SendFreshCommandToTMUX("grunt \&\& ./copyToReason.sh")<enter>
-		map \ :call SendFreshCommandToTMUX("grunt")<enter>
+		map \ :call SendFreshCommandToTMUX("grunt \&\& ./copyToReason.sh")<enter>
+		" map \ :call SendFreshCommandToTMUX("grunt")<enter>
 		set tags=tags,/Users/tfeiler/development/jsloteFormBuilder/formbuilder-rsn/coffeeTags
 	elseif stridx(currentDir, "/Users/tfeiler/development/jsloteFormBuilder/formbuilder") == 0
 		set tags=tags,/Users/tfeiler/development/jsloteFormBuilder/formbuilder/coffeeTags
