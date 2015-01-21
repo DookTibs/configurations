@@ -244,6 +244,12 @@ function ReloadChromeTab(pattern)
 	echo "reloading Chrome tabs with [" . a:pattern . "] url's..."
 endfunction
 
+function SendNetcatCommand(server, port, command)
+	silent execute "!echo '" . a:command . "' | nc " . a:server . " " . a:port
+	redraw!
+	echo "sent [" . a:command . "] over netcat to server [" . a:server . ":" . a:port . "]..."
+endfunction
+
 function ToggleBlockCommentC()
 	call ToggleBlockComment("/*", "*/")
 endfunction
