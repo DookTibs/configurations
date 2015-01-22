@@ -244,10 +244,17 @@ function ReloadChromeTab(pattern)
 	echo "reloading Chrome tabs with [" . a:pattern . "] url's..."
 endfunction
 
+" see scripts/loanerPseudoServer.sh for example of how this is useful
 function SendNetcatCommand(server, port, command)
 	silent execute "!echo '" . a:command . "' | nc " . a:server . " " . a:port
 	redraw!
 	echo "sent [" . a:command . "] over netcat to server [" . a:server . ":" . a:port . "]..."
+endfunction
+
+function SendNodeTestCmd(url)
+	silent execute "!curl " . a:url
+	redraw!
+	echo "hit [" . a:url . "]"
 endfunction
 
 function ToggleBlockCommentC()
