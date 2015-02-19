@@ -34,5 +34,7 @@ alias moodleCheck='~/development/moodle/tools/PHP_CodeSniffer-2.0.0a2/scripts/ph
 
 alias goremotes='cd ~/remotes/'
 alias goslote='cd ~/remotes/ventnorTfeilerReason/'
+alias gotemplates='cd ~/remotes/ventnorTfeilerReason/reason_package_local/local/minisite_templates'
+alias gomodules='cd ~/remotes/ventnorTfeilerReason/reason_package_local/local/minisite_templates/modules'
 alias goform='cd ~/development/jsloteFormBuilder/formbuilder-rsn'
 alias goomeka='cd ~/remotes/wsgOmeka/'
