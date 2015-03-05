@@ -1,0 +1,26 @@
+--langdef=actionscript
+--langmap=actionscript:.as
+--regex-actionscript=/^[ \t]*[override[ \t]+]*(public|private)+.*function[ \t]+get[ \t]+([A-Za-z0-9_]+)[ \t]*\(/\2/g, getter, getters/
+--regex-actionscript=/^[ \t]*[override[ \t]+]*(public|private)+.*function[ \t]+set[ \t]+([A-Za-z0-9_]+)[ \t]*\(/\2/s, setter, setters/
+--regex-actionscript=/^.*public.*function[ \t]+([A-Za-z0-9_]+)[ \t]*\(/\1/F, pubfunction, pubfunctions/
+--regex-actionscript=/^.*private.*function[ \t]+([A-Za-z0-9_]+)[ \t]*\(/\1/f, prifunction, prifunctions/
+--regex-actionscript=/^.*protected.*function[ \t]+([A-Za-z0-9_]+)[ \t]*\(/\1/z, profunction, profunctions/
+--regex-actionscript=/^.*const[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/k,const, consts/
+--regex-actionscript=/^.*(private|public|protected)+.*var[ \t]+([A-Za-z0-9_]+)[ \t]*/\2/p,property, properties/
+--regex-actionscript=/.*\.prototype \.([A-Za-z0-9 ]+)=([ \t]?)function( [ \t]?)*\(/\1/ f,function, functions/
+--regex-actionscript=/^[ \t]*[(public|final) ( \t)]*class[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class, classes/
+
+--langdef=js
+--langmap=js:.js
+--regex-js=/([A-Za-z0-9_$]+)[ \t]*[:=][ \t]*function[A-Za-z0-9_$ \t]*\(/\1/f, function, functions/
+--regex-js=/\[[ \t]*['"]([A-Za-z0-9_$ ]+)['"][ \t]*\][ \t]*=[ \t]*function[A-Za-z0-9_$ \t]*\(/\1/f, function, functions/
+--regex-js=/['"]([A-Za-z0-9_$ ]+)['"][ \t]*:[ \t]*function[A-Za-z0-9_$ \t]*\(/\1/f, function, functions/
+--regex-js=/function[ \t]+([A-Za-z0-9_$]+)[ \t]*([^)])/\1/f, function, functions/
+--regex-js=/(\b[A-Z][A-Za-z0-9_$]*)[ \t]*=[ \t]*new[ \t]+/\1/v, variable, variables/
+--regex-js=/(\b[A-Z][A-Z0-9_$]*)[ \t]*=/\1/c, constant, contants/
+
+--langdef=coffee
+--langmap=coffee:.coffee
+--regex-coffee=/^[ \t]*class ([a-zA-Z_$][0-9a-zA-Z_$]*)([ \t]+extends.*)?/\1/c,class,classes/
+--regex-coffee=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*):.*->.*/\1/f,function,functions/
+--regex-coffee=/^[ \t]*@([a-zA-Z_$][0-9a-zA-Z_$]*):.*->.*/\1/s,static,static methods/
