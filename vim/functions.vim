@@ -327,5 +327,9 @@ function PasteToggler()
 			" when we leave insert mode, call this function again and we'll toggle paste back off
 			autocmd InsertLeave <buffer> call PasteToggler()
 		augroup END
+	else
+		augroup paste_callback
+			autocmd!
+		augroup END
 	endif
 endfunction
