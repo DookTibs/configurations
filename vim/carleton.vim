@@ -12,7 +12,7 @@ endif
 if stridx("foo", "bar") == 0
 	" echo this is just here so that I can re-order the elseif's easily...it's obviously always false
 elseif stridx(currentDir, "/Users/tfeiler/remotes/mitreClampHome") == 0
-	set tags=tags,/Users/tfeiler/remotes/mitreClampHome/tjfdev20140926/tags
+	set tags=tags,/Users/tfeiler/remotes/mitreClampHome/showHideCourse_20150305/tjfTags
 elseif stridx(currentDir, "/Users/tfeiler/remotes/ventnorTfeilerReason") == 0
 	let relativePath = substitute(currentDir, "/Users/tfeiler/remotes/ventnorTfeilerReason/\\(.*\\)", "\\1", "")
 	" echo "relativepath [" . relativePath . "]..."
@@ -38,7 +38,8 @@ elseif stridx(currentDir, "/Users/tfeiler/remotes/ventnorTfeilerReason") == 0
 	elseif stridx(relativePath, "reason_package_local/local/minisite_templates/modules") == 0
 		" map \ :call ReloadChromeTab("slote.test.carleton.edu/giving/giftmap-demo")<enter>
 		" map \ :call ReloadChromeTab("slote.test.carleton.edu/home")<enter>
-		map \ :call ReloadChromeTab("https://slote.test.carleton.edu/campus/webgroup/reason101/mbs/")<enter>
+		" map \ :call ReloadChromeTab("https://slote.test.carleton.edu/campus/webgroup/reason101/mbs/")<enter>
+		map \ :call ReloadChromeTab("news2015")<enter>
 	elseif stridx(relativePath, "reason_package_local/local/scripts/upgrade/mbs") == 0
 		map \ :call SendFreshCommandToTMUX("/usr/local/wsg/php5/bin/php -d include_path=/usr/local/webapps/branches/slote-apps/reason_package/ mbsCreation.php")<enter>
 	elseif stridx(relativePath, "tjf/cams") == 0
@@ -104,3 +105,11 @@ elseif stridx(currentDir, "/Users/tfeiler/remotes/wsgTfeilerReasonCore") == 0
 else
 	" echo "WORKING ON UNKNOWN!"
 endif
+
+function ExplainReasonQuery()
+	" echo "eplain..."
+	let lineContents = getline(".")
+	let explainedQuery = systemlist("echo '" . lineContents . "' | ~/development/shellScripts/queryDebugger/queryDebugger.sh")
+	call setline(".", explainedQuery)
+endfunction
+" map <F5> :call ExplainReasonQuery()<enter>

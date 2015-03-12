@@ -304,3 +304,28 @@ function SetExpandTabForIndentedLanguages()
 		endif
 	endif
 endfunction
+
+" mapped to <C-P> for me usually; if paste mode was off, turns it on and enters insert mode. And,
+" sets up an autocommand to call this function again when existing insert mode.
+"
+" when called with insert mode on, turns it back off.
+"
+" Nice - now when I have stuff to paste in like sql or html or what have you I
+" can just do
+" ctrl-P			command-V	esc
+" (PasteToggler)	(paste)		(exit insert mode)
+function PasteToggler()
+	let inPasteMode = &paste
+	set paste!
+	if inPasteMode == 0
+		startinsert
+
+		augroup paste_callback
+			"clear the group
+			autocmd!
+
+			" when we leave insert mode, call this function again and we'll toggle paste back off
+			autocmd InsertLeave <buffer> call PasteToggler()
+		augroup END
+	endif
+endfunction

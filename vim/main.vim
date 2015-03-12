@@ -109,6 +109,10 @@ au FileType php set keywordprg=~/development/shellScripts/vim/php_doc.sh
 " au Syntax * RainbowParenthesesLoadBraces
 " map ) :RainbowParenthesesToggle<enter>
 
+" map CTRL-P to toggle paste mode. Interesting - once in cmd mode, can use
+" C-P/C-N to look at prev/next command history in vim
+map <C-P> :call PasteToggler()<enter>
+
 " clojure
 " au BufRead,BufNewFile *.clj xmap \ <Plug>SlimeRegionSend
 " au BufRead,BufNewFile *.clj nmap \ <Plug>SlimeParagraphSend
@@ -143,3 +147,8 @@ endif
 
 " disables persistent undo; I think I prefer the old way
 set noundofile
+
+" interesting - I used this to unravel a weird phising email - takes a capture
+" from a substitute command and appends it onto the A buffer, then jumps
+" around some windows. Couple of neat tricks I had never seen before
+" map \ :s-ccc += '\(.*\)'-\=setreg('A', submatch(1))-n<enter>j4bma*mb:'ad<enter>'b 
