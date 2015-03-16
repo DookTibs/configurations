@@ -333,3 +333,11 @@ function PasteToggler()
 		augroup END
 	endif
 endfunction
+
+" see http://vim.wikia.com/wiki/PHP_online_help for the idea; K is mapped to this function instead of default use of keywordprg
+function EnhancedKeywordLookup()
+	let wordUnderCursor = expand("<cword>")
+	let ft = &filetype
+	exe "silent !~/development/shellScripts/vim/keyword/vimKeywordLookup.js " . ft . " " . wordUnderCursor . " | less"
+	redraw!
+endfunction

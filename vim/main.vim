@@ -100,7 +100,9 @@ map TT :TlistToggle<enter>
 " use "gx" to open urls in browser
 
 " when editing php, make shift-K run this command that looks stuff up from php docs!
-au FileType php set keywordprg=~/development/shellScripts/vim/php_doc.sh
+map K :call EnhancedKeywordLookup()<enter>
+" au FileType php set keywordprg=~/development/shellScripts/vim/keyword/shortcuts/sc_php.sh
+" au FileType javascript set keywordprg=~/development/shellScripts/vim/keyword/shortcuts/sc_javascript.sh
 
 " rainbow parentheses
 " " au VimEnter * RainbowParenthesesActivate
