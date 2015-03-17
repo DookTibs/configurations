@@ -346,7 +346,7 @@ function EnhancedKeywordLookup()
 
 	if v:shell_error == 1
 		" no - attempt to run it via curl/simpleCommandServer
-		exe "silent !curl -s localhost:2499/vk/" . ft . "/" . " wordUnderCursor . " | less"
+		exe "silent !curl -s localhost:2499/vk/" . ft . "/" . wordUnderCursor . " | less"
 	else
 		" yes - just run the command
 		exe "silent !~/development/shellScripts/vim/keyword/keywordLookup.js " . ft . " " . wordUnderCursor . " | less"
