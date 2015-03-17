@@ -335,9 +335,23 @@ function PasteToggler()
 endfunction
 
 " see http://vim.wikia.com/wiki/PHP_online_help for the idea; K is mapped to this function instead of default use of keywordprg
+" note - this has two problems at the moment
 function EnhancedKeywordLookup()
 	let wordUnderCursor = expand("<cword>")
 	let ft = &filetype
-	exe "silent !~/development/shellScripts/vim/keyword/vimKeywordLookup.js " . ft . " " . wordUnderCursor . " | less"
-	redraw!
+
+	" check - are we running on my machine which has keywordLookup.js on it?
+	call system('hostname | grep "acs.carleton.edu"')
+
+	if v:shell_error == 1
+		" no - attempt to run it via curl/simpleCommandServer
+		" exe "silent !curl -s localhost:2499/vk/" . ft . "/" . " wordUnderCursor . " | less"
+		echo "run curl"
+	else
+		" yes - just run the command
+		" exe "silent !~/development/shellScripts/vim/keyword/keywordLookup.js " . ft . " " . wordUnderCursor . " | less"
+		echo "run cmd"
+	endif
+	" redraw!
+
 endfunction
