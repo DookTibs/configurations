@@ -335,21 +335,16 @@ function PasteToggler()
 endfunction
 
 " see http://vim.wikia.com/wiki/PHP_online_help for the idea; K is mapped to this function instead of default use of keywordprg
-" note - this has two problems at the moment...carleton stuff is hardcoded
-" within, and the port number is hardcoded too
 function EnhancedKeywordLookup()
 	let wordUnderCursor = expand("<cword>")
 	let ft = &filetype
 
-	" check - are we running on my machine which has keywordLookup.js on it?
-	call system('hostname | grep "acs.carleton.edu"')
-
-	if v:shell_error == 1
-		" no - attempt to run it via curl/simpleCommandServer
-		exe "silent !curl -s localhost:2499/vk/" . ft . "/" . wordUnderCursor . " | less"
-	else
-		" yes - just run the command
+	if g:remote_cmdserver_port == -1
+		" just run the command
 		exe "silent !~/development/shellScripts/vim/keyword/keywordLookup.js " . ft . " " . wordUnderCursor . " | less"
+	else
+		" attempt to run it via curl/simpleCommandServer
+		exe "silent !curl -s localhost:" . g:remote_cmdserver_port . "/vk/" . ft . "/" . wordUnderCursor . " | less"
 	endif
 	redraw!
 

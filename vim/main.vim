@@ -154,3 +154,9 @@ set noundofile
 " from a substitute command and appends it onto the A buffer, then jumps
 " around some windows. Couple of neat tricks I had never seen before
 " map \ :s-ccc += '\(.*\)'-\=setreg('A', submatch(1))-n<enter>j4bma*mb:'ad<enter>'b 
+let hostName=system('hostname')
+if stridx(hostName, ".acs.carleton.edu") != -1
+	let g:remote_cmdserver_port = -1
+else
+	let g:remote_cmdserver_port=2499
+endif
