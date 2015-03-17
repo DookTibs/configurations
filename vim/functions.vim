@@ -239,7 +239,13 @@ function ReloadChromeTab(pattern)
 	" it's worth it to step through this extra hoop
 	" silent execute "!chromix with " . a:pattern . " close ; chromix load " . a:pattern
 	" silent execute "!chromix with " . a:pattern . " reload ; chromix with " . a:pattern . " focus"
-	silent execute "!chromix load " . a:pattern . " ; chromix with " . a:pattern . " reload"
+	if g:remote_cmdserver_port == -1
+		silent execute "!chromix load " . a:pattern . " ; chromix with " . a:pattern . " reload"
+	else
+		" attempt to run it via curl/simpleCommandServer
+		exe "silent !curl -s localhost:" . g:remote_cmdserver_port . "/chromix/with/" . a:pattern . "/reload"
+	endif
+
 	redraw!
 	echo "reloading Chrome tabs with [" . a:pattern . "] url's..."
 endfunction
