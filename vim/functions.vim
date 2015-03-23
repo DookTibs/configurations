@@ -320,11 +320,14 @@ endfunction
 " can just do
 " ctrl-P			command-V	esc
 " (PasteToggler)	(paste)		(exit insert mode)
+" TODO - make this insert a blank line below
 function PasteToggler()
 	let inPasteMode = &paste
 	set paste!
 	if inPasteMode == 0
-		startinsert
+		" startinsert
+		" insert a blank line below and sstart pasting
+		normal o
 
 		augroup paste_callback
 			"clear the group
