@@ -49,6 +49,7 @@ alias diffgitdir='git bcdiff'
 alias tt="tmux attach -t"
 alias tl="tmux ls"
 alias tn="tmux new -s"
+alias tc="clear ; tmux clear-history"
 
 alias goscripts='cd ~/development/shellScripts/'
 
