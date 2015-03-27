@@ -97,6 +97,9 @@ map TT :TlistToggle<enter>
 "
 " CTAGS STUFF END
 
+" not ctags, but let's map TL to show listing of matching tags
+map TL g]
+
 " use "gx" to open urls in browser
 
 " when editing php, make shift-K run this command that looks stuff up from php docs!

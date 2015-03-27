@@ -297,7 +297,7 @@ function SetExpandTabForIndentedLanguages()
 		let fullFilename=expand("%:p")
 		" echo "full name [" fullFilename "]"
 
-		if currentFileType == "php" && (stridx(fullFilename, "${MOODLE_WSG}") == 0 || stridx(fullFilename, "/Users/tfeiler/remotes/mitreClampHome") == 0)
+		if currentFileType == "php" && (stridx(fullFilename, "${MOODLE_WSG}") == 0 || stridx(fullFilename, "/Users/tfeiler/remotes/mitreClampHome") == 0 || stridx(fullFilename, "/home/tfeiler/moodles") == 0)
 			" moodle coding standards call for spaces not tabs
 			" echo "php in moodle - expandtab"
 			set expandtab
