@@ -20,10 +20,13 @@ alias ssh_persia="ssh -2 $_CARL_MY_USERNAME@$_LIVE_COMPS_SERVERNAME"
 alias ssh_chi5="ssh -2 $_CARL_MY_USERNAME@$_LIVE_WWW_SERVERNAME"
 alias ssh_mitre="ssh -2 $_CARL_MY_USERNAME@mitre.clamp-it.org"
 
+alias ssvn="ssh_vent svn"
+
 # for example, if I'm in:
 # /Users/tfeiler/remotes/ventnorTfeilerReason/reason_package_local/local/minisite_templates/modules/
 # this will return:
 # "reason_package_local/local/minisite_templates/modules"
+# TODO - modify this whole system to let me jump to a base dir (right now you gotta be in rpl. Maybe if I'm in base I use a special BASE placeholder to distinguish between that and being out of the dir structure altogether?)
 getReasonLocalRelativePath() {
 	local rv=`pwd | grep "/Users/tfeiler/remotes/ventnorTfeilerReason/" | sed 's-.*ventnorTfeilerReason/\(.*\)-\1-'`
 	echo "$rv"
