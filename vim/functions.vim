@@ -358,3 +358,14 @@ function EnhancedKeywordLookup()
 	redraw!
 
 endfunction
+
+" usually extension is enough to tell us what the filetype is, but sometimes
+" it's not. For instance I often name shell scripts with .sh extension but use
+" Node.js, so I want JavaScript filetype.
+function DetectScriptFiletype()
+	let firstLineOfFile = getline(1)
+
+	if firstLineOfFile =~# '^#!/usr/local/bin/node\>'
+		set filetype=javascript
+	endif
+endfunction

@@ -142,6 +142,8 @@ au BufRead,BufNewFile Cakefile set filetype=coffee
 au FileType * call SetExpandTabForIndentedLanguages()
 " au FileType * call UpdateReasonPackageSwitcher()
 
+au BufNewFile,BufRead * call DetectScriptFiletype()
+
 let currentDir=system("pwd")
 " echo "Current Dir is:" currentDir
 
