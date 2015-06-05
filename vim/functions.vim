@@ -227,6 +227,10 @@ function ReloadFirefoxTab(pattern)
 	echo "reloading Firefox tab with [" . a:pattern . "] url's..."
 endfunction
 
+function CheckCommandServerStatus()
+	echo "command server port is [" . g:remote_cmdserver_port . "]"
+endfunction
+
 " wrapping it in a function means we can get it to run in the background sorta, and not screw up vim's display
 " this requires Chromix installation and a running Chromix server
 function ReloadChromeTab(pattern)
@@ -241,13 +245,15 @@ function ReloadChromeTab(pattern)
 	" silent execute "!chromix with " . a:pattern . " reload ; chromix with " . a:pattern . " focus"
 	if g:remote_cmdserver_port == -1
 		silent execute "!chromix load " . a:pattern . " ; chromix with " . a:pattern . " reload"
+		let methodology="local chromix"
 	else
 		" attempt to run it via curl/simpleCommandServer
 		exe "silent !curl -s localhost:" . g:remote_cmdserver_port . "/chromix/with/" . a:pattern . "/reload"
+		let methodology="tunnelling over port " . g:remote_cmdserver_port
 	endif
 
 	redraw!
-	echo "reloading Chrome tabs with [" . a:pattern . "] url's..."
+	echo "reloading Chrome tabs with [" . a:pattern . "] url's using " . methodology . "..."
 endfunction
 
 " see scripts/loanerPseudoServer.sh for example of how this is useful
