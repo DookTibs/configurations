@@ -375,3 +375,18 @@ function DetectScriptFiletype()
 		set filetype=javascript
 	endif
 endfunction
+
+function IndentSurroundingBlock()
+	" step 1 - let's find the enclosing curly brace and jump the cursor back
+	" to it. We need to either echo the val or store it in variable or vim
+	" complains?
+	let bracketPos = searchpair('{', '', '}', 'bW')
+
+	" step 2 - do "=" (which indents) to "%" (the matching curly brace)
+	normal =%
+
+	" note you can keep hitting this command and it will just move up out 
+	" of nested brackets as you go. So like first it will do inside and if
+	" block, then inside the loop it's in, then inside the function that's in,
+	" etc.
+endfunction

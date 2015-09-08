@@ -118,6 +118,8 @@ map K :call EnhancedKeywordLookup()<enter>
 " C-P/C-N to look at prev/next command history in vim
 map <C-P> :call PasteToggler()<enter>
 
+map <C-I> :call IndentSurroundingBlock()<enter>
+
 " clojure
 " au BufRead,BufNewFile *.clj xmap \ <Plug>SlimeRegionSend
 " au BufRead,BufNewFile *.clj nmap \ <Plug>SlimeParagraphSend
@@ -159,9 +161,14 @@ set noundofile
 " from a substitute command and appends it onto the A buffer, then jumps
 " around some windows. Couple of neat tricks I had never seen before
 " map \ :s-ccc += '\(.*\)'-\=setreg('A', submatch(1))-n<enter>j4bma*mb:'ad<enter>'b 
+
 let hostName=system('hostname')
 if stridx(hostName, ".acs.carleton.edu") != -1
 	let g:remote_cmdserver_port = -1
+	" hardcoding this for summer2015 as I will usually be remote and wanting
+	" to tunnel like this. NOTE - ALSO RESTORE EnhancedKeywordLookup
+	" function!!!!
+	" let g:remote_cmdserver_port = 2997
 else
 	let g:remote_cmdserver_port=2499
 endif

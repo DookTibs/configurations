@@ -2,20 +2,26 @@
 
 " set tags to whoever's install I'm looking at
 if stridx(currentDir, "/Users/tfeiler/remotes/ventnor") == 0
-	let rsnMountBaseDir = substitute(currentDir, "\\(.*ventnor[a-zA-Z]*Reason\\).*", "\\1", "")
+	let rsnMountBaseDir = substitute(currentDir, "\\(.*ventnor[a-zA-Z]*Reason[0-9]*\\).*", "\\1", "")
 	let phpTags = rsnMountBaseDir . "/phpTags"
 	" echo "php tags should be [" . phpTags . "]"
 	" set tags=tags,phpTags
 	let &tags = "tags," . phpTags
 endif
 
+" rework this so that reason mount name isn't hardcoded in any paths.
+" in summer2015 I kept having problems with my mounted dir and so I needed
+" an easy way to just specify a new directory name to ssh mount into. Now the 
+" only place that specifies something like "ventnorTfeilerReasonX" is in
+" my carleton bash configuration file.
+let onTheFlyReasonDir = "/Users/tfeiler/remotes/" . $REASON_MOUNT_NAME
+
 if stridx("foo", "bar") == 0
 	" echo this is just here so that I can re-order the elseif's easily...it's obviously always false
 elseif stridx(currentDir, "/Users/tfeiler/remotes/mitreClampHome") == 0
 	set tags=tags,/Users/tfeiler/remotes/mitreClampHome/showHideCourse_20150305/tjfTags
-elseif stridx(currentDir, "/Users/tfeiler/remotes/ventnorTfeilerReason") == 0
-	let relativePath = substitute(currentDir, "/Users/tfeiler/remotes/ventnorTfeilerReason/\\(.*\\)", "\\1", "")
-	" echo "relativepath [" . relativePath . "]..."
+elseif stridx(currentDir, onTheFlyReasonDir) == 0
+	let relativePath = substitute(currentDir, onTheFlyReasonDir . "/\\(.*\\)", "\\1", "")
 	if stridx(relativePath, "reason_package/reason_4.0/lib/local/scripts/reminders") == 0
 		map \ :call SendFreshCommandToTMUX("~/development/shellScripts/sshRelated/runFindOldPoliciesRemote.sh")<enter>
 		" use this one if ssh'ed into ventnor and cd'ed into correct dir
@@ -50,7 +56,7 @@ elseif stridx(currentDir, "/Users/tfeiler/remotes/ventnorTfeilerReason") == 0
 		map \ :call ReloadChromeTab("slote.test.carleton.edu/reason/index.php")<enter>
 	endif
 	
-	" set tags=tags,/Users/tfeiler/remotes/ventnorTfeilerReason/phpTags
+	" set tags=tags,/Users/tfeiler/remotes/ventnorTfeilerReason2/phpTags
 	set path=.,/usr/include,,${REASON_VENT}/reason_4.0/lib/local/,${REASON_VENT}/reason_4.0/lib/core/,${REASON_VENT}/,${REASON_VENT}/carl_util/
 elseif stridx(currentDir, "/Users/tfeiler/development") == 0
 	let devSubportion = substitute(currentDir, "/Users/tfeiler/development/\\([a-zA-Z0-0]*\\).*", "\\1", "")
