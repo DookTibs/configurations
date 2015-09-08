@@ -47,6 +47,7 @@ alias diffgitdir='git bcdiff'
 # alias tmass="~/screenConfigs/tmux/assetPipeline.sh"
 # alias tmang="~/screenConfigs/tmux/angular.sh"
 alias tt="tmux attach -t"
+alias ta="tt"
 alias tl="tmux ls"
 alias tn="tmux new -s"
 alias tc="clear ; tmux clear-history"

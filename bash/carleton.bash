@@ -1,5 +1,7 @@
+declare -x REASON_MOUNT_NAME="ventnorTfeilerReason14"
+
 declare -x REASON_WSG="/Users/tfeiler/remotes/wsgTfeilerReasonCore/reason_package_20140404"
-declare -x REASON_VENT="/Users/tfeiler/remotes/ventnorTfeilerReason/reason_package"
+declare -x REASON_VENT="/Users/tfeiler/remotes/${REASON_MOUNT_NAME}/reason_package"
 declare -x MOODLE_WSG="/Users/tfeiler/remotes/wsgTfeilerMoodle"
 
 alias rps='source /Users/tfeiler/development/shellScripts/special/rps.sh'
@@ -7,7 +9,7 @@ alias rps='source /Users/tfeiler/development/shellScripts/special/rps.sh'
 # see http://osxfuse.github.io/
 alias smount_moodle="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_MOODLE_SERVERNAME:$_SERVPATH_MOODLE wsgTfeilerMoodle 22"
 alias smount_wsg="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_MOODLE_SERVERNAME:$_SERVPATH_MOODLECORE wsgTfeilerReasonCore 22"
-alias smount_vent="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME:$_SERVPATH_SLOTE ventnorTfeilerReason 22"
+alias smount_vent="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME:$_SERVPATH_SLOTE $REASON_MOUNT_NAME 22"
 alias smount_clamp="mountSsh.sh $_CARL_MY_USERNAME@$_CLAMP_SERVERNAME:$_SERVPATH_CLAMP mitreClampHome 22"
 alias smount_comps="mountSsh.sh $_CARL_MY_USERNAME@$_LIVE_COMPS_SERVERNAME:$_SERVPATH_COMPS persiaComps 22"
 alias smount_omeka="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_OMEKA_SERVERNAME:$_SERVPATH_OMEKA wsgOmeka 22"
@@ -23,12 +25,12 @@ alias ssh_mitre="ssh -2 $_CARL_MY_USERNAME@mitre.clamp-it.org"
 alias ssvn="ssh_vent svn"
 
 # for example, if I'm in:
-# /Users/tfeiler/remotes/ventnorTfeilerReason/reason_package_local/local/minisite_templates/modules/
+# /Users/tfeiler/remotes/ventnorTfeilerReason2/reason_package_local/local/minisite_templates/modules/
 # this will return:
 # "reason_package_local/local/minisite_templates/modules"
 # TODO - modify this whole system to let me jump to a base dir (right now you gotta be in rpl. Maybe if I'm in base I use a special BASE placeholder to distinguish between that and being out of the dir structure altogether?)
 getReasonLocalRelativePath() {
-	local rv=`pwd | grep "/Users/tfeiler/remotes/ventnorTfeilerReason/" | sed 's-.*ventnorTfeilerReason/\(.*\)-\1-'`
+	local rv=`pwd | grep "/Users/tfeiler/remotes/$REASON_MOUNT_NAME/" | sed "s-.*$REASON_MOUNT_NAME/\(.*\)-\1-"`
 	echo "$rv"
 }
 
@@ -88,7 +90,6 @@ ssh_vent() {
 	reason_ssh "kwijybo" "$_CARL_MY_USERNAME" "$_DEV_RSN_SERVERNAME" "${_SERVPATH_REASON_MYDEV}" "${*}"
 }
 
-
 # mysql aliases
 alias mysql_vent="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS $_DEV_RSN_DB_NAME_MYDEV'"
 alias mysql_ventTest="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS $_DEV_RSN_DB_NAME_TEST'"
@@ -102,8 +103,8 @@ alias errorlog_vent="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'tail -f $_S
 alias moodleCheck='~/development/moodle/tools/PHP_CodeSniffer-2.0.0a2/scripts/phpcs --standard=/Users/tfeiler/development/moodle/tools/moodleCodeChecker/moodle/ruleset.xml'
 
 alias goremotes='cd ~/remotes/'
-alias goslote='cd ~/remotes/ventnorTfeilerReason/'
-alias gotemplates='cd ~/remotes/ventnorTfeilerReason/reason_package_local/local/minisite_templates'
-alias gomodules='cd ~/remotes/ventnorTfeilerReason/reason_package_local/local/minisite_templates/modules'
+alias goslote="cd ~/remotes/$REASON_MOUNT_NAME/"
+alias gotemplates="cd ~/remotes/$REASON_MOUNT_NAME/reason_package_local/local/minisite_templates"
+alias gomodules="cd ~/remotes/$REASON_MOUNT_NAME/reason_package_local/local/minisite_templates/modules"
 alias goform='cd ~/development/jsloteFormBuilder/formbuilder-rsn'
 alias goomeka='cd ~/remotes/wsgOmeka/'
