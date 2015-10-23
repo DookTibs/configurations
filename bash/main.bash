@@ -15,8 +15,8 @@ if [ "${TOM_OS}" = "cygwin" ]; then
 	declare -x CHROMIX='/cygdrive/c/development/tools/chromix-master'
 elif [ "${TOM_OS}" = "osx" ]; then
 	declare -x CHROMIX="/usr/local/lib/node_modules/chromix/snapshots/"
-	alias chromelog='tail -f /Users/tfeiler/Library/Application\ Support/Google/Chrome/chrome_debug.log'
-	alias chromelogClean='chromelog | filterChromeConsole.sh'
+	alias chromelogRaw='echo "" ; echo "##### if no results - did you remember to launch Chrome with [open -a \"Google Chrome.app\" --args --enable-logging --v=1]? #####" ; echo ""; tail -f /Users/tfeiler/Library/Application\ Support/Google/Chrome/chrome_debug.log'
+	alias chromelog='chromelogRaw | filterChromeConsole.sh'
 fi
 
 # use vi for shell editing

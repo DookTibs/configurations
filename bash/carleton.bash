@@ -1,4 +1,4 @@
-declare -x REASON_MOUNT_NAME="ventnorTfeilerReason14"
+declare -x REASON_MOUNT_NAME="ventnorTfeilerReason"
 
 declare -x REASON_WSG="/Users/tfeiler/remotes/wsgTfeilerReasonCore/reason_package_20140404"
 declare -x REASON_VENT="/Users/tfeiler/remotes/${REASON_MOUNT_NAME}/reason_package"
@@ -13,6 +13,7 @@ alias smount_vent="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME:$_SERVPAT
 alias smount_clamp="mountSsh.sh $_CARL_MY_USERNAME@$_CLAMP_SERVERNAME:$_SERVPATH_CLAMP mitreClampHome 22"
 alias smount_comps="mountSsh.sh $_CARL_MY_USERNAME@$_LIVE_COMPS_SERVERNAME:$_SERVPATH_COMPS persiaComps 22"
 alias smount_omeka="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_OMEKA_SERVERNAME:$_SERVPATH_OMEKA wsgOmeka 22"
+alias smount_area51="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_AREA51_SERVERNAME:$_SERVPATH_AREA51 area51Test7 22"
 
 # ssh shortcuts
 alias ssh_wsg="ssh -2 $_CARL_MY_USERNAME@$_DEV_MOODLE_SERVERNAME"
@@ -108,3 +109,5 @@ alias gotemplates="cd ~/remotes/$REASON_MOUNT_NAME/reason_package_local/local/mi
 alias gomodules="cd ~/remotes/$REASON_MOUNT_NAME/reason_package_local/local/minisite_templates/modules"
 alias goform='cd ~/development/jsloteFormBuilder/formbuilder-rsn'
 alias goomeka='cd ~/remotes/wsgOmeka/'
+
+alias govag="cd ~/development/reason/carl-web-reason"

@@ -7,6 +7,9 @@ if stridx(currentDir, "/Users/tfeiler/remotes/ventnor") == 0
 	" echo "php tags should be [" . phpTags . "]"
 	" set tags=tags,phpTags
 	let &tags = "tags," . phpTags
+elseif stridx(currentDir, "/Users/tfeiler/development/reason/carl-web-reason") == 0
+	let phpTags = "/Users/tfeiler/development/reason/carl-web-reason/phpTags"
+	let &tags = "tags," . phpTags
 endif
 
 " rework this so that reason mount name isn't hardcoded in any paths.
@@ -18,6 +21,8 @@ let onTheFlyReasonDir = "/Users/tfeiler/remotes/" . $REASON_MOUNT_NAME
 
 if stridx("foo", "bar") == 0
 	" echo this is just here so that I can re-order the elseif's easily...it's obviously always false
+elseif stridx(currentDir, "/Users/tfeiler/remotes/area51Test7") == 0
+	set tags=tags,/Users/tfeiler/remotes/area51Test7/tags
 elseif stridx(currentDir, "/Users/tfeiler/remotes/mitreClampHome") == 0
 	set tags=tags,/Users/tfeiler/remotes/mitreClampHome/showHideCourse_20150305/tjfTags
 elseif stridx(currentDir, onTheFlyReasonDir) == 0
