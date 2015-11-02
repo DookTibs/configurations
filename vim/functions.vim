@@ -222,7 +222,8 @@ function FIFO(cmd, ...)
 endfunction
 
 function ReloadFirefoxTab(pattern)
-	silent execute "!osascript /Users/tfeiler/development/appleScripts/firefoxReloader.scpt " . a:pattern
+	" silent execute "!osascript /Users/tfeiler/development/appleScripts/firefoxReloader.scpt " . a:pattern
+	silent execute "!/Users/tfeiler/development/shellScripts/firefoxReloader.scpt " . a:pattern
 	redraw!
 	echo "reloading Firefox tab with [" . a:pattern . "] url's..."
 endfunction

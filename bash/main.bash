@@ -62,3 +62,6 @@ alias ssh_home="ssh -p $_TJF_HOME_SSH_PORT $_TJF_HOME_USERNAME@$_TJF_HOME_HOST"
 alias tunnel_home="ssh -L localhost:$_VNC_LOCAL_PORT:$_TJF_HOME_HOST:$_TJF_HOME_VNC_PORT -N -f -p $_TJF_HOME_SSH_PORT $_TJF_HOME_USERNAME@$_TJF_HOME_HOST"
 alias vnc_home="open vnc://localhost:$_VNC_LOCAL_PORT"
 
+
+# run irssi with various statusbars hidden
+alias irssi_slim="irssi --config=~/.irssi/slim_config"
