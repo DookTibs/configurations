@@ -37,3 +37,13 @@ entitle () {
 	# \n	newline
 }
 
+# see http://stackoverflow.com/questions/25532773/change-background-color-of-active-or-inactive-pane-in-tmux/25533057#25533057
+# we could also set the active/passive bg color now!
+tmux_color () {
+	if [ -n "$1" ]; then
+		echo "Setting current tmux pane background color to '$1': \"tmux select-pane -t:.1 -P 'fg=???,bg=$1'\" (target is optional, defaults to current)"
+		tmux select-pane -P "bg=$1"
+	else
+		echo "No color specified";
+	fi
+}
