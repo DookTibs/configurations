@@ -16,3 +16,7 @@ fi
 if [ -f "${HOME}/development/configurations/bash/carleton.bash" ]; then
 	source "${HOME}/development/configurations/bash/carleton.bash"
 fi
+
+if [ -f "${HOME}/development/configurations/bash/git-completion.bash" ]; then
+	source "${HOME}/development/configurations/bash/git-completion.bash"
+fi

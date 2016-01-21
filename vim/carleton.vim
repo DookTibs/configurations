@@ -7,8 +7,8 @@ if stridx(currentDir, "/Users/tfeiler/remotes/ventnor") == 0
 	" echo "php tags should be [" . phpTags . "]"
 	" set tags=tags,phpTags
 	let &tags = "tags," . phpTags
-elseif stridx(currentDir, "/Users/tfeiler/development/reason/carl-web-reason") == 0
-	let phpTags = "/Users/tfeiler/development/reason/carl-web-reason/phpTags"
+elseif stridx(currentDir, "/Users/tfeiler/development/carleton/carleton.edu") == 0
+	let phpTags = "/Users/tfeiler/development/carleton/carleton.edu/.php_tags"
 	let &tags = "tags," . phpTags
 endif
 

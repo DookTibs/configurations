@@ -23,7 +23,11 @@ alias ssh_persia="ssh -2 $_CARL_MY_USERNAME@$_LIVE_COMPS_SERVERNAME"
 alias ssh_chi5="ssh -2 $_CARL_MY_USERNAME@$_LIVE_WWW_SERVERNAME"
 alias ssh_mitre="ssh -2 $_CARL_MY_USERNAME@mitre.clamp-it.org"
 
-alias ssvn="ssh_vent svn"
+alias ssh_dev="ssh vagrant@192.168.50.50 -i /Users/tfeiler/.vagrant.d/boxes/wsg-centos7/0/virtualbox/vagrant_private_key"
+alias mysql_dev="ssh_dev -t 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS -h$_DEV_RSN_DB_HOST $_DEV_RSN_DB_NAME_MYDEV'"
+alias mysql_thor="ssh_dev -t 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS -h$_DEV_RSN_DB_HOST $_DEV_RSN_DB_NAME_THORDEV'"
+
+# alias ssvn="ssh_vent svn"
 
 # for example, if I'm in:
 # /Users/tfeiler/remotes/ventnorTfeilerReason2/reason_package_local/local/minisite_templates/modules/
@@ -87,16 +91,16 @@ ssh_chi() {
 	reason_ssh "kwijybo" "$_CARL_MY_USERNAME" "$_LIVE_APPS_SERVERNAME" "${_SERVPATH_REASON_PROD}" "${*}"
 }
 
-ssh_vent() {
-	reason_ssh "kwijybo" "$_CARL_MY_USERNAME" "$_DEV_RSN_SERVERNAME" "${_SERVPATH_REASON_MYDEV}" "${*}"
-}
+# ssh_vent() {
+	# reason_ssh "kwijybo" "$_CARL_MY_USERNAME" "$_DEV_RSN_SERVERNAME" "${_SERVPATH_REASON_MYDEV}" "${*}"
+# }
 
 # mysql aliases
-alias mysql_vent="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS $_DEV_RSN_DB_NAME_MYDEV'"
+# alias mysql_vent="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS $_DEV_RSN_DB_NAME_MYDEV'"
 alias mysql_ventTest="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS $_DEV_RSN_DB_NAME_TEST'"
 alias mysql_mbsOld="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DEV_MBS_DB_USER -p$_DEV_MBS_DB_PASS $_DEV_MBS_DB_NAME'"
 alias mysql_moodle="ssh -t $_CARL_MY_USERNAME@$_DEV_MOODLE_SERVERNAME 'mysql -u$_DEV_MOODLE_DB_USER -p$_DEV_MOODLE_DB_PASS $_DEV_MOODLE_DB_NAME'"
-alias mysql_thor="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS $_DEV_RSN_DB_NAME_THORDEV'"
+# alias mysql_thor="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS $_DEV_RSN_DB_NAME_THORDEV'"
 alias mysql_doc="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'mysql -u$_DOC_DB_USER -p$_DOC_DB_PASS $_DOC_DB_NAME -h$_CARLETON_LIVE_MYSQL_SERVER'"
 
 alias errorlog_vent="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'tail -f $_SERVPATH_ERRLOG'"
@@ -104,10 +108,14 @@ alias errorlog_vent="ssh -t $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME 'tail -f $_S
 alias moodleCheck='~/development/moodle/tools/PHP_CodeSniffer-2.0.0a2/scripts/phpcs --standard=/Users/tfeiler/development/moodle/tools/moodleCodeChecker/moodle/ruleset.xml'
 
 alias goremotes='cd ~/remotes/'
-alias goslote="cd ~/remotes/$REASON_MOUNT_NAME/"
-alias gotemplates="cd ~/remotes/$REASON_MOUNT_NAME/reason_package_local/local/minisite_templates"
-alias gomodules="cd ~/remotes/$REASON_MOUNT_NAME/reason_package_local/local/minisite_templates/modules"
-alias goform='cd ~/development/jsloteFormBuilder/formbuilder-rsn'
-alias goomeka='cd ~/remotes/wsgOmeka/'
+# alias goslote="cd ~/remotes/$REASON_MOUNT_NAME/"
+alias goslote="echo 'Did you mean \"godev\" instead?'"
+# alias gotemplates="cd ~/remotes/$REASON_MOUNT_NAME/reason_package_local/local/minisite_templates"
+# alias gomodules="cd ~/remotes/$REASON_MOUNT_NAME/reason_package_local/local/minisite_templates/modules"
+# alias goform='cd ~/development/jsloteFormBuilder/formbuilder-rsn'
+# alias goomeka='cd ~/remotes/wsgOmeka/'
 
-alias govag="cd ~/development/reason/carl-web-reason"
+alias godev="cd ~/development/carleton/carleton.edu"
+alias goprov="cd ~/development/carleton/wsg-provisioning/carleton.edu"
+alias gotemplates="cd ~/development/carleton/carleton.edu/reason_package_local/local/minisite_templates"
+alias gomodules="cd ~/development/carleton/carleton.edu/reason_package_local/local/minisite_templates/modules"

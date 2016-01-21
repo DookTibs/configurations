@@ -66,3 +66,5 @@ alias vnc_home="open vnc://localhost:$_VNC_LOCAL_PORT"
 
 # run irssi with various statusbars hidden
 alias irssi_slim="irssi --config=~/.irssi/slim_config"
+
+alias dice="coffee ~/development/diceware/main.coffee"
