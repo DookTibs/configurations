@@ -1,0 +1,43 @@
+[diff]
+	tool = vimdiff
+	# tool = opendiff
+	# tool = bc3
+	# tool = bcomp
+
+[merge]
+	tool = vimdiff
+	# tool = bcomp
+
+[difftool]
+	prompt = false
+
+[mergetool]
+	prompt = false
+
+[difftool "bc3"]
+	# path = "/Applications/Beyond Compare.app/Contents/MacOS/bcomp"
+	# path = "/Applications/Beyond Compare.app/Contents/MacOS/BCompare"
+	# path = "bcomp"
+	# cmd = "/usr/local/bin/bcompare" "$LOCAL" "$REMOTE" "/solo"
+
+[difftool "bcomp"]
+	trustExitCode = true
+	keepBackup = true
+	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
+
+[mergetool "bcomp"]
+	trustExitCode = true
+	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+
+[color]
+	ui = auto
+
+[alias]
+	bcdiff = !sh ~/development/shellScripts/openGitDiffsInBackground.sh
+	ignored = !git ls-files -v | grep "^[[:lower:]]"
+	showfiles = "!f() { git diff-tree -no-commit-id --name-only -r $1; }; f"
+	mylog = !git log --author="Feiler"
+
+[user]
+	name = Thomas Feiler
+	email = tfeiler@carleton.edu
