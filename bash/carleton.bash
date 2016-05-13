@@ -1,4 +1,5 @@
-declare -x REASON_MOUNT_NAME="ventnorTfeilerReason"
+# declare -x REASON_MOUNT_NAME="ventnorTfeilerReason"
+declare -x REASON_MOUNT_NAME="wsgdev05Reason"
 
 declare -x REASON_WSG="/Users/tfeiler/remotes/wsgTfeilerReasonCore/reason_package_20140404"
 declare -x REASON_VENT="/Users/tfeiler/remotes/${REASON_MOUNT_NAME}/reason_package"
@@ -9,23 +10,26 @@ alias rps='source /Users/tfeiler/development/shellScripts/special/rps.sh'
 # see http://osxfuse.github.io/
 alias smount_moodle="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_MOODLE_SERVERNAME:$_SERVPATH_MOODLE wsgTfeilerMoodle 22"
 alias smount_wsg="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_MOODLE_SERVERNAME:$_SERVPATH_MOODLECORE wsgTfeilerReasonCore 22"
-alias smount_vent="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME:$_SERVPATH_SLOTE $REASON_MOUNT_NAME 22"
+# alias smount_vent="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME:$_SERVPATH_SLOTE $REASON_MOUNT_NAME 22"
 alias smount_clamp="mountSsh.sh $_CARL_MY_USERNAME@$_CLAMP_SERVERNAME:$_SERVPATH_CLAMP mitreClampHome 22"
 alias smount_comps="mountSsh.sh $_CARL_MY_USERNAME@$_LIVE_COMPS_SERVERNAME:$_SERVPATH_COMPS persiaComps 22"
 alias smount_omeka="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_OMEKA_SERVERNAME:$_SERVPATH_OMEKA wsgOmeka 22"
 alias smount_area51="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_AREA51_SERVERNAME:$_SERVPATH_AREA51 area51Test7 22"
+alias smount_dev="mountSsh.sh $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME:/var/www/apps $REASON_MOUNT_NAME 22"
 
 # ssh shortcuts
-alias ssh_wsg="ssh -2 $_CARL_MY_USERNAME@$_DEV_MOODLE_SERVERNAME"
+# alias ssh_wsg="ssh -2 $_CARL_MY_USERNAME@$_DEV_MOODLE_SERVERNAME"
 # alias ssh_vent="ssh -2 $_CARL_MY_USERNAME@$_DEV_RSN_SERVERNAME"
 alias ssh_persia="ssh -2 $_CARL_MY_USERNAME@$_LIVE_COMPS_SERVERNAME"
 # alias ssh_chi="ssh -2 $_CARL_MY_USERNAME@$_LIVE_APPS_SERVERNAME"
 alias ssh_chi5="ssh -2 $_CARL_MY_USERNAME@$_LIVE_WWW_SERVERNAME"
 alias ssh_mitre="ssh -2 $_CARL_MY_USERNAME@mitre.clamp-it.org"
 
-alias ssh_dev="ssh vagrant@192.168.50.50 -i /Users/tfeiler/.vagrant.d/boxes/wsg-centos7/0/virtualbox/vagrant_private_key"
-alias mysql_dev="ssh_dev -t 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS -h$_DEV_RSN_DB_HOST $_DEV_RSN_DB_NAME_MYDEV'"
-alias mysql_thor="ssh_dev -t 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS -h$_DEV_RSN_DB_HOST $_DEV_RSN_DB_NAME_THORDEV'"
+# alias ssh_dev="ssh tfeiler@wsgdev05.its.carleton.edu"
+
+alias ssh_vagrant="ssh vagrant@192.168.50.50 -i /Users/tfeiler/.vagrant.d/boxes/wsg-centos7/0/virtualbox/vagrant_private_key"
+alias mysql_dev="ssh_vagrant -t 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS -h$_DEV_RSN_DB_HOST $_DEV_RSN_DB_NAME_MYDEV'"
+alias mysql_thordev="ssh_vagrant -t 'mysql -A -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS -h$_DEV_RSN_DB_HOST $_DEV_RSN_DB_NAME_THORDEV'"
 
 # alias ssvn="ssh_vent svn"
 
@@ -35,7 +39,20 @@ alias mysql_thor="ssh_dev -t 'mysql -u$_DEV_RSN_DB_USER -p$_DEV_RSN_DB_PASS -h$_
 # "reason_package_local/local/minisite_templates/modules"
 # TODO - modify this whole system to let me jump to a base dir (right now you gotta be in rpl. Maybe if I'm in base I use a special BASE placeholder to distinguish between that and being out of the dir structure altogether?)
 getReasonLocalRelativePath() {
-	local rv=`pwd | grep "/Users/tfeiler/remotes/$REASON_MOUNT_NAME/" | sed "s-.*$REASON_MOUNT_NAME/\(.*\)-\1-"`
+	# local rv=`pwd | grep "/Users/tfeiler/remotes/$REASON_MOUNT_NAME/" | sed "s-.*$REASON_MOUNT_NAME/\(.*\)-\1-"`
+	local rv=`pwd | grep "/Users/tfeiler/remotes/$REASON_MOUNT_NAME"`
+
+	if [ "${rv}" != "" ]; then
+		rv=`echo "${rv}" | sed "s-.*$REASON_MOUNT_NAME/*\(.*\)-\1-"`
+	else
+		rv=`pwd | grep "/Users/tfeiler/development/carleton/carleton.edu"`
+		if [ "${rv}" != "" ]; then
+			rv=`echo "${rv}" | sed "s-/Users/tfeiler/development/carleton/carleton.edu/--"`
+		else
+			rv="NOT_IN_REASON_TREE"
+		fi
+	fi
+	
 	echo "$rv"
 }
 
@@ -63,7 +80,11 @@ reason_ssh() {
 
 	cmd="ssh -2 $user@$server"
 
-	if [ "" != "${reasonPath}" ]; then
+	if [ "${user}" == "vagrant" ]; then
+		cmd="${cmd} -i /Users/tfeiler/.vagrant.d/boxes/wsg-centos7/0/virtualbox/vagrant_private_key"
+	fi
+
+	if [ "NOT_IN_REASON_TREE" != "${reasonPath}" ]; then
 		cmd="${cmd} \"cd ${remoteBaseDir}/${reasonPath} ;"
 
 		# are there arguments? 
@@ -91,6 +112,30 @@ ssh_chi() {
 	reason_ssh "kwijybo" "$_CARL_MY_USERNAME" "$_LIVE_APPS_SERVERNAME" "${_SERVPATH_REASON_PROD}" "${*}"
 }
 
+ssh_wsgdev05() {
+	reason_ssh "kwijybo" "$_CARL_MY_USERNAME" "$_DEV_RSN_SERVERNAME" "/var/www/apps" "${*}"
+}
+
+ssh_dev() {
+	# reason_ssh "kwijybo" "$_CARL_MY_USERNAME" "$_DEV_RSN_SERVERNAME" "/var/www/apps" "${*}"
+	reason_ssh "kwijybo" "vagrant" "192.168.50.50" "/var/www/apps" "${*}"
+}
+
+alias gg="ssh_dev git"
+alias vanilla_git="git"
+context_sensitive_git() {
+	pwd | grep "/Users/tfeiler/remotes/$REASON_MOUNT_NAME" > /dev/null
+
+	if [ $? -eq 0 ]; then
+		echo "In remote Reason mount; use ssh_dev+git technique (see carleton.bash for details)..."
+		ssh_wsgdev05 git "${*}"
+	else
+		echo "Using standard git technique (see carleton.bash for details)..."
+		vanilla_git "${*}"
+	fi
+}
+# alias git="context_sensitive_git"
+
 # ssh_vent() {
 	# reason_ssh "kwijybo" "$_CARL_MY_USERNAME" "$_DEV_RSN_SERVERNAME" "${_SERVPATH_REASON_MYDEV}" "${*}"
 # }
@@ -115,7 +160,11 @@ alias goslote="echo 'Did you mean \"godev\" instead?'"
 # alias goform='cd ~/development/jsloteFormBuilder/formbuilder-rsn'
 # alias goomeka='cd ~/remotes/wsgOmeka/'
 
+# alias godev="cd ~/remotes/$REASON_MOUNT_NAME/"
 alias godev="cd ~/development/carleton/carleton.edu"
+# alias govagrant="cd ~/development/carleton/carleton.edu"
 alias goprov="cd ~/development/carleton/wsg-provisioning/carleton.edu"
-alias gotemplates="cd ~/development/carleton/carleton.edu/reason_package_local/local/minisite_templates"
 alias gomodules="cd ~/development/carleton/carleton.edu/reason_package_local/local/minisite_templates/modules"
+# alias gomodules="cd ~/remotes/$REASON_MOUNT_NAME/reason_package_local/local/minisite_templates/modules"
+
+alias dpq="~/development/carleton/wsg-provisioning/carleton.edu/bin/deploy-prod-quick"

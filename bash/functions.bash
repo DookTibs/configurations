@@ -4,6 +4,21 @@ untitle () {
 	PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n\$ '
 }
 
+weather() {
+	curl -s http://wttr.in/$1 | head -n 7
+	echo "('forecast' will return next 3 days of data.)"
+}
+
+forecast() {
+	curl -s http://wttr.in/$1
+}
+
+dice() {
+	cd ~/development/diceware
+	coffee main.coffee $1
+	cd -
+}
+
 # function
 entitle () { 
 	echo "setting window title to [$*] (fxn defined in .bashrc)..."

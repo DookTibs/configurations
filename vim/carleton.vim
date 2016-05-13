@@ -7,6 +7,12 @@ if stridx(currentDir, "/Users/tfeiler/remotes/ventnor") == 0
 	" echo "php tags should be [" . phpTags . "]"
 	" set tags=tags,phpTags
 	let &tags = "tags," . phpTags
+elseif stridx(currentDir, "/Users/tfeiler/remotes/wsgdev05Reason") == 0
+	let phpTags = "/Users/tfeiler/remotes/wsgdev05Reason/.php_tags"
+	let &tags = "tags," . phpTags
+elseif stridx(currentDir, "/Users/tfeiler/remotes/tateVentnor") == 0
+	let phpTags = "/Users/tfeiler/remotes/tateVentnor/.php_tags"
+	let &tags = "tags," . phpTags
 elseif stridx(currentDir, "/Users/tfeiler/development/carleton/carleton.edu") == 0
 	let phpTags = "/Users/tfeiler/development/carleton/carleton.edu/.php_tags"
 	let &tags = "tags," . phpTags

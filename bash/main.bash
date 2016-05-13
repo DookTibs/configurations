@@ -37,6 +37,7 @@ declare -x PATH=${PATH}:/usr/local/share/npm/bin/:/usr/local/mysql/bin
 alias diffgit='git difftool --no-prompt'
 alias ghost='/usr/local/bin/gs' # this is the ghostscript default. Saving it here in case I do need it for something
 alias gs='clear ; git status'
+alias gb='git branch'
 alias st='gs'
 alias dg='diffgit'
 alias diffgitb='git difftool -t bc3 --no-prompt'
@@ -67,4 +68,7 @@ alias vnc_home="open vnc://localhost:$_VNC_LOCAL_PORT"
 # run irssi with various statusbars hidden
 alias irssi_slim="irssi --config=~/.irssi/slim_config"
 
-alias dice="coffee ~/development/diceware/main.coffee"
+# changed to be a function
+# alias dice="cd ~/development/diceware ; coffee main.coffee ; cd -"
+
+declare -x PATH=${PATH}:~/development/pebble-dev/pebble-sdk-4.2-mac/bin
