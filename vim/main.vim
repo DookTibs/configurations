@@ -43,6 +43,10 @@ map + :e #
 map ^ :call IndentBouncer(1, 0)<enter>
 map <Space> :call ShowTagPrototype()<enter>
 
+" by default # does reverse search of current word (like * but opposite direction)
+" I don't use that all that much so instead let's map it to toggle line numbers
+map # :set nu!<enter>
+
 " colorschemes live in /usr/share/vim/vim73/colors/
 " others that are ok: torte, delek, darkblue, slate, zellner
 " also have some in ~/.vim/bundle like vim-colors-solarized (along with other plugins)
