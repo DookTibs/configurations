@@ -232,9 +232,25 @@ function CheckCommandServerStatus()
 	echo "command server port is [" . g:remote_cmdserver_port . "]"
 endfunction
 
+function ReloadChromeTab(pattern)
+	if $TOM_OS == 'cygwin'
+		call ReloadChromeTabWithAutoHotKey(a:pattern)
+	else
+		call ReloadChromeTabWithChromix(a:pattern)
+	endif
+endfunction
+map \ :call ReloadChromeTab("random.org")<enter>
+
+
+function ReloadChromeTabWithAutoHotKey(pattern)
+	let scriptPath="/cygdrive/c/development/AHK\\ Scripts/chromeReloader.ahk"
+	silent execute "!cygstart " . scriptPath . " " . a:pattern
+	redraw!
+endfunction
+
 " wrapping it in a function means we can get it to run in the background sorta, and not screw up vim's display
 " this requires Chromix installation and a running Chromix server
-function ReloadChromeTab(pattern)
+function ReloadChromeTabWithChromix(pattern)
 	" silent execute "!chromix with " . a:pattern . " reload"
 	" silent execute "!chromix with " . a:pattern . " goto " . a:pattern
 	

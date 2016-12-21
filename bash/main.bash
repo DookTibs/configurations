@@ -1,5 +1,5 @@
 # \vi will call the real vi not the alias.
-alias vim='/Applications/MacVim.app/Contents/MacOS/Vim' # use homebrew vi 7.4.258 instead of 7.3 stock
+# alias vim='/Applications/MacVim.app/Contents/MacOS/Vim' # use homebrew vi 7.4.258 instead of 7.3 stock
 alias vi='vim'
 alias vit='vim -t' # start with a tag
 alias ls='ls -ltrG'
@@ -23,7 +23,8 @@ fi
 set -o vi
 
 # declare -x PS1="\h:\W \u\$ "
-declare -x PS1="[\u@office \W]$ "
+# declare -x PS1="[\u@office \W]$ "
+declare -x PS1="[tfeiler@ICF \W]$ "
 
 declare -x BREW="/usr/local/Cellar"
 

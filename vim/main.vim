@@ -61,10 +61,10 @@ let appropriateColorScheme = system("selectAppropriateVimColorScheme.sh")
 execute 'colorscheme' appropriateColorScheme
 
 
-if g:colors_name == "solarized"
+" if g:colors_name == "solarized"
 	" syntax enable
-	set background=dark
-endif
+	" set background=dark
+" endif
 
 
 " airline
@@ -78,6 +78,7 @@ let g:airline_theme='kolor'
 " slime
 let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
+let g:slime_dont_ask_default = 1
 
 " CTAGS STUFF START
 let tlist_actionscript_settings = 'actionscript;c:classes;k:consts;p:properties;F:public methods;f:private methods;z:protected methods;g:getters;s:setters;v:variables'
