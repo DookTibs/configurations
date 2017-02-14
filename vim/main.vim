@@ -25,6 +25,7 @@ set shiftwidth=4
 set noexpandtab
 set incsearch
 set hlsearch
+" au FileType text echo "textwidth set to 0; run ':set tw=78' to revert to default for this file"
 syntax on
 filetype on
 
@@ -148,6 +149,8 @@ au BufRead,BufNewFile Cakefile set filetype=coffee
 " au FileType python set expandtab
 au FileType * call SetExpandTabForIndentedLanguages()
 " au FileType * call UpdateReasonPackageSwitcher()
+
+au FileType * set tw=0
 
 au BufNewFile,BufRead * call DetectScriptFiletype()
 

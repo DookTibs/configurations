@@ -112,7 +112,7 @@ endfunction
 " show the current tag prototype as an "echo". Doesn't support multiline
 " prototypes but not bad! Follow up with <C-w>} to see tag prototype in
 " preview window, or standard tag commands to jump to edit the file
-function ShowTagPrototype()
+function! ShowTagPrototype()
 	let wordUnderCursor = expand("<cword>")
 	let tagSearchResult = taglist(wordUnderCursor)
 
@@ -173,7 +173,7 @@ endfunction
 " datestamp up, and then calls SendKeysToTMUX
 
 " takes optional second param to specify the tmux target; defaults to pane 1 of current window
-function SendFreshCommandToTMUX(cmdString, ...)
+function! SendFreshCommandToTMUX(cmdString, ...)
 	let tmuxTarget="1"
 	if a:0 > 0
 		let tmuxTarget = a:1
@@ -191,7 +191,7 @@ function SendFreshCommandToTMUX(cmdString, ...)
 endfunction
 
 " sends keys to some tmux window. Maybe look into vimux/tslime?
-function SendKeysToTMUX(target, cmdString)
+function! SendKeysToTMUX(target, cmdString)
 	" let fullCmd = "!tmux send-keys -t " . a:target . " " . a:cmdString
 	" echo "full cmd [" . fullCmd . "]"
 	" silent execute fullCmd
@@ -207,7 +207,7 @@ endfunction
 " :call FIFO("javac Foo.java") # sends compile cmd to fifo /tmp/vimCmds
 " :call FIFO("java Foo", "B") # sends run cmd to fifo /tmp/vimCmdsB
 " use in conjunction with listenForVimCommands.sh / http://blog.jb55.com/post/29072842980/sending-commands-from-vim-to-a-separate-tmux-pane
-function FIFO(cmd, ...)
+function! FIFO(cmd, ...)
 	if a:0 > 0
 		let pipeName = "/tmp/vimCmds" . a:1
 	else
@@ -221,28 +221,28 @@ function FIFO(cmd, ...)
 	redraw!
 endfunction
 
-function ReloadFirefoxTab(pattern)
+function! ReloadFirefoxTab(pattern)
 	" silent execute "!osascript /Users/tfeiler/development/appleScripts/firefoxReloader.scpt " . a:pattern
 	silent execute "!/Users/tfeiler/development/shellScripts/firefoxReloader.scpt " . a:pattern
 	redraw!
 	echo "reloading Firefox tab with [" . a:pattern . "] url's..."
 endfunction
 
-function CheckCommandServerStatus()
+function! CheckCommandServerStatus()
 	echo "command server port is [" . g:remote_cmdserver_port . "]"
 endfunction
 
-function ReloadChromeTab(pattern)
+function! ReloadChromeTab(pattern)
 	if $TOM_OS == 'cygwin'
 		call ReloadChromeTabWithAutoHotKey(a:pattern)
 	else
 		call ReloadChromeTabWithChromix(a:pattern)
 	endif
 endfunction
-map \ :call ReloadChromeTab("random.org")<enter>
+" map \ :call ReloadChromeTab("random.org")<enter>
 
 
-function ReloadChromeTabWithAutoHotKey(pattern)
+function! ReloadChromeTabWithAutoHotKey(pattern)
 	let scriptPath="/cygdrive/c/development/AHK\\ Scripts/chromeReloader.ahk"
 	silent execute "!cygstart " . scriptPath . " " . a:pattern
 	redraw!
@@ -250,7 +250,7 @@ endfunction
 
 " wrapping it in a function means we can get it to run in the background sorta, and not screw up vim's display
 " this requires Chromix installation and a running Chromix server
-function ReloadChromeTabWithChromix(pattern)
+function! ReloadChromeTabWithChromix(pattern)
 	" silent execute "!chromix with " . a:pattern . " reload"
 	" silent execute "!chromix with " . a:pattern . " goto " . a:pattern
 	
@@ -274,23 +274,23 @@ function ReloadChromeTabWithChromix(pattern)
 endfunction
 
 " see scripts/loanerPseudoServer.sh for example of how this is useful
-function SendNetcatCommand(server, port, command)
+function! SendNetcatCommand(server, port, command)
 	silent execute "!echo '" . a:command . "' | nc " . a:server . " " . a:port
 	redraw!
 	echo "sent [" . a:command . "] over netcat to server [" . a:server . ":" . a:port . "]..."
 endfunction
 
-function SendNodeTestCmd(url)
+function! SendNodeTestCmd(url)
 	silent execute "!curl " . a:url
 	redraw!
 	echo "hit [" . a:url . "]"
 endfunction
 
-function ToggleBlockCommentC()
+function! ToggleBlockCommentC()
 	call ToggleBlockComment("/*", "*/")
 endfunction
 
-function ToggleBlockComment(startSequence, endSequence)
+function! ToggleBlockComment(startSequence, endSequence)
 	let line = getline(".")
 
 	let startIdx = stridx(line, a:startSequence)
@@ -308,7 +308,7 @@ function ToggleBlockComment(startSequence, endSequence)
 	call setline(".", repl)
 endfunction
 
-function SetExpandTabForIndentedLanguages()
+function! SetExpandTabForIndentedLanguages()
 	let currentFileType=&filetype
 	" echo "sample fxn! [" currentFileType "]/[" @% "]"
 	set nosmartindent
@@ -344,7 +344,7 @@ endfunction
 " ctrl-P			command-V	esc
 " (PasteToggler)	(paste)		(exit insert mode)
 " TODO - make this insert a blank line below
-function PasteToggler()
+function! PasteToggler()
 	let inPasteMode = &paste
 	set paste!
 	if inPasteMode == 0
@@ -367,7 +367,7 @@ function PasteToggler()
 endfunction
 
 " see http://vim.wikia.com/wiki/PHP_online_help for the idea; K is mapped to this function instead of default use of keywordprg
-function EnhancedKeywordLookup()
+function! EnhancedKeywordLookup()
 	let wordUnderCursor = expand("<cword>")
 	let ft = &filetype
 
@@ -385,7 +385,7 @@ endfunction
 " usually extension is enough to tell us what the filetype is, but sometimes
 " it's not. For instance I often name shell scripts with .sh extension but use
 " Node.js, so I want JavaScript filetype.
-function DetectScriptFiletype()
+function! DetectScriptFiletype()
 	let firstLineOfFile = getline(1)
 
 	if firstLineOfFile =~# '^#!/usr/local/bin/node\>'
@@ -393,7 +393,7 @@ function DetectScriptFiletype()
 	endif
 endfunction
 
-function IndentSurroundingBlock()
+function! IndentSurroundingBlock()
 	" step 1 - let's find the enclosing curly brace and jump the cursor back
 	" to it. We need to either echo the val or store it in variable or vim
 	" complains?
@@ -406,4 +406,18 @@ function IndentSurroundingBlock()
 	" of nested brackets as you go. So like first it will do inside and if
 	" block, then inside the loop it's in, then inside the function that's in,
 	" etc.
+endfunction
+
+function! CellmateUpload()
+	let currFilename = @%
+	let workingDir = system("pwd")
+	let workingDir = substitute(workingDir, "\n", "", "")
+	let fullPath = workingDir . "/" . currFilename
+	
+	" cellmate source is available on my DookTibs github
+	" you'll need google SDK installed; I have a python virtualenv "google_uploader" that will do this,
+	" do 'workon google_uploader' to enable it in the tmux window that is running this...
+	let cmd = "python ~/development/acc/cellmate/cellmate.py -f " . fullPath . " -o upload"
+	" execute "!" . cmd
+	call SendFreshCommandToTMUX(cmd)
 endfunction
