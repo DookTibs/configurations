@@ -62,3 +62,57 @@ tmux_color () {
 		echo "No color specified";
 	fi
 }
+
+# mkdir, cd into it
+mkcd () {
+	mkdir -p "$*"
+	cd "$*"
+}
+
+# go as far into a subdir tree as you can while there is only one option
+drill() {
+	startDir="${PWD}"
+	if [ -n "$1" ]; then
+		cd "$1"
+	fi
+
+	shopt -s nullglob
+
+	keepGoing=1
+
+	sanity=1
+	drillsMade=0
+	while [ ${keepGoing} -eq 1 ]; do
+		dirContents=(*)
+
+		if [ ${#dirContents[@]} -eq 1 ]; then
+			singleEl=${dirContents[0]}
+			if [ -d ${singleEl} ]; then
+				cd "${singleEl}"
+				let drillsMade=${drillsMade}+1
+			else
+				# there's only one thing here but it's not a text file. We're done.
+				keepGoing=0
+			fi
+		else
+			# either nothing here, or more than one file/dir. either way, we're done
+			keepGoing=0
+		fi
+
+		let sanity=${sanity}+1
+		if [ ${sanity} -ge 50 ]; then
+			keepGoing=0
+			echo "breaking after 50 drills (${sanity})"
+		fi
+	done
+
+	# cd - is busted. can we do better?
+	if [ ${drillsMade} -gt 0 ];then
+		# can't just set $OLDPWD since script has its own env variables. So let's just bounce back
+		# and forth
+		cd "${startDir}"
+		cd -
+	fi
+
+	shopt -u nullglob
+}
