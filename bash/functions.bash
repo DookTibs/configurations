@@ -110,8 +110,14 @@ drill() {
 	if [ ${drillsMade} -gt 0 ];then
 		# can't just set $OLDPWD since script has its own env variables. So let's just bounce back
 		# and forth
+
+		drillDir="${PWD}"
 		cd "${startDir}"
-		cd -
+		cd "${drillDir}"
+		# cd -
+		echo "Drilled to ${drillDir}..."
+	else
+		echo "Couldn't drill..."
 	fi
 
 	shopt -u nullglob
