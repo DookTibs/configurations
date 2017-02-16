@@ -9,11 +9,11 @@ elseif stridx(currentDir, "/home/38593/development/acc") == 0
 	map <BS> :call CellmateUpload()<enter>
 	map \ :call ReloadChromeTab("https://awesome-table.com")<enter>
 elseif stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon") == 0
-	let projectTags = "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/java/tags"
+	let projectTags = "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/java/.dragonOnlineJavaTags"
 	let jdkTags = "/home/38593/development/java/jdk_source/jdktags"
 	let &tags = "tags," . projectTags . "," . jdkTags
 
-	" map \ :call SendFreshCommandToTMUX("mvn compile")<enter>
+	map <BS> :call SendFreshCommandToTMUX("tomcatHelper.sh redeploy")<enter>
 endif
 
 map <C-P> :r! cat /dev/clipboard<enter>
@@ -82,7 +82,21 @@ function! PublishLambda()
 	endif
 endfunction
 
-" TODO - a deploy function that asks for a message? Haven't done a Vimscript funciton yet that take sinput, could be interesting
+" TODO - a AWS Lambda/API deploy function that asks for a message? Haven't done a Vimscript funciton yet that take sinput, could be interesting
+
+" suggested by Eclim author
+let g:SuperTabDefaultCompletionType = 'context'
+
+let g:SuperTabContextDefaultCompletionType = "<c-n>"
+
+" :lnext will jump to the next placed 'sign' - these are those markers that Eclim 
+" dumps in the leftmost column to show compilation problems. :lprev goes backwards
+" :ToggleLocationWindow toggles Vim's location-list window which gives details as to what the problem is
+" leader is \ by default - I use this key for LOTS of stuff. It still works,
+" but any command on \ is slower now that I am using leaders for stuff
+nnoremap <silent> <buffer> <leader>w :call ToggleLocationWindow()<enter>
+nnoremap <silent> <buffer> <leader>n :lnext<enter>
+nnoremap <silent> <buffer> <leader>p :lprev<enter>
 
 " for fast development reloading...
 " :map <BS> :source icf.vim<enter>

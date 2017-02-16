@@ -421,3 +421,45 @@ function! CellmateUpload()
 	" execute "!" . cmd
 	call SendFreshCommandToTMUX(cmd)
 endfunction
+
+function! ToggleLocationWindow()
+	call ToggleWindow("variables.current_syntax", "qf", "lopen", "lclose")
+endfunction
+
+function! ToggleWindow(targetField, targetVal, openCmd, closeCmd)
+	let targetChunks=split(a:targetField, "\\.")
+
+	" do it this way and buffers is a list of Dictionaries with various items listed...
+	" let buffers = map(filter(copy(getbufinfo()), 'v:val.listed'), 'v:val')
+	
+	" do it this way
+	let buffers = map(filter(copy(getbufinfo()), 'v:val.listed'), 'v:val')
+
+	let windowIsOpen = 0
+
+	let idx = 0
+	for b in buffers
+		let idx += 1
+		" echo "buffer [" . idx . "], [" . a:targetField . "]:"
+		" echo b
+		let val = b
+		for chunk in targetChunks
+			let val = val[chunk]
+		endfor
+		" echo val
+		if (val == a:targetVal)
+			let windowIsOpen = 1
+		endif
+	endfor
+
+	if (windowIsOpen == 1)
+		exe a:closeCmd
+	else
+		try
+			exe a:openCmd
+		catch
+			echo "Unable to open window using '" . a:openCmd . "'"
+		endtry
+	endif
+
+endfunction

@@ -7,6 +7,8 @@
 " set backupdir=/cygdrive/c/Users/tfeiler/vimBackups/,.
 set backupdir=~/vimBackups/,.
 
+let mapleader=";"
+
 " this changes swap directory (double slash at end ensures unique filenames so
 " you can edit multiple files from different dirs with same filename
 " set directory=~/vimBackups//,.

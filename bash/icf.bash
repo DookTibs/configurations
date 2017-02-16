@@ -30,9 +30,15 @@ alias gonotes='cd "$ONEDRIVE_HOME/notes"'
 
 alias ls='ls -ltrG --color=auto'
 
-alias godragon="cd /cygdrive/c/Users/38593/workspace/icf_dragon"
-alias gojavadragon="cd /cygdrive/c/Users/38593/workspace/icf_dragon/src/main/java/com/icfi/dragon/web"
-alias gotomcat="cd /cygdrive/c/development/tomcat/apache-tomcat-9.0.0.M15"
+declare -x DRAGON_HOME="/cygdrive/c/Users/38593/workspace/icf_dragon/"
+declare -x DRAGON_JAVA_HOME="${DRAGON_HOME}src/main/java/com/icfi/dragon/web/"
+declare -x DRAGON_TEMPLATES_HOME="${DRAGON_HOME}src/main/webapp/templates/"
+alias godragon="cd $DRAGON_HOME"
+alias godragonjava="cd ${DRAGON_JAVA_HOME}"
+alias godragontemplates="cd ${DRAGON_TEMPLATES_HOME}"
+
+declare -x TOMCAT_HOME="/cygdrive/c/development/tomcat/apache-tomcat-9.0.0.M15/"
+alias gotomcat="cd $TOMCAT_HOME"
 
 alias goapi="cd ~/development/dragon_api"
 alias goapimain="cd ~/development/dragon_api/src/aws_lambda/main/python"
