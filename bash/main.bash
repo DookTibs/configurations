@@ -53,7 +53,8 @@ alias ta="tt"
 alias tl="tmux ls"
 alias tn="tmux new -s"
 alias tc="clear ; tmux clear-history"
-alias tb="tmux_color"
+alias tb="tmux_backcolor"
+alias tf="tmux_forecolor"
 
 alias goscripts='cd ~/development/shellScripts/'
 
