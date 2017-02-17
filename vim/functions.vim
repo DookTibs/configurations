@@ -408,7 +408,7 @@ function! IndentSurroundingBlock()
 	" etc.
 endfunction
 
-function! CellmateUpload()
+function! CellmateUpload(extra)
 	let currFilename = @%
 	let workingDir = system("pwd")
 	let workingDir = substitute(workingDir, "\n", "", "")
@@ -419,6 +419,12 @@ function! CellmateUpload()
 	" do 'workon google_uploader' to enable it in the tmux window that is running this...
 	let cmd = "python ~/development/acc/cellmate/cellmate.py -f " . fullPath . " -o upload"
 	" execute "!" . cmd
+
+	" blink the screen once so we know it's done
+	if a:extra == "blink"
+		let cmd = cmd . "; tmux_blink green 1"
+	endif
+
 	call SendFreshCommandToTMUX(cmd)
 endfunction
 

@@ -135,6 +135,7 @@ drill() {
 
 # optional arg #1 = color, arg #2 = times to blink
 tmux_blink() {
+	currentPane=$TMUX_PANE
 	if [ -z $1 ]; then
 		BLINK_COLOR="red"
 	else
@@ -148,9 +149,9 @@ tmux_blink() {
 	fi
 
 	for (( i=1; i<=$NUM_ITERATIONS; i++ )); do
-		tmux select-pane -P "bg=${BLINK_COLOR},fg=white"
+		tmux select-pane -t "${currentPane}" -P "bg=${BLINK_COLOR},fg=white"
 		sleep .1 
-		tmux select-pane -P "bg=default,fg=default"
+		tmux select-pane -t "${currentPane}" -P "bg=default,fg=default"
 		sleep .1
 	done
 }

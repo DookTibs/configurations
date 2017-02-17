@@ -6,7 +6,7 @@ elseif stridx(currentDir, "/home/38593/development/dragon_api") == 0
 	map <BS> :call DragonAPITestSwitcher()<enter>
 	map \ :call DragonAPITestRunner()<enter>
 elseif stridx(currentDir, "/home/38593/development/acc") == 0
-	map <BS> :call CellmateUpload()<enter>
+	map <BS> :call CellmateUpload("blink")<enter>
 	map \ :call ReloadChromeTab("https://awesome-table.com")<enter>
 elseif stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon") == 0
 	let projectTags = "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/java/.dragonOnlineJavaTags"
