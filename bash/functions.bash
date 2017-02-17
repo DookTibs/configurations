@@ -132,3 +132,25 @@ drill() {
 
 	shopt -u nullglob
 }
+
+# optional arg #1 = color, arg #2 = times to blink
+tmux_blink() {
+	if [ -z $1 ]; then
+		BLINK_COLOR="red"
+	else
+		BLINK_COLOR="${1}"
+	fi
+
+	if [ -z $2 ]; then
+		NUM_ITERATIONS=3
+	else
+		NUM_ITERATIONS=$2
+	fi
+
+	for (( i=1; i<=$NUM_ITERATIONS; i++ )); do
+		tmux select-pane -P "bg=${BLINK_COLOR},fg=white"
+		sleep .1 
+		tmux select-pane -P "bg=default,fg=default"
+		sleep .1
+	done
+}
