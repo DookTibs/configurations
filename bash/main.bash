@@ -5,6 +5,8 @@ alias vit='vim -t' # start with a tag
 alias ls='ls -ltrG'
 alias tmux='tmux -2' # force tmux to recognize 256 color display
 
+alias findname='find . -name'
+
 if [ "${OSTYPE}" = "cygwin" ]; then
 	declare -x TOM_OS="cygwin"
 elif [ `uname` = "Darwin" ]; then
@@ -38,6 +40,7 @@ declare -x PATH=${PATH}:/usr/local/share/npm/bin/:/usr/local/mysql/bin
 alias diffgit='git difftool --no-prompt'
 alias ghost='/usr/local/bin/gs' # this is the ghostscript default. Saving it here in case I do need it for something
 alias gs='clear ; git status'
+alias gr='clear ; git remote -v'
 alias gb='git branch'
 alias st='gs'
 alias dg='diffgit'
@@ -49,6 +52,8 @@ alias diffgitdir='git bcdiff'
 # alias tmass="~/screenConfigs/tmux/assetPipeline.sh"
 # alias tmang="~/screenConfigs/tmux/angular.sh"
 alias tt="tmux attach -t"
+alias tclone="tmux new-session -t" # detach and use 'tmux kill-session -t <SESSION_NAME>' when you're done. I can use this to link windows for the same session in multiple monitors, so I can have
+									# multiple terminals open and each on a different window of the same session. See http://unix.stackexchange.com/questions/24274/attach-to-different-windows-in-session
 alias ta="tt"
 alias tl="tmux ls"
 alias tn="tmux new -s"

@@ -19,6 +19,10 @@ dice() {
 	cd -
 }
 
+http() {
+	python -m SimpleHTTPServer $1
+}
+
 # function
 entitle () { 
 	echo "setting window title to [$*] (fxn defined in .bashrc)..."
