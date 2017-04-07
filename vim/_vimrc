@@ -1,5 +1,22 @@
+" this is the config file for cygwin's Vim. If you're looking for Windows
+" GVim, try C:\Program Files (x86)\Vim\_vimrc
+
+" ACTUALLY - instead I just set Windows environment variable %HOME% to point
+" to C:\cygwin64\home\38593\ and that makes GVim look here too. I still had to
+" do things like drop pathogen.vim into C:\Program Files (x86)\Vim\vimfiles\autoload\ but
+" maybe other things will work?
+
 " this should live in my home directory
+" source ~/development/configurations/vim/cscope_maps.vim
+
 source ~/development/configurations/vim/plugins.vim
 source ~/development/configurations/vim/functions.vim
 source ~/development/configurations/vim/main.vim
-source ~/development/configurations/vim/carleton.vim
+source ~/development/configurations/vim/icf.vim
+
+" source ~/development/configurations/vim/carleton.vim
+
+" various jdb related tests
+" source ~/development/configurations/vim/tibs_jdb.vim
+" source ~/development/configurations/vim/vebugger.vim
+" source ~/development/configurations/vim/dbg.vim
