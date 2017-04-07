@@ -22,6 +22,7 @@
 
 let g:pathogen_disabled = []
 " call add(g:pathogen_disabled, 'vim-airline')
-" call add(g:pathogen_disabled, 'supertab')
+call add(g:pathogen_disabled, 'supertab')
+" call add(g:pathogen_disabled, 'vim-vebugger')
 execute pathogen#infect()
 

@@ -186,7 +186,7 @@ function! SendFreshCommandToTMUX(cmdString, ...)
 	" end
 	let updatedCmdString = "\"clear\" Enter \"" . a:cmdString . "\" Enter"
 
-	echo "update [" . updatedCmdString . "]"
+	" echo "update [" . updatedCmdString . "]"
 	call SendKeysToTMUX(tmuxTarget, updatedCmdString)
 endfunction
 
@@ -198,6 +198,7 @@ function! SendKeysToTMUX(target, cmdString)
 	" redraw!
 	
 	let fullCmd = "tmux send-keys -t " . a:target . " " . a:cmdString
+	" echo "full cmd [" . fullCmd . "]"
 	call system(fullCmd)
 	redraw!
 
@@ -468,4 +469,87 @@ function! ToggleWindow(targetField, targetVal, openCmd, closeCmd)
 		endtry
 	endif
 
+endfunction
+
+function! GetCurrentContext()
+	let workingDir = system("pwd")
+	let workingDir = substitute(workingDir, "\n", "", "")
+	" let workingDir = fnamemodify(workingDir, ':t')
+
+	let currFilename = @%
+	let lineNum = line(".")
+
+	" let key = workingDir . "|" . currFilename . lineNum
+	let fullPath = workingDir . "/" . currFilename
+
+	let context = {'fullPath': fullPath, 'dir': workingDir, 'filename': currFilename, 'line': lineNum}
+	return context
+endfunction
+
+" help channel-demo
+" run /home/38593/development/vim/runtime/tools/demoserver.py
+" send the following:
+" ["call", "MyHandler", ["control vim from python!"]]
+"
+" idea here is that I write a Python program that:
+" 1. watches the tmux window containing jdb and captures output somehow
+" 2. acts as a server
+"
+" Vim then opens a channel to this Python program. Vim sends commands
+" directly to the jdb window using stuff in tibs_jdb.vim. REturn values
+" are sent by the Python program.
+"
+" Candidates for how to achieve #1 - "tmux capture-pane", "tmux pipe-pane"
+" or launch debugger like "jdb whatever | tee outputFile.log" and then my python
+" program just tails outputFile. This is cleanest - gets me JUST the debugger
+" output so I don't have to parse out all the garbage input!
+function! MyHandler(rawJson)
+	let startTime = strftime("%X")
+
+	let parsedData = json_decode(a:rawJson)
+
+	let debugMsg = ""
+	if ("raw" == parsedData.type)
+		let debugMsg = "Raw data: [" . join(parsedData.data, ",") . "]"
+	elseif ("breakpoint_added" == parsedData.type)
+		let bp = parsedData.breakpoint
+		let debugMsg = "added breakpoint at " . bp.class . ":" . bp.line
+		call AddBreakpointAtLineOfCurrentFile(bp.line)
+	elseif ("breakpoint_removed" == parsedData.type)
+		let bp = parsedData.breakpoint
+		let debugMsg = "removed breakpoint at " . bp.class . ":" . bp.line
+	elseif ("breakpoint_list" == parsedData.type)
+		let debugMsg = "list of breakpoints..."
+	else
+		let debugMsg = "Unknown type: " . a:rawJson
+	endif
+
+	let endTime = strftime("%X")
+	echo "[" . startTime . "]->[" . endTime . "] got data " . strpart(a:rawJson, 0, 25) . " ....."
+	" echo "[" . startTime . "]->[" . endTime . "] " . debugMsg
+	
+	" note to self - echo'ing sometimes fires after a lengthy delay. Not sure why.
+
+endfunction
+
+function! ServerTest()
+	let g:channel = ch_open('localhost:8765')
+endfunction
+
+"if () {
+	"sadfdasf
+	"dsaf
+	"dfsa
+	"dsfa
+	"dsaf
+	"fdas
+"}
+
+function! FoldBlock()
+	let startLine = line('.')
+	normal %
+	let endLine = line('.')
+	normal %
+	echo "fold from " .startLine. " to " . endLine
+	execute "normal! :" . startLine . "," . endLine . "fold\<cr>"
 endfunction

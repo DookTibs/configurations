@@ -182,3 +182,26 @@ if stridx(hostName, ".acs.carleton.edu") != -1
 else
 	let g:remote_cmdserver_port=2499
 endif
+
+let g:tibs_search_basedir="."
+" ack related
+" make ack.vim use ag as it's command
+let g:ackprg = 'ag --vimgrep'
+" supposedly these will make Ack work without jumping to the first file in the list. Doesn't work for me though...
+" cnoreabbrev Ack Ack!
+" nnoremap <Leader>a :Ack!<Space>
+
+" :DragonSearch "foobar" will search the entire Dragon codebase using the ack.vim plugin
+" :DragonSearch by itself will search using the word under the cursor
+" command! -bang -nargs=* -complete=file DragonSearch           call ack#Ack('grep<bang>', (<q-args> == "" ? expand("<cword>") : <q-args>) . ' /cygdrive/c/Users/38593/workspace/icf_dragon/' )
+command! -bang -nargs=* -complete=file TibsSearch           call ack#Ack('grep<bang>', (<q-args> == "" ? expand("<cword>") : <q-args>) . ' ' . g:tibs_search_basedir )
+" we intentionally don't add a <enter> here - this lets us add a search term if we want, or just hit enter manually
+" to search for the current word.
+map // :TibsSearch! 
+
+map zz :call FoldBlock()<enter>
+
+hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white
+map _ :set cursorline!<enter>
+
+map <F5> :redraw!<enter>

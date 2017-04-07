@@ -3,17 +3,24 @@
 " set tags to whoever's install I'm looking at
 if stridx("foo", "bar") == 0
 elseif stridx(currentDir, "/home/38593/development/dragon_api") == 0
+	let g:tibs_search_basedir="/home/38593/development/dragon_api"
+	let &tags = "tags," . "/home/38593/development/dragon_api/src/aws_lambda/main/python/.heroApiTags"
 	map <BS> :call DragonAPITestSwitcher()<enter>
 	map \ :call DragonAPITestRunner()<enter>
 elseif stridx(currentDir, "/home/38593/development/acc") == 0
 	map <BS> :call CellmateUpload("blink")<enter>
 	map \ :call ReloadChromeTab("https://awesome-table.com")<enter>
 elseif stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon") == 0
+	let g:tibs_search_basedir="/cygdrive/c/Users/38593/workspace/icf_dragon/"
 	let projectTags = "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/java/.dragonOnlineJavaTags"
 	let jdkTags = "/home/38593/development/java/jdk_source/jdktags"
 	let &tags = "tags," . projectTags . "," . jdkTags
 
-	map <BS> :call SendFreshCommandToTMUX("tomcatHelper.sh redeploy")<enter>
+	" map <BS> :call SendFreshCommandToTMUX("tomcatHelper.sh redeploy")<enter>
+	map <BS> :call DragonOnlineDevUtil()<enter>
+elseif stridx(currentDir, "/home/38593/development/java/ris") == 0
+	map <BS> :call SendFreshCommandToTMUX("ant")<enter>
+	map \ :call SendFreshCommandToTMUX("java -jar dist/lib/RisImporter.jar")<enter>
 endif
 
 map <C-P> :r! cat /dev/clipboard<enter>
@@ -98,5 +105,29 @@ nnoremap <silent> <buffer> <leader>w :call ToggleLocationWindow()<enter>
 nnoremap <silent> <buffer> <leader>n :lnext<enter>
 nnoremap <silent> <buffer> <leader>p :lprev<enter>
 
+function! DragonOnlineDevUtil()
+	" should break this into a fxn
+	let currentDir = system("pwd")
+	let currentDir = substitute(currentDir, "\n", "", "")
+
+	if stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/webapp") == 0
+		" let fullPath = currentDir . "/" . @%
+		silent write " save the file
+		let relativeDir = substitute(currentDir, ".*icf_dragon/src/main/webapp", "", "")
+		let relativeFilePath = relativeDir . "/" . @%
+		" echo "sync webapp file [" . relativeDir . "]    [" . relativeFilePath . "]"
+		let copyCmd = 'cp "' . currentDir . "/" . @% . '" "$TOMCAT_HOME/webapps/ROOT' . relativeDir . '/"'
+		call system(copyCmd)
+
+		" let curlCmd = 'curl "http://localhost:8081' . relativeFilePath . '"'
+		" call system(curlCmd)
+		echo "copied " . relativeDir . "/" . @% . " to $TOMCAT_HOME webapps dir..."
+	elseif stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/java") == 0
+		call SendFreshCommandToTMUX("tomcatHelper.sh redeploy")
+	else
+		echo "don't know how to handle this in " . currentDir . "..."
+	endif
+endfunction
+
 " for fast development reloading...
-" :map <BS> :source icf.vim<enter>
+" map r :source ~/development/configurations/vim/icf.vim<enter>
