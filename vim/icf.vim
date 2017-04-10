@@ -17,7 +17,11 @@ elseif stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon") == 0
 	let &tags = "tags," . projectTags . "," . jdkTags
 
 	" map <BS> :call SendFreshCommandToTMUX("tomcatHelper.sh redeploy")<enter>
-	map <BS> :call DragonOnlineDevUtil()<enter>
+	map <BS> :call DragonOnlineDevUtil(1)<enter>
+
+	autocmd BufWritePost * :call DragonOnlineDevUtil(0)
+	map \ :call ReloadChromeTab("explorer")<enter>
+
 elseif stridx(currentDir, "/home/38593/development/java/ris") == 0
 	map <BS> :call SendFreshCommandToTMUX("ant")<enter>
 	map \ :call SendFreshCommandToTMUX("java -jar dist/lib/RisImporter.jar")<enter>
@@ -105,7 +109,7 @@ nnoremap <silent> <buffer> <leader>w :call ToggleLocationWindow()<enter>
 nnoremap <silent> <buffer> <leader>n :lnext<enter>
 nnoremap <silent> <buffer> <leader>p :lprev<enter>
 
-function! DragonOnlineDevUtil()
+function! DragonOnlineDevUtil(userInteraction)
 	" should break this into a fxn
 	let currentDir = system("pwd")
 	let currentDir = substitute(currentDir, "\n", "", "")
@@ -123,7 +127,11 @@ function! DragonOnlineDevUtil()
 		" call system(curlCmd)
 		echo "copied " . relativeDir . "/" . @% . " to $TOMCAT_HOME webapps dir..."
 	elseif stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/java") == 0
-		call SendFreshCommandToTMUX("tomcatHelper.sh redeploy")
+		" we only trigger a reploy if we actually launched the command intentionally.
+		" if this fired as a result of a save action, we don't do it.
+		if (a:userInteraction == 1)
+			call SendFreshCommandToTMUX("tomcatHelper.sh redeploy")
+		endif
 	else
 		echo "don't know how to handle this in " . currentDir . "..."
 	endif
