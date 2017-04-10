@@ -244,7 +244,7 @@ endfunction
 
 
 function! ReloadChromeTabWithAutoHotKey(pattern)
-	let scriptPath="/cygdrive/c/development/AHK\\ Scripts/chromeReloader.ahk"
+	let scriptPath="~/development/configurations/ahk/chromeReloader.ahk"
 	silent execute "!cygstart " . scriptPath . " " . a:pattern
 	redraw!
 endfunction
