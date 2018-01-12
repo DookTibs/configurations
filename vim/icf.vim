@@ -2,6 +2,12 @@
 
 " set tags to whoever's install I'm looking at
 if stridx("foo", "bar") == 0
+elseif stridx(currentDir, "/home/38593/development/uncertainty") == 0
+	" map <BS> :call ReloadChromeTab("localhost:4000")<enter>
+elseif stridx(currentDir, "/home/38593/development/docter_online") == 0
+	map <BS> :call ReloadChromeTab("localhost:5678")<enter>
+	let &tags = "tags," . "/home/38593/development/docter_online/.docterOnlineTags"
+
 elseif stridx(currentDir, "/home/38593/development/dragon_api") == 0
 	let g:tibs_search_basedir="/home/38593/development/dragon_api"
 	let &tags = "tags," . "/home/38593/development/dragon_api/src/aws_lambda/main/python/.heroApiTags"
@@ -14,13 +20,14 @@ elseif stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon") == 0
 	let g:tibs_search_basedir="/cygdrive/c/Users/38593/workspace/icf_dragon/"
 	let projectTags = "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/java/.dragonOnlineJavaTags"
 	let jdkTags = "/home/38593/development/java/jdk_source/jdktags"
-	let &tags = "tags," . projectTags . "," . jdkTags
+	" let &tags = "tags," . projectTags . "," . jdkTags
+	let &tags = "tags," . projectTags
 
 	" map <BS> :call SendFreshCommandToTMUX("tomcatHelper.sh redeploy")<enter>
 	map <BS> :call DragonOnlineDevUtil(1)<enter>
 
 	autocmd BufWritePost * :call DragonOnlineDevUtil(0)
-	map \ :call ReloadChromeTab("explorer")<enter>
+	" map \ :call ReloadChromeTab("explorer")<enter>
 
 elseif stridx(currentDir, "/home/38593/development/java/ris") == 0
 	map <BS> :call SendFreshCommandToTMUX("ant")<enter>
@@ -114,7 +121,13 @@ function! DragonOnlineDevUtil(userInteraction)
 	let currentDir = system("pwd")
 	let currentDir = substitute(currentDir, "\n", "", "")
 
-	if stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/webapp") == 0
+	if stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/webapp/css") == 0
+		if (a:userInteraction == 1)
+			let copyCmd = 'cp /cygdrive/c/Users/38593/workspace/icf_dragon/src/main/webapp/css/main.css /cygdrive/c/development/tomcat/apache-tomcat-9.0.0.M15/webapps/ROOT/css/'
+			call system(copyCmd)
+			echo "copied main.css to TOMCAT_HOME (did you have gulp running?)..."
+		endif
+	elseif stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/webapp") == 0
 		" let fullPath = currentDir . "/" . @%
 		silent write " save the file
 		let relativeDir = substitute(currentDir, ".*icf_dragon/src/main/webapp", "", "")
@@ -125,15 +138,28 @@ function! DragonOnlineDevUtil(userInteraction)
 
 		" let curlCmd = 'curl "http://localhost:8081' . relativeFilePath . '"'
 		" call system(curlCmd)
-		echo "copied " . relativeDir . "/" . @% . " to $TOMCAT_HOME webapps dir..."
+		if (a:userInteraction == 1)
+			echo "copied " . relativeDir . "/" . @% . " to $TOMCAT_HOME webapps dir..."
+		" else just do it silently in the background...
+		endif
 	elseif stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/java") == 0
 		" we only trigger a reploy if we actually launched the command intentionally.
 		" if this fired as a result of a save action, we don't do it.
 		if (a:userInteraction == 1)
-			call SendFreshCommandToTMUX("tomcatHelper.sh redeploy")
+			" cancel whatever's running, and then redeploy/rewatch
+			
+			" old way - in pane 1 of my current window
+			" call SendFreshCommandToTMUX("C-c")
+			" call SendFreshCommandToTMUX("tomcatHelper.sh redeploy && tomcatHelper.sh watch")
+
+			" new way - in a window named "dragonTomcat"
+			call system("createTmuxWindowIfNotThere.sh dragonTomcat")
+			call SendFreshCommandToTMUX("C-c", "dragonTomcat")
+			call SendFreshCommandToTMUX("tomcatHelper.sh redeploy && tomcatHelper.sh watch", "dragonTomcat")
+			echo "Build initiated in 'dragonTomcat' window..."
 		endif
 	else
-		echo "don't know how to handle this in " . currentDir . "..."
+		" echo "don't know how to handle this in " . currentDir . "..."
 	endif
 endfunction
 

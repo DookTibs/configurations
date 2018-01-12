@@ -311,14 +311,27 @@ endfunction
 
 function! SetExpandTabForIndentedLanguages()
 	let currentFileType=&filetype
-	" echo "sample fxn! [" currentFileType "]/[" @% "]"
+	let fullFilename=expand("%:p")
+	" echo "sample fxn! [" currentFileType "]/[" fullFilename "]"
 	set nosmartindent
+
+	if currentFileType == "javascript" && (stridx(fullFilename, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/webapp/js") == 0)
+		set shiftwidth=2
+		set tabstop=2
+		set softtabstop=2
+		set expandtab
+		return
+	endif
+	set shiftwidth=4
+	set tabstop=4
+	set softtabstop=4
+	set noexpandtab
+
 
 	if currentFileType == "python" || currentFileType == "coffee"
 		" echo "python/coffee/etc. - expandtab"
 		set expandtab
 	else
-		let fullFilename=expand("%:p")
 		" echo "full name [" fullFilename "]"
 
 		if currentFileType == "php" && (stridx(fullFilename, "${MOODLE_WSG}") == 0 || stridx(fullFilename, "/Users/tfeiler/remotes/mitreClampHome") == 0 || stridx(fullFilename, "/home/tfeiler/moodles") == 0)
@@ -552,4 +565,57 @@ function! FoldBlock()
 	normal %
 	echo "fold from " .startLine. " to " . endLine
 	execute "normal! :" . startLine . "," . endLine . "fold\<cr>"
+endfunction
+
+function! ToggleLineNumDisplay()
+	if (&number == 0 && &relativenumber == 0)
+		set number
+	else
+		if (&number == 1 && &relativenumber == 0)
+			set relativenumber
+		else
+			set nonumber
+			set norelativenumber
+		endif
+	endif
+
+endfunction
+
+" I use Vim's autochdir and don't want to stop, but this wreaks havoc with cscope...basically
+" you can follow tags but as soon as you switch directories relative links start to break down.
+" If you disable autochdir it all works but I love autochdir!
+" Best solution I've found is to build the tag database with absolute paths and just call this
+" function via an autocmd every time I switch buffers
+function! ReloadCscopeDatabase(dirOfInterest)
+	" autochdir doesn't seem to change directories soon enough so I'll do it myself
+	" see http://vim.wikia.com/wiki/Set_working_directory_to_the_current_file
+	" this is super clunky
+	lcd %:p:h
+	let dir = getcwd()
+
+	if stridx(dir, a:dirOfInterest) == 0
+		" echo "Reloading in [" . dir . "]..."
+		set nocsverb
+		cs reset
+		set csverb
+	else
+		" not in project, skip
+	endif
+
+endfunction
+
+function! ToggleCustomLineHighlight()
+	" getmatches will return current matches
+	let currentMatches = getmatches()
+
+	let linePattern = '\%' . line('.') . 'l'
+	for m in currentMatches
+		if has_key(m, 'pattern') && m['pattern'] == linePattern
+			call matchdelete(m['id'])
+			return
+		endif
+	endfor
+	
+	call matchadd('TempLineMarker', linePattern)
+	echo "Press - again to remove; or ':call clearmatches()' to remove all"
 endfunction

@@ -7,7 +7,7 @@
 " maybe other things will work?
 
 " this should live in my home directory
-" source ~/development/configurations/vim/cscope_maps.vim
+source ~/development/configurations/vim/cscope_maps.vim
 
 source ~/development/configurations/vim/plugins.vim
 source ~/development/configurations/vim/functions.vim

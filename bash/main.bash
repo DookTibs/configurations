@@ -41,12 +41,15 @@ alias diffgit='git difftool --no-prompt'
 alias ghost='/usr/local/bin/gs' # this is the ghostscript default. Saving it here in case I do need it for something
 alias gs='clear ; git status'
 alias gr='clear ; git remote -v'
+alias gd="tc ; git diff $1"
 alias gb='git branch'
 alias st='gs'
 alias dg='diffgit'
 alias diffgitb='git difftool -t bc3 --no-prompt'
 alias diffgitv='git difftool -t vimdiff --no-prompt'
 alias diffgitdir='git bcdiff'
+# show branches sorted by recent modification
+alias gbs='for k in `git branch|perl -pe s/^..//`;do echo -e `git show --pretty=format:"%Cgreen%ci %C(cyan)%cr%Creset" $k|head -n 1`\\t$k;done|sort -r'
 
 # tmux aliases
 # alias tmass="~/screenConfigs/tmux/assetPipeline.sh"
@@ -82,4 +85,7 @@ alias irssi_slim="irssi --config=~/.irssi/slim_config"
 # changed to be a function
 # alias dice="cd ~/development/diceware ; coffee main.coffee ; cd -"
 
-declare -x PATH=${PATH}:~/development/pebble-dev/pebble-sdk-4.2-mac/bin
+alias list_ssh_aliases="cat ~/.ssh/* | grep \"Host \" | awk '{ print \$2 }' | sort | uniq"
+
+# declare -x PATH=${PATH}:~/development/pebble-dev/pebble-sdk-4.2-mac/bin
+declare -x PATH=${PATH}:~/development/tools/gtags_bin

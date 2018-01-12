@@ -1,0 +1,14 @@
+Host prod_bastion
+	# elastic ip of dragon-prod-jumpbox
+	HostName 54.243.26.249
+	User ec2-user
+	Port 22
+	IdentityFile /cygdrive/c/Users/38593/workspace/icf_dragon/unsynced/keypairs/icf_dragon_aws_20170508_keypair.pem
+
+Host prod_web
+	# private IP of icfdragon-webserver-1. This changes as Elastic Beanstalk makes changes (proof of concept)
+	Hostname 10.0.1.162
+	User ec2-user
+	Port 22
+	ProxyCommand ssh prod_bastion -W %h:%p
+	IdentityFile /cygdrive/c/Users/38593/workspace/icf_dragon/unsynced/keypairs/icf_dragon_aws_20170508_keypair.pem

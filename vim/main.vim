@@ -21,10 +21,11 @@ source $VIMRUNTIME/vimrc_example.vim
 set nu
 set ai
 highlight Normal guibg=Black guifg=White
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set noexpandtab
+" relocated to the increasingly poorly named SetExpandTabForIndentedLanguages
+" set tabstop=4
+" set softtabstop=4
+" set shiftwidth=4
+" set noexpandtab
 set incsearch
 set hlsearch
 " au FileType text echo "textwidth set to 0; run ':set tw=78' to revert to default for this file"
@@ -48,7 +49,8 @@ map <Space> :call ShowTagPrototype()<enter>
 
 " by default # does reverse search of current word (like * but opposite direction)
 " I don't use that all that much so instead let's map it to toggle line numbers
-map # :set nu!<enter>
+" map # :set nu!<enter>
+map # :call ToggleLineNumDisplay()<enter>
 
 " colorschemes live in /usr/share/vim/vim73/colors/
 " others that are ok: torte, delek, darkblue, slate, zellner
@@ -201,7 +203,16 @@ map // :TibsSearch!
 
 map zz :call FoldBlock()<enter>
 
+" code for easy line highlights. underscore will highlight line as cursor moves
 hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white
 map _ :set cursorline!<enter>
 
+" and dash will let me add custom highlights (useful if I am jumping around and interested in 
+" particular areas, or want to mark temp debug code, etc.)
+hi TempLineMarker cterm=NONE ctermbg=green ctermfg=darkred
+map - :call ToggleCustomLineHighlight()<enter>
+
 map <F5> :redraw!<enter>
+
+" with non-zero values, vim will start scrolling as you approach the top/bottom of the visible portion of the file
+set scrolloff=0

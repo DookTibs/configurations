@@ -33,11 +33,21 @@
 	ui = auto
 
 [alias]
+	# git mylog | grep "^commit " | awk 'NR == 2 { print $2 }'
 	bcdiff = !sh ~/development/shellScripts/openGitDiffsInBackground.sh
 	ignored = !git ls-files -v | grep "^[[:lower:]]"
 	showfiles = "!f() { git diff-tree -no-commit-id --name-only -r $1; }; f"
+	# showRecentFiles = "!f() { echo \"foo $1\"; git mylog; }; f"
 	mylog = !git log --author="Feiler"
+	squash = "!f() { git rebase -i HEAD~$1; }; f"
+	graph = log --graph --full-history --all --color --pretty=tformat:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s%x20%x1b[33m(%an)%x1b[0m"
+
+
+# how to get this into an alias?
+# for k in `git branch|perl -pe s/^..//`;do echo -e `git show --pretty=format:"%Cgreen%ci %C(cyan)%cr%Creset" $k|head -n 1`\\t$k;done|sort -r }; f"
 
 [user]
-	name = Thomas Feiler
-	email = tfeiler@carleton.edu
+	name = Tom Feiler
+	email = tfeiler@gmail.com
+[credential]
+	helper = cache
