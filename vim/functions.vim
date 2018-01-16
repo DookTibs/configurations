@@ -590,7 +590,13 @@ function! ReloadCscopeDatabase(dirOfInterest)
 	" autochdir doesn't seem to change directories soon enough so I'll do it myself
 	" see http://vim.wikia.com/wiki/Set_working_directory_to_the_current_file
 	" this is super clunky
-	lcd %:p:h
+	try
+		lcd %:p:h
+	catch
+		" this fails sometimes; for instance when vimdiff'ing? <Maybe other times too
+		echo "ReloadCscopeDatabase failed (diffing perhaps?), aborting..."
+		return
+	endtry
 	let dir = getcwd()
 
 	if stridx(dir, a:dirOfInterest) == 0

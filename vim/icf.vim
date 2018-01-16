@@ -156,7 +156,8 @@ function! DragonOnlineDevUtil(userInteraction)
 			call system("createTmuxWindowIfNotThere.sh dragonTomcat")
 			call SendFreshCommandToTMUX("C-c", "dragonTomcat")
 			call SendFreshCommandToTMUX("tomcatHelper.sh redeploy && tomcatHelper.sh watch", "dragonTomcat")
-			echo "Build initiated in 'dragonTomcat' window..."
+			call system("tmux select-window -t 'dragonTomcat'")
+			" echo "Build initiated in 'dragonTomcat' window..."
 		endif
 	else
 		" echo "don't know how to handle this in " . currentDir . "..."
