@@ -52,12 +52,15 @@ alias gotemplates=godragontemplates
 alias gojs=godragonjs
 alias gocss=godragoncss
 
+alias launch_sqsd="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/event_queue_tfeiler_sqsd --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
+
 declare -x DOCTER_HOME="/home/38593/development/docter_online/"
 declare -x DOCTER_VM_HOME="/home/38593/development/docterVM/"
 alias godocter="cd ${DOCTER_HOME}"
 alias godocterVM="cd ${DOCTER_VM_HOME}"
 
-declare -x TOMCAT_HOME="/cygdrive/c/development/tomcat/apache-tomcat-9.0.0.M15/"
+# declare -x TOMCAT_HOME="/cygdrive/c/development/tomcat/apache-tomcat-9.0.0.M15/"
+declare -x TOMCAT_HOME="/cygdrive/c/development/tomcat/apache-tomcat-9.0.0.M18/"
 alias gotomcat="cd $TOMCAT_HOME"
 
 alias goapi="cd ~/development/dragon_api"
@@ -89,10 +92,13 @@ runMongoOnCygwin() {
 	winpty /cygdrive/c/Program\ Files/MongoDB/Server/3.4/bin/mongo.exe $1
 }
 
+alias sqlite="winpty /cygdrive/c/development/tools/sqlite/sqlite3.exe"
+
 alias mongo_dragon_dev="runMongoOnCygwin ${MONGO_DEV_PRIMARY_CONN}"
 alias mongo_dragon_dev2="runMongoOnCygwin ${MONGO_DEV_SECONDARY_CONN}"
 alias mongo_dragon_prod="runMongoOnCygwin ${MONGO_PROD_PRIMARY_CONN}"
 alias mongo_dragon_prod2="runMongoOnCygwin ${MONGO_PROD_SECONDARY_CONN}"
+alias mongo_dragon_sandbox="runMongoOnCygwin ${MONGO_SANDBOX_PRIMARY_CONN}"
 
 # at ICF/cygwin I kept running into this issue where shell overwrote itself.
 # this MAYBE has something to do with python virtualenv - but I think it's just
@@ -204,20 +210,30 @@ alias tunnel_dragon_prod_stop="tunnel_dragon_prod_psql_stop"
 
 alias tunnel_dragon_dev_psql_start="ssh -N -f -L 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_jumpbox"
 alias tunnel_dragon_dev_psql_stop="stopTunnelling.sh 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
-alias tunnel_dragon_dev_elastic_start="ssh -N -f -L 9250:10.2.0.90:9200 -L 9350:10.2.0.90:9300 dev_jumpbox"
-alias tunnel_dragon_dev_elastic_stop="stopTunnelling.sh 9250:10.2.0.90:9200"
-alias tunnel_dragon_dev_start="tunnel_dragon_dev_psql_start ; tunnel_dragon_dev_elastic_start"
-alias tunnel_dragon_dev_stop="tunnel_dragon_dev_psql_stop ; tunnel_dragon_dev_elastic_stop"
+# alias tunnel_dragon_dev_elastic_start="ssh -N -f -L 9250:10.2.0.90:9200 -L 9350:10.2.0.90:9300 dev_jumpbox"
+# alias tunnel_dragon_dev_elastic_stop="stopTunnelling.sh 9250:10.2.0.90:9200"
+alias tunnel_dragon_dev_start="tunnel_dragon_dev_psql_start" # ; tunnel_dragon_dev_elastic_start"
+alias tunnel_dragon_dev_stop="tunnel_dragon_dev_psql_stop" # ; tunnel_dragon_dev_elastic_stop"
 
+alias tunnel_dragon_sandbox_psql_start="ssh -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_jumpbox"
+alias tunnel_dragon_sandbox_psql_stop="stopTunnelling.sh 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
+alias tunnel_dragon_sandbox_start="tunnel_dragon_sandbox_psql_start"
+alias tunnel_dragon_sandbox_stop="tunnel_dragon_sandbox_psql_stop"
 
 alias tunnel_docter_dev_psql_start="ssh -N -f -L 5937:docter-dev-psql.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_docter_jumpbox"
 alias tunnel_docter_dev_psql_stop="stopTunnelling.sh 5937:docter-dev-psql"
 
+alias tunnel_embsi_dev_start="ssh -N -f -L 6462:embsi-dev-psql.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_embsi_jumpbox"
+alias tunnel_embsi_dev_stop="stopTunnelling.sh 6462:embsi-dev-psql"
+
 # curl localhost:9250/_cluster/health?pretty
 alias psql_dragon_production="psql -h localhost -p 6432 -d dragon -U dragon"
 alias psql_dragon_development="psql -h localhost -p 7432 -d dragon -U dbadmin"
+alias psql_dragon_sandbox="psql -h localhost -p 8432 -d dragon_env_backup -U dragon_sandbox_admin"
 
 alias psql_docter_development="psql -h localhost -p 5937 -d docter -U docter"
+
+alias psql_embsi_development="psql -h localhost -p 6462 -d embsi_dev -U embsi_admin"
 
 # where am I:
 # 1. added AWSLambdaVPCAccessExecutionRole policy to "dragon-api-lambda" role in IAM

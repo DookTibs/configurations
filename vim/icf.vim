@@ -9,10 +9,15 @@ elseif stridx(currentDir, "/home/38593/development/docter_online") == 0
 	let &tags = "tags," . "/home/38593/development/docter_online/.docterOnlineTags"
 
 elseif stridx(currentDir, "/home/38593/development/dragon_api") == 0
-	let g:tibs_search_basedir="/home/38593/development/dragon_api"
-	let &tags = "tags," . "/home/38593/development/dragon_api/src/aws_lambda/main/python/.heroApiTags"
-	map <BS> :call DragonAPITestSwitcher()<enter>
-	map \ :call DragonAPITestRunner()<enter>
+	" old Lambda mappings
+	" let g:tibs_search_basedir="/home/38593/development/dragon_api"
+	" let &tags = "tags," . "/home/38593/development/dragon_api/src/aws_lambda/main/python/.heroApiTags"
+	" map <BS> :call DragonAPITestSwitcher()<enter>
+	" map \ :call DragonAPITestRunner()<enter>
+	
+	" new Flask mappings
+	map \ :call SendFreshCommandToTMUX("python application.py", "1")<enter>
+	map <BS> :call SendFreshCommandToTMUX("python endpointTester.py local tom.feiler@icf.com /assessments/164241/studies?outputMapper=HeroMapper", "3")<enter>
 elseif stridx(currentDir, "/home/38593/development/acc") == 0
 	map <BS> :call CellmateUpload("blink")<enter>
 	map \ :call ReloadChromeTab("https://awesome-table.com")<enter>
