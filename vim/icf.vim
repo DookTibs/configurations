@@ -2,29 +2,79 @@
 
 " set tags to whoever's install I'm looking at
 if stridx("foo", "bar") == 0
-elseif stridx(currentDir, "/home/38593/development/uncertainty") == 0
-	" map <BS> :call ReloadChromeTab("localhost:4000")<enter>
-elseif stridx(currentDir, "/home/38593/development/docter_online") == 0
-	map <BS> :call ReloadChromeTab("localhost:5678")<enter>
-	let &tags = "tags," . "/home/38593/development/docter_online/.docterOnlineTags"
+elseif stridx(currentDir, "/Users/tfeiler/development/hawc/epahawc") == 0
+	let &tags = "tags," . "/Users/tfeiler/development/hawc/epahawc/.hawcTags"
+	
+	" \ should send the cache.clear() command to the manage.py shell running in the tmux HAWC_SERVERS session,
+	" window 1, pane 1
+	" map \ :call SendFreshCommandToTMUX("cache.clear()", "HAWC_SERVERS:1.1")<enter>
+	
+	" backspace should add some empty spaces on the debug console running in the tmux HAWC_SERVERS session,
+	" window 1, pane 0
+	map <BS> :call SendKeysToTMUX("HAWC_SERVERS:1.0", "Enter")<enter>
 
-elseif stridx(currentDir, "/home/38593/development/dragon_api") == 0
+elseif stridx(currentDir, "/Users/tfeiler/development/fhwa") == 0
+	" map caret to wrap the next character in a "superscript" tag (think footnotes)
+	map ^ li<sup>la</sup>
+
+	" map backspace to wrap a line in the figure source footer style
+	map <BS> I<tab><tab><tab><p class="figure-source">A</p>j
+
+	" map @ to wrap cell text in "strong" and move to next line (1j replace with 8j or so to do columns
+	map @ i<strong>/</tdi</strong>1j0/">ll
+	map # i<em>/</tdi</em>1j0/">ll
+
+	" map \ to reload the browser
+	map \ :call ReloadChromeTab("localhost:4444")<enter>
+
+	" and automatically run the compiler whenever I save
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh chap1.html 'CHAPTER 1: System Assets' CHAP1","2")
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh chap2.html 'CHAPTER 2: Funding' CHAP2","2")
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh chap3.html 'CHAPTER 3: Travel' CHAP3","2")
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh chap4.html 'CHAPTER 4: Mobility and Access' CHAP4","2")
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh chap5.html 'CHAPTER 5: Safety' CHAP5","2")
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh chap6.html 'CHAPTER 6: Infrastructure Conditions' CHAP6","2")
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh chap7.html 'CHAPTER 7: Capital Investment Scenarios' CHAP7","2")
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh chap8.html 'CHAPTER 8: Supplemental Analysis' CHAP8","2")
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh chap9.html 'CHAPTER 9: Sensitivity Analysis' CHAP9","2")
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh chap10.html 'CHAPTER 10: Impacts of Investment' CHAP10","2")
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh part4.html 'PART IV: Additional Information' PART4","2")
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh chap13.html 'CHAPTER 13: Multimodal Transportation Systems: Pedestrian and Bicycle' CHAP13","2")
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh part5.html 'PART V: Changes to the Highway Performance Monitoring System' PART5","2")
+	" autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh part6.html 'PART VI: Appendices' PART6","2")
+	autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh appendixb.html 'APPENDIX B: Bridge Investment Analysis Methodology' APPB","2")
+
+
+elseif stridx(currentDir, "/Users/tfeiler/development/uncertainty") == 0
+	map <BS> :call ReloadChromeTab("localhost:5000")<enter>
+	map \ :call SendFreshCommandToTMUX("python application.py")<enter>
+	let &tags = "tags," . "/Users/tfeiler/development/uncertainty/flask/.embsiTags"
+
+	" let g:lsc_server_commands = { 'python': 'pyls' }
+	" let g:lsc_auto_map = v:true " use default vim-lsc mappings
+elseif stridx(currentDir, "/Users/tfeiler/development/docter_online") == 0
+	map <BS> :call ReloadChromeTab("localhost:5678")<enter>
+	let &tags = "tags," . "/Users/tfeiler/development/docter_online/.docterOnlineTags"
+
+elseif stridx(currentDir, "/Users/tfeiler/development/dragon_api") == 0
 	" old Lambda mappings
-	" let g:tibs_search_basedir="/home/38593/development/dragon_api"
-	" let &tags = "tags," . "/home/38593/development/dragon_api/src/aws_lambda/main/python/.heroApiTags"
+	" let g:tibs_search_basedir="/Users/tfeiler/development/dragon_api"
+	" let &tags = "tags," . "/Users/tfeiler/development/dragon_api/src/aws_lambda/main/python/.heroApiTags"
 	" map <BS> :call DragonAPITestSwitcher()<enter>
 	" map \ :call DragonAPITestRunner()<enter>
 	
 	" new Flask mappings
 	map \ :call SendFreshCommandToTMUX("python application.py", "1")<enter>
 	map <BS> :call SendFreshCommandToTMUX("python endpointTester.py local tom.feiler@icf.com /assessments/164241/studies?outputMapper=HeroMapper", "3")<enter>
-elseif stridx(currentDir, "/home/38593/development/acc") == 0
+elseif stridx(currentDir, "/Users/tfeiler/development/acc") == 0
 	map <BS> :call CellmateUpload("blink")<enter>
 	map \ :call ReloadChromeTab("https://awesome-table.com")<enter>
-elseif stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon") == 0
-	let g:tibs_search_basedir="/cygdrive/c/Users/38593/workspace/icf_dragon/"
-	let projectTags = "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/java/.dragonOnlineJavaTags"
-	let jdkTags = "/home/38593/development/java/jdk_source/jdktags"
+elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/scripts/flexFormCustomJsScripts") == 0
+	autocmd BufWritePost * :call StuffFlexFormJs()
+elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon") == 0
+	let g:tibs_search_basedir="/Users/tfeiler/development/icf_dragon/"
+	let projectTags = "/Users/tfeiler/development/icf_dragon/src/main/java/.dragonOnlineJavaTags"
+	let jdkTags = "/Users/tfeiler/development/java/jdk_source/jdktags"
 	" let &tags = "tags," . projectTags . "," . jdkTags
 	let &tags = "tags," . projectTags
 
@@ -34,12 +84,17 @@ elseif stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon") == 0
 	autocmd BufWritePost * :call DragonOnlineDevUtil(0)
 	" map \ :call ReloadChromeTab("explorer")<enter>
 
-elseif stridx(currentDir, "/home/38593/development/java/ris") == 0
+elseif stridx(currentDir, "/Users/tfeiler/development/java/ris") == 0
 	map <BS> :call SendFreshCommandToTMUX("ant")<enter>
 	map \ :call SendFreshCommandToTMUX("java -jar dist/lib/RisImporter.jar")<enter>
 endif
 
-map <C-P> :r! cat /dev/clipboard<enter>
+
+if $TOM_OS == 'cygwin'
+	map <C-P> :r! cat /dev/clipboard<enter>
+else
+	map <C-P> :r! pbpaste<enter>
+endif
 
 " based on the currently active edit window, figure out the last dir we are in and the part of the API we're looking
 " at. We'll use this for things like switching between test/main source files, triggering appropriate test/deploy 
@@ -121,18 +176,31 @@ nnoremap <silent> <buffer> <leader>w :call ToggleLocationWindow()<enter>
 nnoremap <silent> <buffer> <leader>n :lnext<enter>
 nnoremap <silent> <buffer> <leader>p :lprev<enter>
 
+function! StuffFlexFormJs()
+	let currentDir = system("pwd")
+	let currentDir = substitute(currentDir, "\n", "", "")
+	let fullPath = currentDir . "/" . @%
+	let stuffCmd = $DRAGON_HOME . "/src/main/scripts/flexFormCustomJsHelper.py stuff " . fullPath
+	call system(stuffCmd)
+
+	if (v:shell_error != 0)
+		" checks exit code of flexFormCustomJsHelper.py; if non-zero, display this hint...
+		echo "error stuffing (" . v:shell_error . ") - this will only work if using a Python VM with psycopg2 (like flexform_customjs)"
+	endif
+endfunction
+
 function! DragonOnlineDevUtil(userInteraction)
 	" should break this into a fxn
 	let currentDir = system("pwd")
 	let currentDir = substitute(currentDir, "\n", "", "")
 
-	if stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/webapp/css") == 0
+	if stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/webapp/css") == 0
 		if (a:userInteraction == 1)
-			let copyCmd = 'cp /cygdrive/c/Users/38593/workspace/icf_dragon/src/main/webapp/css/main.css /cygdrive/c/development/tomcat/apache-tomcat-9.0.0.M15/webapps/ROOT/css/'
+			let copyCmd = 'cp /Users/tfeiler/development/icf_dragon/src/main/webapp/css/main.css /Users/tfeiler/development/tools/tomcat/apache-tomcat-9.0.0.M18/webapps/ROOT/css/'
 			call system(copyCmd)
 			echo "copied main.css to TOMCAT_HOME (did you have gulp running?)..."
 		endif
-	elseif stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/webapp") == 0
+	elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/webapp") == 0
 		" let fullPath = currentDir . "/" . @%
 		silent write " save the file
 		let relativeDir = substitute(currentDir, ".*icf_dragon/src/main/webapp", "", "")
@@ -147,7 +215,7 @@ function! DragonOnlineDevUtil(userInteraction)
 			echo "copied " . relativeDir . "/" . @% . " to $TOMCAT_HOME webapps dir..."
 		" else just do it silently in the background...
 		endif
-	elseif stridx(currentDir, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/java") == 0
+	elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/java") == 0
 		" we only trigger a reploy if we actually launched the command intentionally.
 		" if this fired as a result of a save action, we don't do it.
 		if (a:userInteraction == 1)
@@ -162,6 +230,8 @@ function! DragonOnlineDevUtil(userInteraction)
 			call SendFreshCommandToTMUX("C-c", "dragonTomcat")
 			call SendFreshCommandToTMUX("tomcatHelper.sh redeploy && tomcatHelper.sh watch", "dragonTomcat")
 			call system("tmux select-window -t 'dragonTomcat'")
+
+
 			" echo "Build initiated in 'dragonTomcat' window..."
 		endif
 	else

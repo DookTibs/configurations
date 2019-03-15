@@ -262,8 +262,10 @@ function! ReloadChromeTabWithChromix(pattern)
 	" silent execute "!chromix with " . a:pattern . " close ; chromix load " . a:pattern
 	" silent execute "!chromix with " . a:pattern . " reload ; chromix with " . a:pattern . " focus"
 	if g:remote_cmdserver_port == -1
-		silent execute "!chromix load " . a:pattern . " ; chromix with " . a:pattern . " reload"
-		let methodology="local chromix"
+		" silent execute "!chromix load " . a:pattern . " ; chromix with " . a:pattern . " reload"
+		silent execute "!chromix-too reload " . a:pattern
+		silent execute "!chromix-too select " . a:pattern
+		let methodology="local chromix-too"
 	else
 		" attempt to run it via curl/simpleCommandServer
 		exe "silent !curl -s localhost:" . g:remote_cmdserver_port . "/chromix/with/" . a:pattern . "/reload"
@@ -315,7 +317,8 @@ function! SetExpandTabForIndentedLanguages()
 	" echo "sample fxn! [" currentFileType "]/[" fullFilename "]"
 	set nosmartindent
 
-	if currentFileType == "javascript" && (stridx(fullFilename, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/webapp/js") == 0)
+	" if currentFileType == "javascript" && (stridx(fullFilename, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/webapp/js") == 0)
+	if currentFileType == "javascript" && (stridx(fullFilename, "/Users/tfeiler/development/icf_dragon/src/main/webapp/js") == 0)
 		set shiftwidth=2
 		set tabstop=2
 		set softtabstop=2
@@ -384,6 +387,16 @@ endfunction
 function! EnhancedKeywordLookup()
 	let wordUnderCursor = expand("<cword>")
 	let ft = &filetype
+
+	" don't use an external command; use the NVimR Rhelp command
+	if ft == "r"
+		exe "Rhelp " . wordUnderCursor
+		return
+	elseif ft == "python"
+		exe "silent !pydoc " . wordUnderCursor . " | less"
+		redraw!
+		return
+	endif
 
 	if g:remote_cmdserver_port == -1
 		" just run the command
@@ -610,6 +623,7 @@ function! ReloadCscopeDatabase(dirOfInterest)
 
 endfunction
 
+" highlight TempLineMarker ctermbg=green
 function! ToggleCustomLineHighlight()
 	" getmatches will return current matches
 	let currentMatches = getmatches()
@@ -624,4 +638,17 @@ function! ToggleCustomLineHighlight()
 	
 	call matchadd('TempLineMarker', linePattern)
 	echo "Press - again to remove; or ':call clearmatches()' to remove all"
+endfunction
+
+" see https://vi.stackexchange.com/questions/666/how-to-add-indentation-guides-lines
+function! ToggleVerticalGuidelines()
+	if (&list)
+		set listchars=eol:$
+		set nolist
+	else
+		" note - there is an empty space on the end of the line below - this is needed, otherwise
+		" you get a bunch of extra crap displaying, and this is worthless
+		set listchars=tab:\|\ 
+		set list
+	endif
 endfunction

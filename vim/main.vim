@@ -7,7 +7,8 @@
 " set backupdir=/cygdrive/c/Users/tfeiler/vimBackups/,.
 set backupdir=~/vimBackups/,.
 
-let mapleader=";"
+" let mapleader=";"
+let mapleader=" "
 
 set diffopt=filler,vertical
 
@@ -38,7 +39,8 @@ filetype on
 " when doing stuff like editing javascript/css embedded in another page. (of
 " course, if I wanted to enforce that type of separation, adding this back in
 " would be good incentive!)
-" filetype plugin indent on
+" unfortunately -- having this disabled breaks eclim. So gotta leave it on.a
+filetype plugin indent on
 
 " set working directory to whatever we just opened, interesting...
 set autochdir
@@ -47,12 +49,17 @@ set autochdir
 map + :e #
 
 map ^ :call IndentBouncer(1, 0)<enter>
-map <Space> :call ShowTagPrototype()<enter>
+" map <Space> :call ShowTagPrototype()<enter>
+map <leader><Space> :call ShowTagPrototype()<enter>
 
 " by default # does reverse search of current word (like * but opposite direction)
 " I don't use that all that much so instead let's map it to toggle line numbers
 " map # :set nu!<enter>
 map # :call ToggleLineNumDisplay()<enter>
+
+" map the pipe (|) character to turn on vertical grid lines.
+" Very helpful when tracking down nesting issues on massive HTML files, indent problems on long Python methods, etc.
+map <bar> :call ToggleVerticalGuidelines()<enter>
 
 " colorschemes live in /usr/share/vim/vim73/colors/
 " others that are ok: torte, delek, darkblue, slate, zellner
@@ -187,6 +194,9 @@ else
 	let g:remote_cmdserver_port=2499
 endif
 
+" 2018-04-09 ICF fix
+let g:remote_cmdserver_port=-1
+
 let g:tibs_search_basedir="."
 " ack related
 " make ack.vim use ag as it's command
@@ -211,10 +221,27 @@ map _ :set cursorline!<enter>
 
 " and dash will let me add custom highlights (useful if I am jumping around and interested in 
 " particular areas, or want to mark temp debug code, etc.)
-hi TempLineMarker cterm=NONE ctermbg=green ctermfg=darkred
+" hi TempLineMarker cterm=NONE ctermbg=green ctermfg=darkred
+hi TempLineMarker cterm=NONE ctermbg=DarkBlue
 map - :call ToggleCustomLineHighlight()<enter>
 
 map <F5> :redraw!<enter>
 
 " with non-zero values, vim will start scrolling as you approach the top/bottom of the visible portion of the file
 set scrolloff=0
+
+" NVimR
+let R_in_buffer = 0
+let R_notmuxconf = 1
+let R_assign=2 " flips normal behavior -- now a single _ stays, double __ is converted to <-
+
+" customize tab file completion in a :e command
+" Imagine you have four files: foo, bar1, bar2, bar3
+" tab will complete if only one match. But if multiple matches, say you enter ":e b"
+" first tab - will complete as much as it can - like "bar"
+" second tab - will show all the matches "bar1 bar2 bar3"
+" third->n tabs - will cycle through those matches and then back to first tab behavior
+"
+" if there is no longest match the first tab will be skipped and you'll just write to the list. 
+" For example if you do ":e bar" you will immediately see the "bar1 bar2 bar3" list.
+set wildmode=longest,list,full

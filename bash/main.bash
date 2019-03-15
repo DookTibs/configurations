@@ -1,9 +1,12 @@
 # \vi will call the real vi not the alias.
 # alias vim='/Applications/MacVim.app/Contents/MacOS/Vim' # use homebrew vi 7.4.258 instead of 7.3 stock
+# OSX installs to /usr/bin/vim. As of 2018-12-11 I use a Homebrew version at /usr/local/bin/vim
 alias vi='vim'
+alias awk='gawk'
 alias vit='vim -t' # start with a tag
-alias ls='ls -ltrG'
+alias ls='ls -ltrGpFh'
 alias tmux='tmux -2' # force tmux to recognize 256 color display
+alias qcsv="q -d ',' -H -O"
 
 alias findname='find . -name'
 
@@ -31,7 +34,7 @@ declare -x PS1="[tfeiler@ICF \W]$ "
 declare -x BREW="/usr/local/Cellar"
 
 # maybe instead of ctags on its own do /usr/local/bin ?
-declare -x PATH=/usr/local/bin:${PATH}:${HOME}/development/shellScripts
+declare -x PATH=/usr/local/bin:${PATH}:${HOME}/development/shellScripts:${HOME}/development/shellScripts/qutils
 
 # FIXED - /usr/local/share/npm/bin is where executables for globally installed npm packages end up
 declare -x PATH=${PATH}:/usr/local/share/npm/bin/:/usr/local/mysql/bin
@@ -63,6 +66,7 @@ alias tn="tmux new -s"
 alias tc="clear ; tmux clear-history"
 alias tb="tmux_backcolor"
 alias tf="tmux_forecolor"
+alias tra="tmux -L NvimR attach -t NvimR" # attach to the NvimR socket server tmux instance
 
 alias goscripts='cd ~/development/shellScripts/'
 
@@ -89,3 +93,5 @@ alias list_ssh_aliases="cat ~/.ssh/* | grep \"Host \" | awk '{ print \$2 }' | so
 
 # declare -x PATH=${PATH}:~/development/pebble-dev/pebble-sdk-4.2-mac/bin
 declare -x PATH=${PATH}:~/development/tools/gtags_bin
+
+alias mkvirtualenv3='mkvirtualenv --python=`which python3`'

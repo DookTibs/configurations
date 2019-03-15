@@ -1,37 +1,43 @@
 declare -x PATH=${PATH}:~/bin/
-# declare -x PATH=${PATH}:/cygdrive/c/Program\ Files\ \(x86\)/Graphviz2.38/bin/
-declare -x PATH=/usr/local/Cellar/python\@2/2.7.14_3/bin:${PATH}
+declare -x PATH=${PATH}:/cygdrive/c/development/tools/ctags58/
+declare -x PATH=${PATH}:/cygdrive/c/development/tools/apache-maven-3.3.9/bin/
+declare -x PATH=${PATH}:/cygdrive/c/development/tools/apache-ant-1.10.1/bin/
+declare -x PATH=${PATH}:/cygdrive/c/Program\ Files/nodejs/
+declare -x PATH=${PATH}:/cygdrive/c/Program\ Files\ \(x86\)/Graphviz2.38/bin/
 
 declare -x GOOGLE_APPLICATION_CREDENTIALS=~/development/acc/serviceAccount.json
 
 # virtualenv for python
 declare -x WORKON_HOME=${HOME}/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
+source /usr/bin/virtualenvwrapper.sh
 
-declare -x DOWNLOADS=/Users/tfeiler/Downloads/
+declare -x DOWNLOADS=/cygdrive/c/Users/38593/Downloads/
 
-# declare -x ECLIPSE_HOME=/cygdrive/c/Users/38593/eclipse/neon/eclipse/
-# alias goeclipse="cd $ECLIPSE_HOME"
-# alias launch_eclimd="goeclipse; ./eclimd.bat"
+declare -x ECLIPSE_HOME=/cygdrive/c/Users/38593/eclipse/neon/eclipse/
+alias goeclipse="cd $ECLIPSE_HOME"
 
-declare -x WORKSPACE=/Users/tfeiler/eclipse-workspace/
+declare -x WORKSPACE=/cygdrive/c/Users/38593/workspace/
 alias goworkspace="cd $WORKSPACE"
 
-declare -x ONEDRIVE_HOME="/Users/tfeiler/OneDriveData/OneDrive - ICF"
+declare -x ONEDRIVE_HOME="/cygdrive/c/Users/38593/OneDrive for Business/"
 alias goonedrive='cd "$ONEDRIVE_HOME"'
 
-alias bc="/Applications/Beyond\ Compare.app/Contents/MacOS/bcomp"
+alias launch_eclimd="goeclipse; ./eclimd.bat"
 
-# alias start_mongo_server="/cygdrive/c/Program\ Files/MongoDB/Server/3.4/bin/mongod.exe --dbpath C:/development/mongo_datadir"
-# alias mongo="/cygdrive/c/Program\ Files/MongoDB/Server/3.4/bin/mongo.exe"
+alias open="explorer.exe ."
 
-# alias start_mysql_server="echo 'mysqladmin -uroot shutdown to kill...' ; mysqld_safe &"
+alias bc="/cygdrive/c/Program\ Files/Beyond\ Compare\ 4/BCompare.exe"
+
+alias start_mongo_server="/cygdrive/c/Program\ Files/MongoDB/Server/3.4/bin/mongod.exe --dbpath C:/development/mongo_datadir"
+alias mongo="/cygdrive/c/Program\ Files/MongoDB/Server/3.4/bin/mongo.exe"
+
+alias start_mysql_server="echo 'mysqladmin -uroot shutdown to kill...' ; mysqld_safe &"
 
 alias gonotes='cd "$ONEDRIVE_HOME/notes"'
 
-alias ls='ls -ltrG'
+alias ls='ls -ltrG --color=auto'
 
-declare -x DRAGON_HOME="/Users/tfeiler/development/icf_dragon/"
+declare -x DRAGON_HOME="/cygdrive/c/Users/38593/workspace/icf_dragon/"
 declare -x DRAGON_JAVA_HOME="${DRAGON_HOME}src/main/java/com/icfi/dragon/web/"
 declare -x DRAGON_CSS_HOME="${DRAGON_HOME}src/main/webapp/css/"
 declare -x DRAGON_TEMPLATES_HOME="${DRAGON_HOME}src/main/webapp/templates/"
@@ -48,27 +54,21 @@ alias gocss=godragoncss
 
 alias launch_sqsd="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/event_queue_tfeiler_sqsd --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
 
-# declare -x DOCTER_HOME="/Users/tfeiler/development/docter_online/"
-declare -x DOCTER_HOME="/Users/tfeiler/development/docterOnline/"
-# declare -x DOCTER_VM_HOME="/Users/tfeiler/development/docterVM/"
+declare -x DOCTER_HOME="/home/38593/development/docter_online/"
+declare -x DOCTER_VM_HOME="/home/38593/development/docterVM/"
 alias godocter="cd ${DOCTER_HOME}"
-# alias godocterVM="cd ${DOCTER_VM_HOME}"
+alias godocterVM="cd ${DOCTER_VM_HOME}"
 
-declare -x HAWC_HOME="/Users/tfeiler/development/hawc/epahawc/"
-
-alias dj='source /Users/tfeiler/development/shellScripts/special/djs.sh'
-alias djj='source /Users/tfeiler/development/shellScripts/special/djs.sh javascript'
-alias djt='source /Users/tfeiler/development/shellScripts/special/djs.sh templates'
-alias djp='source /Users/tfeiler/development/shellScripts/special/djs.sh python'
-
-alias gohawc="cd ${HAWC_HOME}"
-# alias psql_hawc_local="psql -h localhost -p 5432 -d hawc_localdev -U hawc_user"
-alias psql_hawc_local="psql -h localhost -p 5432 -d hawc -U hawc"
-
-declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-9.0.0.M18/"
+# declare -x TOMCAT_HOME="/cygdrive/c/development/tomcat/apache-tomcat-9.0.0.M15/"
+declare -x TOMCAT_HOME="/cygdrive/c/development/tomcat/apache-tomcat-9.0.0.M18/"
 alias gotomcat="cd $TOMCAT_HOME"
 
 alias goapi="cd ~/development/dragon_api"
+alias goapimain="cd ~/development/dragon_api/src/aws_lambda/main/python"
+
+clippaste() {
+	cat /dev/clipboard > $1
+}
 
 # alias psql_dragon_dev="psql -h dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com -p 5432 -d dragon -U dbadmin"
 
@@ -92,28 +92,20 @@ runMongoOnCygwin() {
 	winpty /cygdrive/c/Program\ Files/MongoDB/Server/3.4/bin/mongo.exe $1
 }
 
-# alias sqlite="winpty /cygdrive/c/development/tools/sqlite/sqlite3.exe"
+alias sqlite="winpty /cygdrive/c/development/tools/sqlite/sqlite3.exe"
 
-# alias mongo_dragon_dev="runMongoOnCygwin ${MONGO_DEV_PRIMARY_CONN}"
-# alias mongo_dragon_dev2="runMongoOnCygwin ${MONGO_DEV_SECONDARY_CONN}"
-# alias mongo_dragon_prod="runMongoOnCygwin ${MONGO_PROD_PRIMARY_CONN}"
-# alias mongo_dragon_prod2="runMongoOnCygwin ${MONGO_PROD_SECONDARY_CONN}"
-# alias mongo_dragon_sandbox="runMongoOnCygwin ${MONGO_SANDBOX_PRIMARY_CONN}"
-
-alias mongo_dragon_dev="mongo ${MONGO_DEV_PRIMARY_CONN}"
-alias mongo_dragon_dev2="mongo ${MONGO_DEV_SECONDARY_CONN}"
-alias mongo_dragon_prod="mongo ${MONGO_PROD_PRIMARY_CONN}"
-alias mongo_dragon_prod2="mongo ${MONGO_PROD_SECONDARY_CONN}"
-alias mongo_dragon_sandbox="mongo ${MONGO_SANDBOX_PRIMARY_CONN}"
-
-alias sqlserver_dcc_dev="sqlcmd -S ${DCC_DB_DEV_HOST} -U ${DCC_DB_DEV_USER} -P ${DCC_DB_DEV_PASSWORD}"
+alias mongo_dragon_dev="runMongoOnCygwin ${MONGO_DEV_PRIMARY_CONN}"
+alias mongo_dragon_dev2="runMongoOnCygwin ${MONGO_DEV_SECONDARY_CONN}"
+alias mongo_dragon_prod="runMongoOnCygwin ${MONGO_PROD_PRIMARY_CONN}"
+alias mongo_dragon_prod2="runMongoOnCygwin ${MONGO_PROD_SECONDARY_CONN}"
+alias mongo_dragon_sandbox="runMongoOnCygwin ${MONGO_SANDBOX_PRIMARY_CONN}"
 
 # at ICF/cygwin I kept running into this issue where shell overwrote itself.
 # this MAYBE has something to do with python virtualenv - but I think it's just
 # cygwin annoyingness
 #
 # see http://unix.stackexchange.com/questions/105958/terminal-prompt-not-wrapping-correctly
-# shopt -s checkwinsize
+shopt -s checkwinsize
 
 # connects to the EC2 DRAGON dev instance. Note that this can change its address...
 # see http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html
@@ -208,39 +200,30 @@ ssh_devweb() {
 #    D) work on the keepalive settings
 #    E) get back to new test/live env setup
 alias tunnel_check="checkTunnels.sh"
+# alias tunnel_prod_psql_start="ssh -N -f -L 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_bastion"
+alias tunnel_dragon_prod_psql_start="ssh -N -f -L 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
+alias tunnel_dragon_prod_psql_stop="stopTunnelling.sh 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
+# alias tunnel_prod_elastic_start="ssh -N -f -L 9270:10.1.0.50:9200 -L 9370:10.1.0.50:9300 prod_jumpbox"
+# alias tunnel_prod_elastic_stop="stopTunnelling.sh 9270:10.1.0.50:9200"
+alias tunnel_dragon_prod_start="tunnel_dragon_prod_psql_start"
+alias tunnel_dragon_prod_stop="tunnel_dragon_prod_psql_stop"
 
-# autossh -M with a different monitor port for each instance. Keeps tunnel open on OSX
-# alias tunnel_dragon_prod_start="ssh -N -f -L 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
-alias tunnel_dragon_prod_start="autossh -M 20005 -N -f -L 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
-alias tunnel_dragon_prod_stop="stopTunnelling.sh 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
+alias tunnel_dragon_dev_psql_start="ssh -N -f -L 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_jumpbox"
+alias tunnel_dragon_dev_psql_stop="stopTunnelling.sh 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
+# alias tunnel_dragon_dev_elastic_start="ssh -N -f -L 9250:10.2.0.90:9200 -L 9350:10.2.0.90:9300 dev_jumpbox"
+# alias tunnel_dragon_dev_elastic_stop="stopTunnelling.sh 9250:10.2.0.90:9200"
+alias tunnel_dragon_dev_start="tunnel_dragon_dev_psql_start" # ; tunnel_dragon_dev_elastic_start"
+alias tunnel_dragon_dev_stop="tunnel_dragon_dev_psql_stop" # ; tunnel_dragon_dev_elastic_stop"
 
-alias tunnel_dragon_dev_start="autossh -M 20010 -N -f -L 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_jumpbox"
-alias tunnel_dragon_dev_stop="stopTunnelling.sh 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
+alias tunnel_dragon_sandbox_psql_start="ssh -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_jumpbox"
+alias tunnel_dragon_sandbox_psql_stop="stopTunnelling.sh 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
+alias tunnel_dragon_sandbox_start="tunnel_dragon_sandbox_psql_start"
+alias tunnel_dragon_sandbox_stop="tunnel_dragon_sandbox_psql_stop"
 
-alias tunnel_accessdragon_recovery_start="autossh -M 20030 -N -f -L 3310:accessdragon-20180903-recovery.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:3306 dev_jumpbox"
-alias tunnel_accessdragon_recovery_stop="stopTunnelling.sh 3310:accessdragon-20180903-recovery.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:3306"
-alias mysql_accessdragon_recovery="mysql -h127.0.0.1 -P3310 -u${ACCESS_DRAGON_PROD_USERNAME} -p${ACCESS_DRAGON_PROD_PASSWORD} -A ${ACCESS_DRAGON_PROD_SCHEMA}"
+alias tunnel_docter_dev_psql_start="ssh -N -f -L 5937:docter-dev-psql.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_docter_jumpbox"
+alias tunnel_docter_dev_psql_stop="stopTunnelling.sh 5937:docter-dev-psql"
 
-alias tunnel_dragon_sandbox_start="autossh -M 20000 -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_jumpbox"
-alias tunnel_dragon_sandbox_stop="stopTunnelling.sh 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
-
-# alias tunnel_docter_dev_psql_start="autossh -M 20015 -N -f -L 5937:docter-dev-psql.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_docter_jumpbox"
-# alias tunnel_docter_dev_psql_stop="stopTunnelling.sh 5937:docter-dev-psql"
-
-# alias tunnel_docter_prod_start="autossh -M 20025 -N -f -L 9439:docter-prod-psql.cazjljg8okvt.us-east-2.rds.amazonaws.com:5432 prod_docter_jumpbox"
-# alias tunnel_docter_prod_start="autossh -M 20025 -N -f -L 9439:docter-prod-psql.cazjljg8okvt.us-east-2.rds.amazonaws.com:5432 -L 3312:mmdb-ord-20181127.cazjljg8okvt.us-east-2.rds.amazonaws.com:3306 prod_docter_jumpbox"
-alias tunnel_docter_prod_start="autossh -M 20025 -N -f -L 9439:docter-prod-psql.cazjljg8okvt.us-east-2.rds.amazonaws.com:5432 -L 3312:${MMDBORD_MYSQL_HOST}:3306 prod_docter_jumpbox"
-alias tunnel_docter_prod_stop="stopTunnelling.sh 9439:docter-prod-psql.cazjljg8okvt.us-east-2.rds.amazonaws.com:5432"
-
-# mmdb-ord database is set up, from Azure box access it like:
-# mysql.exe --host=mmdb-ord-20181127.cazjljg8okvt.us-east-2.rds.amazonaws.com --user=icfmmdb --password=h4ppyd4z3 ord
-# to do work, see https://stackoverflow.com/questions/13717277/how-can-i-import-a-large-14-gb-mysql-dump-file-into-a-new-mysql-database
-
-# from this machine, run tunnel_docter_prod_start and then:
-alias mysql_mmdb_ord="mysql -h127.0.0.1 -P3312 -u${MMDBORD_MYSQL_USERNAME} -p${MMDBORD_MYSQL_PASSWORD} ${MMDBORD_MYSQL_DBNAME}"
-
-
-alias tunnel_embsi_dev_start="autossh -M 20020 -N -f -L 6462:embsi-dev-psql.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_embsi_jumpbox"
+alias tunnel_embsi_dev_start="ssh -N -f -L 6462:embsi-dev-psql.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_embsi_jumpbox"
 alias tunnel_embsi_dev_stop="stopTunnelling.sh 6462:embsi-dev-psql"
 
 # curl localhost:9250/_cluster/health?pretty
@@ -248,8 +231,7 @@ alias psql_dragon_production="psql -h localhost -p 6432 -d dragon -U dragon"
 alias psql_dragon_development="psql -h localhost -p 7432 -d dragon -U dbadmin"
 alias psql_dragon_sandbox="psql -h localhost -p 8432 -d dragon_env_backup -U dragon_sandbox_admin"
 
-# alias psql_docter_development="psql -h localhost -p 5937 -d docter -U docter"
-alias psql_docter_prod="psql -h localhost -p 9439 -d docter_db_prod -U docter_admin"
+alias psql_docter_development="psql -h localhost -p 5937 -d docter -U docter"
 
 alias psql_embsi_development="psql -h localhost -p 6462 -d embsi_dev -U embsi_admin"
 
@@ -267,9 +249,9 @@ alias psql_embsi_development="psql -h localhost -p 6462 -d embsi_dev -U embsi_ad
 
 
 # see http://www.saxonica.com/documentation/#!about/gettingstarted/gettingstartedjava
-alias saxon="java -cp /Users/tfeiler/development/tools/saxon97/saxon9he.jar"
-alias saxonq="java -cp /Users/tfeiler/development/tools/saxon97/saxon9he.jar net.sf.saxon.Query -t"
-alias saxont="java -cp /Users/tfeiler/development/tools/saxon97/saxon9he.jar net.sf.saxon.Transform -t"
+alias saxon="java -cp C:/cygwin64/home/38593/development/tools/saxon97/saxon9he.jar"
+alias saxonq="java -cp C:/cygwin64/home/38593/development/tools/saxon97/saxon9he.jar net.sf.saxon.Query -t"
+alias saxont="java -cp C:/cygwin64/home/38593/development/tools/saxon97/saxon9he.jar net.sf.saxon.Transform -t"
 
 # DOCKER SPECIFIC
 if [ "1" = "2" ]; then
@@ -289,7 +271,3 @@ if [ "1" = "2" ]; then
 	alias docker="winpty docker"
 	alias d="docker"
 fi
-
-alias hg='~/development/tools/mercurial/mercurial-4.5.3/hg'
-
-alias godcc="cd ~/development/dcc/vmMountpoint"
