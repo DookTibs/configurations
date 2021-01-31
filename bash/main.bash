@@ -1,3 +1,6 @@
+# make OSX stop complaining about me using bash instead of zsh
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
 # \vi will call the real vi not the alias.
 # alias vim='/Applications/MacVim.app/Contents/MacOS/Vim' # use homebrew vi 7.4.258 instead of 7.3 stock
 # OSX installs to /usr/bin/vim. As of 2018-12-11 I use a Homebrew version at /usr/local/bin/vim
