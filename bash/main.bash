@@ -68,6 +68,10 @@ alias tb="tmux_backcolor"
 alias tf="tmux_forecolor"
 alias tra="tmux -L NvimR attach -t NvimR" # attach to the NvimR socket server tmux instance
 
+# changed to be functions so we can optionally pass in a value...
+# alias tmw="tmuxPrompter.sh 'move-window -t' 'Enter destination window (<SESSION>:<WINDOW>)'"
+# alias tmp="tmuxPrompter.sh 'move-pane -t' 'Enter destination pane (<SESSION>:<WINDOW>.<PANE>)'"
+
 alias goscripts='cd ~/development/shellScripts/'
 
 # talking to my machine at home...
@@ -93,5 +97,7 @@ alias list_ssh_aliases="cat ~/.ssh/* | grep \"Host \" | awk '{ print \$2 }' | so
 
 # declare -x PATH=${PATH}:~/development/pebble-dev/pebble-sdk-4.2-mac/bin
 declare -x PATH=${PATH}:~/development/tools/gtags_bin
+
+alias ngrok="/Users/tfeiler/development/tools/ngrok/ngrok"
 
 alias mkvirtualenv3='mkvirtualenv --python=`which python3`'

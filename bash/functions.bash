@@ -19,6 +19,16 @@ dice() {
 	cd -
 }
 
+# tmux move-window
+tmw() {
+	tmuxPrompter.sh 'move-window -t' 'Enter destination window (<SESSION>:<WINDOW>)' $1
+}
+
+# tmux move-pane
+tmp() {
+	tmuxPrompter.sh 'move-pane -t' 'Enter destination pane (<SESSION>:<WINDOW>.<PANE>)' $1
+}
+
 http() {
 	python -m SimpleHTTPServer $1
 }
@@ -158,4 +168,54 @@ tmux_blink() {
 		tmux select-pane -t "${currentPane}" -P "bg=default,fg=default"
 		sleep .1
 	done
+}
+
+function pretty_csv {
+    perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' "$@" | column -t -s, | less  -F -S -X -K
+}
+
+lowerextension() {
+	extensionCaseChanger.sh lower "$@"
+}
+
+upperextension() {
+	extensionCaseChanger.sh upper "$@"
+}
+
+initConda() {
+    __conda_setup="$('/Users/tfeiler/opt/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+    if [ $? -eq 0 ]; then
+        eval "$__conda_setup"
+    else
+        if [ -f "/Users/tfeiler/opt/anaconda3/etc/profile.d/conda.sh" ]; then
+            . "/Users/tfeiler/opt/anaconda3/etc/profile.d/conda.sh"
+        else
+            export PATH="/Users/tfeiler/opt/anaconda3/bin:$PATH"
+        fi
+    fi
+
+	echo "Conda activated via initConda (defined in functions.bash)"
+	echo "'conda info --envs' to list environments"
+	echo "'conda activate <hawc2020>' to activate specific environment"
+    unset __conda_setup
+}
+
+rpn() {
+	# first bit just adds and pops a dummy value from the stack to set precision. Kludgey.
+	# then we put the arguments onto the stack
+	# then we print
+	#
+	# pipe that whole command to "dc" and echo out the result.
+	#
+	# Usage:
+	#    rpn 4 5 +
+	#	 > "4 5 + == 9"
+	#
+	#	rpn 20 3 /
+	#	> "20 3 / == 6.6"
+	#
+	#	rpn "1.1 2.2 *"
+	#	> "1.1 2.2 * == 2.4"
+	res=$(echo "1.00000 k $* p" | dc)
+	echo "$* == $res"
 }

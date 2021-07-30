@@ -48,13 +48,15 @@ alias gocss=godragoncss
 
 alias launch_sqsd="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/event_queue_tfeiler_sqsd --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
 
+alias launch_sqsd2021="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/litstream-prod2021-eq --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
+
 # declare -x DOCTER_HOME="/Users/tfeiler/development/docter_online/"
 declare -x DOCTER_HOME="/Users/tfeiler/development/docterOnline/"
 # declare -x DOCTER_VM_HOME="/Users/tfeiler/development/docterVM/"
 alias godocter="cd ${DOCTER_HOME}"
 # alias godocterVM="cd ${DOCTER_VM_HOME}"
 
-declare -x HAWC_HOME="/Users/tfeiler/development/hawc/epahawc/"
+declare -x HAWC_HOME="/Users/tfeiler/development/hawc_project/hawc/"
 
 alias dj='source /Users/tfeiler/development/shellScripts/special/djs.sh'
 alias djj='source /Users/tfeiler/development/shellScripts/special/djs.sh javascript'
@@ -62,11 +64,11 @@ alias djt='source /Users/tfeiler/development/shellScripts/special/djs.sh templat
 alias djp='source /Users/tfeiler/development/shellScripts/special/djs.sh python'
 
 alias gohawc="cd ${HAWC_HOME}"
+alias activatehawc="initConda && conda activate hawc2021"
 # alias psql_hawc_local="psql -h localhost -p 5432 -d hawc_localdev -U hawc_user"
 alias psql_hawc_local="psql -h localhost -p 5432 -d hawc -U hawc"
-
-declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-9.0.0.M18/"
-alias gotomcat="cd $TOMCAT_HOME"
+# alias psql_hawc_icfaws="psql -h hawc-internal-icf-dev-db.cotmuxecedep.us-east-1.rds.amazonaws.com -p 5432 -d icf_hawc_dev -U hawc_admin"
+alias psql_hawc_icfaws="psql -h ec2-3-228-3-19.compute-1.amazonaws.com -p 5432 -d hawc -U hawc"
 
 alias goapi="cd ~/development/dragon_api"
 
@@ -105,6 +107,7 @@ alias mongo_dragon_dev2="mongo ${MONGO_DEV_SECONDARY_CONN}"
 alias mongo_dragon_prod="mongo ${MONGO_PROD_PRIMARY_CONN}"
 alias mongo_dragon_prod2="mongo ${MONGO_PROD_SECONDARY_CONN}"
 alias mongo_dragon_sandbox="mongo ${MONGO_SANDBOX_PRIMARY_CONN}"
+alias mongo_dragon_prod2021="mongo ${MONGO_PROD2021_PRIMARY_CONN}"
 
 alias sqlserver_dcc_dev="sqlcmd -S ${DCC_DB_DEV_HOST} -U ${DCC_DB_DEV_USER} -P ${DCC_DB_DEV_PASSWORD}"
 
@@ -211,17 +214,38 @@ alias tunnel_check="checkTunnels.sh"
 
 # autossh -M with a different monitor port for each instance. Keeps tunnel open on OSX
 # alias tunnel_dragon_prod_start="ssh -N -f -L 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
-alias tunnel_dragon_prod_start="autossh -M 20005 -N -f -L 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
-alias tunnel_dragon_prod_stop="stopTunnelling.sh 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
+# alias tunnel_dragon_prod_start="autossh -M 20005 -N -f -L 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9740:litstream-prod-elcache.nbwrk0.0001.use1.cache.amazonaws.com:6379 prod_jumpbox"
+# alias tunnel_dragon_prod_stop="stopTunnelling.sh 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
 
-alias tunnel_dragon_dev_start="autossh -M 20010 -N -f -L 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_jumpbox"
+alias tunnel_dragon_prod_OLD_start="ssh -N -f -L 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
+alias tunnel_dragon_prod_OLD_stop="stopTunnelling.sh 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
+
+alias tunnel_dragon_prod_start="autossh -M 20045 -N -f -L 9432:litstream-pg-prod-20210308.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
+alias tunnel_dragon_prod_stop="stopTunnelling.sh 9432:litstream-pg-prod-20210308.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
+alias psql_dragon_production2="psql -h localhost -p 9432 -d dragon -U dragon"
+
+alias tunnel_litstream_prod2021_start="autossh -M 20055 -N -f -L 1432:litstream-prod2021-pg.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9742:litstream-prod2021-elcache.nbwrk0.0001.use1.cache.amazonaws.com:6379 prod2021_jumpbox"
+alias tunnel_litstream_prod2021_stop="stopTunnelling.sh 1432:litstream-prod2021-pg"
+alias psql_litstream_prod2021="psql -h localhost -p 1432 -d litstream -U litstream_admin"
+alias redis_litstream_prod2021="redis-cli -h localhost -p 9742"
+
+# alias tunnel_dragon_prod3_start="autossh -M 20055 -N -f -L 2432:litstream-pg-prod-20210309-b.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
+# alias tunnel_dragon_prod3_stop="stopTunnelling.sh 2432:litstream-pg-prod-20210309-b.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
+# alias psql_dragon_production3="psql -h localhost -p 2432 -d dragon -U dragon"
+
+# alias tunnel_dragon_dev_start="autossh -M 20010 -N -f -L 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_jumpbox"
+alias tunnel_dragon_dev_start="autossh -M 20010 -N -f -L 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9738:litstream-dev-elcache.nbwrk0.0001.use1.cache.amazonaws.com:6379 dev_jumpbox"
 alias tunnel_dragon_dev_stop="stopTunnelling.sh 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
 
 alias tunnel_accessdragon_recovery_start="autossh -M 20030 -N -f -L 3310:accessdragon-20180903-recovery.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:3306 dev_jumpbox"
 alias tunnel_accessdragon_recovery_stop="stopTunnelling.sh 3310:accessdragon-20180903-recovery.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:3306"
 alias mysql_accessdragon_recovery="mysql -h127.0.0.1 -P3310 -u${ACCESS_DRAGON_PROD_USERNAME} -p${ACCESS_DRAGON_PROD_PASSWORD} -A ${ACCESS_DRAGON_PROD_SCHEMA}"
 
-alias tunnel_dragon_sandbox_start="autossh -M 20000 -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_jumpbox"
+# alias tunnel_dragon_sandbox_start="autossh -M 20000 -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_jumpbox"
+# Dec 2019 - tunnel to both postgres AND redis!
+alias tunnel_dragon_sandbox_start='autossh -M 20000 -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9736:litstream-sandbox-elcache-001.nbwrk0.0001.use1.cache.amazonaws.com:6379 dev_jumpbox'
+# Jan 2020 - at the office, tunnel Mongo too, why not?
+# alias tunnel_dragon_sandbox_start='autossh -M 20000 -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9736:litstream-sandbox-elcache-001.nbwrk0.0001.use1.cache.amazonaws.com:6379 -L 4545:aws-us-east-1-portal.20.dblayer.com:11426 dev_jumpbox'
 alias tunnel_dragon_sandbox_stop="stopTunnelling.sh 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
 
 # alias tunnel_docter_dev_psql_start="autossh -M 20015 -N -f -L 5937:docter-dev-psql.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_docter_jumpbox"
@@ -240,18 +264,32 @@ alias tunnel_docter_prod_stop="stopTunnelling.sh 9439:docter-prod-psql.cazjljg8o
 alias mysql_mmdb_ord="mysql -h127.0.0.1 -P3312 -u${MMDBORD_MYSQL_USERNAME} -p${MMDBORD_MYSQL_PASSWORD} ${MMDBORD_MYSQL_DBNAME}"
 
 
-alias tunnel_embsi_dev_start="autossh -M 20020 -N -f -L 6462:embsi-dev-psql.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_embsi_jumpbox"
-alias tunnel_embsi_dev_stop="stopTunnelling.sh 6462:embsi-dev-psql"
+alias tunnel_embsi_olddev_start="autossh -M 20020 -N -f -L 6462:embsi-dev-psql.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_embsi_jumpbox_OLD"
+alias tunnel_embsi_olddev_stop="stopTunnelling.sh 6462:embsi-dev-psql"
+
+alias tunnel_embsi_dev_start="autossh -M 20040 -N -f -L 6482:emut-dev-psql.c9bgatqk4une.us-east-1.rds.amazonaws.com:5432 dev_embsi_jumpbox"
+alias tunnel_embsi_dev_stop="stopTunnelling.sh 6482:emut-dev-psql"
+
+alias tunnel_embsi_prod_start="autossh -M 20035 -N -f -L 6472:emut-prod-psql.c9bgatqk4une.us-east-1.rds.amazonaws.com:5432 prod_embsi_jumpbox"
+alias tunnel_embsi_prod_stop="stopTunnelling.sh 6472:emut-prod-psql"
 
 # curl localhost:9250/_cluster/health?pretty
 alias psql_dragon_production="psql -h localhost -p 6432 -d dragon -U dragon"
 alias psql_dragon_development="psql -h localhost -p 7432 -d dragon -U dbadmin"
 alias psql_dragon_sandbox="psql -h localhost -p 8432 -d dragon_env_backup -U dragon_sandbox_admin"
 
+alias redis_dragon_sandbox="redis-cli -h localhost -p 9736"
+alias redis_dragon_dev="redis-cli -h localhost -p 9738"
+alias redis_dragon_prod="redis-cli -h localhost -p 9740"
+
 # alias psql_docter_development="psql -h localhost -p 5937 -d docter -U docter"
 alias psql_docter_prod="psql -h localhost -p 9439 -d docter_db_prod -U docter_admin"
 
-alias psql_embsi_development="psql -h localhost -p 6462 -d embsi_dev -U embsi_admin"
+alias psql_embsi_devOLD="psql -h localhost -p 6462 -d embsi_dev -U embsi_admin"
+
+alias psql_embsi_dev="psql -h localhost -p 6482 -d emut_db_dev -U emut_dev_admin"
+
+alias psql_embsi_prod="psql -h localhost -p 6472 -d emut_db_prod -U emut_admin"
 
 # where am I:
 # 1. added AWSLambdaVPCAccessExecutionRole policy to "dragon-api-lambda" role in IAM
@@ -293,3 +331,43 @@ fi
 alias hg='~/development/tools/mercurial/mercurial-4.5.3/hg'
 
 alias godcc="cd ~/development/dcc/vmMountpoint"
+
+declare -x DRAGON_11_UPGRADE="yes"
+
+cd $DRAGON_HOME
+current_dragon_branch=`git rev-parse --abbrev-ref HEAD`
+cd -
+
+
+if [ "${DRAGON_11_UPGRADE}" == "yes" ]; then
+	# we have this split while testing so we can switch back and forth easily. Eventually
+	# this should be our default.
+	echo "SPLIT CONFIG (icf.bash); setting up for Java 11 upgrade work"
+
+	if [ "${current_dragon_branch}" != "feature/fall2020upgrades" ]; then
+		echo "litstream is NOT currently on the 'feature/fall2020upgrades' branch and it probably SHOULD be!"
+	fi
+
+	declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-8.5.58/"
+	# set DRAGON to use Java 11
+	echo "corretto64-11.0.8" > $DRAGON_HOME/.java-version
+
+	# don't need to do this; correct branch ensures it
+	# cat $DRAGON_HOME/pom.xml | sed 's-.*target.*-                    <target>11</target>-' > DRAGON_HOME/fixed.xml
+else
+	echo "SPLIT CONFIG (icf.bash); falling back to Java 1.8 work"
+
+	if [ "${current_dragon_branch}" = "feature/fall2020upgrades" ]; then
+		echo "litstream IS currently on the 'feature/fall2020upgrades' branch and it probably should NOT be!"
+	fi
+
+	declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-9.0.0.M18/"
+	echo "1.8" > $DRAGON_HOME/.java-version
+	# cat $DRAGON_HOME/pom.xml | sed 's-.*target.*-                    <target>1.7</target>-' > DRAGON_HOME/pom.xml
+	# cat $DRAGON_HOME/pom.xml | sed 's-.*source.*-                    <source>1.7</source>-' > DRAGON_HOME/pom.xml
+fi
+
+alias gotomcat="cd $TOMCAT_HOME"
+
+# GCLOUD SDK - installed in ~/development/tools/google-cloud-sdk
+declare -x CLOUDSDK_PYTHON="/usr/local/bin/python3"

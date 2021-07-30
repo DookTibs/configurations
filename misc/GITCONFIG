@@ -41,6 +41,7 @@
 	mylog = !git log --author="Feiler"
 	squash = "!f() { git rebase -i HEAD~$1; }; f"
 	graph = log --graph --full-history --all --color --pretty=tformat:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s%x20%x1b[33m(%an)%x1b[0m"
+	currbranch = rev-parse --abbrev-ref HEAD
 
 
 # how to get this into an alias?

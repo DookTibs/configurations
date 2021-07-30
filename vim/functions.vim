@@ -324,7 +324,28 @@ function! SetExpandTabForIndentedLanguages()
 		set softtabstop=2
 		set expandtab
 		return
+	elseif currentFileType == "rust"
+		set shiftwidth=4
+		set tabstop=4
+		set softtabstop=4
+		set expandtab
+		return
+	elseif (currentFileType == "javascript" && (stridx(fullFilename, "/Users/tfeiler/development/hawc_project/hawc/frontend/") == 0)) || ((currentFileType == "html" || currentFileType == "htmldjango") && (stridx(fullFilename, "/Users/tfeiler/development/hawc_project/hawc/hawc/") == 0))
+			if currentFileType == "javascript"
+				" javascript
+				set shiftwidth=4
+				set tabstop=4
+				set softtabstop=4
+			else
+				" html
+				set shiftwidth=2
+				set tabstop=2
+				set softtabstop=2
+			endif
+			set expandtab
+		return
 	endif
+
 	set shiftwidth=4
 	set tabstop=4
 	set softtabstop=4
@@ -645,10 +666,34 @@ function! ToggleVerticalGuidelines()
 	if (&list)
 		set listchars=eol:$
 		set nolist
+		set nocursorcolumn
 	else
 		" note - there is an empty space on the end of the line below - this is needed, otherwise
 		" you get a bunch of extra crap displaying, and this is worthless
 		set listchars=tab:\|\ 
 		set list
+		set cursorcolumn
 	endif
+endfunction
+
+" https://yous.be/2014/11/30/automatically-quit-vim-if-actual-files-are-closed/
+function! CheckLeftBuffers()
+  if tabpagenr('$') == 1
+    let i = 1
+    while i <= winnr('$')
+      if getbufvar(winbufnr(i), '&buftype') == 'help' ||
+          \ getbufvar(winbufnr(i), '&buftype') == 'quickfix' ||
+          \ exists('t:NERDTreeBufName') &&
+          \   bufname(winbufnr(i)) == t:NERDTreeBufName ||
+          \ bufname(winbufnr(i)) == '__Tag_List__'
+        let i += 1
+      else
+        break
+      endif
+    endwhile
+    if i == winnr('$') + 1
+      qall
+    endif
+    unlet i
+  endif
 endfunction

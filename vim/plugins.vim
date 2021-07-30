@@ -21,6 +21,12 @@
 " see http://www.openlogic.com/wazi/bid/262302/Three-tools-for-managing-Vim-plugins (has typos) for some more info
 
 let g:pathogen_disabled = []
+
+" for now, only run ALE when doing HAWC.
+if stridx(system("pwd"), "/Users/tfeiler/development/hawc_project/hawc") != 0
+	call add(g:pathogen_disabled, 'ale')
+endif
+
 " call add(g:pathogen_disabled, 'vim-airline')
 call add(g:pathogen_disabled, 'supertab')
 " call add(g:pathogen_disabled, 'vim-vebugger')

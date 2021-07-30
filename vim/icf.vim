@@ -1,7 +1,71 @@
 " echo "Current Dir is:" currentDir
 
+
 " set tags to whoever's install I'm looking at
 if stridx("foo", "bar") == 0
+elseif stridx(currentDir, $DRAGON_HOME . "src/main/CloudFormation") == 0
+	set expandtab
+	set tabstop=2
+	set softtabstop=2
+	set shiftwidth=2
+	set syntax=yaml
+elseif stridx(currentDir, "/Users/tfeiler/development/hawc_project/hawc") == 0
+	let &tags = "tags," . "/Users/tfeiler/development/hawc_project/hawc/.hawcTags"
+
+
+
+	" CONSIDER MOVING SOME/ALL OF THIS OUT OF HAWC-SPECIFIC CONFIG AND INTO MAIN - ALE SEEMS MIGHTY USEFUL!!!
+	" right now I'm just using a small part of ALE; my attempts to get things like symbol definition/autocomplete
+	" were kind of annoying. Sticking with ctags for now; it's fast, good enough, and I understand it.
+	if executable("flake8") == 0
+		echo "WARNING - cannot find flake8/etc. on PATH; probably not in right venv."
+		echo "Consider quitting and run 'activatehawc' before re-opening Vim"
+	else
+		" see https://github.com/dense-analysis/ale/tree/master/doc
+		let g:ale_linters = {'javascript': ['eslint'], 'python': ['flake8']}
+		let g:ale_fixers = {'javascript': ['eslint'], 'python': ['black']}
+		let g:ale_python_flake8_options = '--config=/Users/tfeiler/development/hawc_project/hawc/.flake8'
+		" let g:ale_linters_explicit = 1
+		
+		" I'd rather use the quickfix window; lets me use "unimpaired" to quickly move through any errors
+		let g:ale_set_loclist = 0
+		let g:ale_set_quickfix = 1
+		let g:ale_open_list = 1
+
+		" wheneer we save, ALE will attempt to fix simple errors (extra whitespace, etc.)
+		let g:ale_fix_on_save = 1
+		" can also use :ALEFix to fix code on demand
+		
+		" TODO - install a language server and try to get autocomplete / codehinting / etc. working with ALE!
+		" this gets us at least some autocompletion but I'm not really digging it...it pops up automatically, 
+		" is not working right with things I define, etc. I'd rather just use ctags for now.
+		if 1 == 0
+			let g:ale_linters = {'javascript': ['eslint'], 'python': ['pyls','flake8']}
+			let g:ale_completion_delay = 100
+			let g:ale_completion_enabled = 1
+		endif
+	endif
+	
+	
+	" prior to discovering ALE I was using vim-flake8 plugin. Disabled for now.
+	if 1 == 0
+		" when saving a python file, fire flake8 linter. Note you need the hawc2020 Conda
+		" environment running (like via 'activatehawc' alias).
+		autocmd BufWritePost *.py call flake8#Flake8()
+
+		" show markers in the gutter and in the exact position, where problems occur
+		let g:flake8_show_in_gutter=1
+		let g:flake8_show_in_file=1
+
+		" the vim-flake8 plugin doesn't respect project specific .flake8 files by default, we need to force it
+		let g:flake8_cmd="/Users/tfeiler/opt/anaconda3/envs/hawc2020/bin/flake8\ --config=/Users/tfeiler/development/hawc_project/hawc/.flake8"
+		
+		" I use tpope's "unimpaired" plugin; can use [q / ]q to go to prev/next error. [Q to go to the first.
+		" Then you can use spacebar+q / spacebar+Q to navigate quickly through the quickfix list
+		" nnoremap <silent> <buffer> <leader>q :cn<enter>
+		" nnoremap <silent> <buffer> <leader>Q :cp<enter>
+	endif
+
 elseif stridx(currentDir, "/Users/tfeiler/development/hawc/epahawc") == 0
 	let &tags = "tags," . "/Users/tfeiler/development/hawc/epahawc/.hawcTags"
 	
@@ -70,7 +134,7 @@ elseif stridx(currentDir, "/Users/tfeiler/development/acc") == 0
 	map <BS> :call CellmateUpload("blink")<enter>
 	map \ :call ReloadChromeTab("https://awesome-table.com")<enter>
 elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/scripts/flexFormCustomJsScripts") == 0
-	autocmd BufWritePost * :call StuffFlexFormJs()
+	autocmd BufWritePost *.js :call StuffFlexFormJs()
 elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon") == 0
 	let g:tibs_search_basedir="/Users/tfeiler/development/icf_dragon/"
 	let projectTags = "/Users/tfeiler/development/icf_dragon/src/main/java/.dragonOnlineJavaTags"
@@ -181,6 +245,7 @@ function! StuffFlexFormJs()
 	let currentDir = substitute(currentDir, "\n", "", "")
 	let fullPath = currentDir . "/" . @%
 	let stuffCmd = $DRAGON_HOME . "/src/main/scripts/flexFormCustomJsHelper.py stuff " . fullPath
+	" echo stuffCmd
 	call system(stuffCmd)
 
 	if (v:shell_error != 0)
@@ -196,7 +261,8 @@ function! DragonOnlineDevUtil(userInteraction)
 
 	if stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/webapp/css") == 0
 		if (a:userInteraction == 1)
-			let copyCmd = 'cp /Users/tfeiler/development/icf_dragon/src/main/webapp/css/main.css /Users/tfeiler/development/tools/tomcat/apache-tomcat-9.0.0.M18/webapps/ROOT/css/'
+			" let copyCmd = 'cp /Users/tfeiler/development/icf_dragon/src/main/webapp/css/main.css /Users/tfeiler/development/tools/tomcat/apache-tomcat-9.0.0.M18/webapps/ROOT/css/'
+			let copyCmd = 'cp /Users/tfeiler/development/icf_dragon/src/main/webapp/css/main.css $TOMCAT_HOME/webapps/ROOT/css/'
 			call system(copyCmd)
 			echo "copied main.css to TOMCAT_HOME (did you have gulp running?)..."
 		endif

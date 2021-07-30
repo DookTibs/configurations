@@ -215,15 +215,18 @@ map // :TibsSearch!
 
 map zz :call FoldBlock()<enter>
 
-" code for easy line highlights. underscore will highlight line as cursor moves
+" code for easy line highlights. dash will highlight line as cursor moves
 hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white
-map _ :set cursorline!<enter>
+hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white
+map - :set cursorline!<enter>
 
-" and dash will let me add custom highlights (useful if I am jumping around and interested in 
+" and underscore will let me add custom highlights (useful if I am jumping around and interested in 
 " particular areas, or want to mark temp debug code, etc.)
 " hi TempLineMarker cterm=NONE ctermbg=green ctermfg=darkred
 hi TempLineMarker cterm=NONE ctermbg=DarkBlue
 map - :call ToggleCustomLineHighlight()<enter>
+
+" and pipe/bar, defined below, calls a function that both sets vrtical gridlines and sets cursorcolumn
 
 map <F5> :redraw!<enter>
 
@@ -245,3 +248,16 @@ let R_assign=2 " flips normal behavior -- now a single _ stays, double __ is con
 " if there is no longest match the first tab will be skipped and you'll just write to the list. 
 " For example if you do ":e bar" you will immediately see the "bar1 bar2 bar3" list.
 set wildmode=longest,list,full
+
+" see https://stackoverflow.com/a/59823132
+" Position the (global) quickfix window at the very bottom of the window
+" (useful for making sure that it appears underneath splits)
+"
+" quickfix is used for instance by the flake8 linter that runs when I edit HAWC code at ICF.
+"
+" NOTE: Using a check here to make sure that window-specific location-lists
+" aren't effected, as they use the same `FileType` as quickfix-lists.
+autocmd FileType qf if (getwininfo(win_getid())[0].loclist != 1) | wincmd J | endif
+
+" close Vim if all that's left is help/quickfix/NERDTree/etc.
+autocmd BufEnter * call CheckLeftBuffers()
