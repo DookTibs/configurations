@@ -224,7 +224,7 @@ map - :set cursorline!<enter>
 " particular areas, or want to mark temp debug code, etc.)
 " hi TempLineMarker cterm=NONE ctermbg=green ctermfg=darkred
 hi TempLineMarker cterm=NONE ctermbg=DarkBlue
-map - :call ToggleCustomLineHighlight()<enter>
+map _ :call ToggleCustomLineHighlight()<enter>
 
 " and pipe/bar, defined below, calls a function that both sets vrtical gridlines and sets cursorcolumn
 
