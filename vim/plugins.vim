@@ -24,11 +24,17 @@ let g:pathogen_disabled = []
 
 " for now, only run ALE when doing HAWC.
 if stridx(system("pwd"), "/Users/tfeiler/development/hawc_project/hawc") != 0
-	call add(g:pathogen_disabled, 'ale')
+	" call add(g:pathogen_disabled, 'ale')
 endif
 
 " call add(g:pathogen_disabled, 'vim-airline')
 call add(g:pathogen_disabled, 'supertab')
 " call add(g:pathogen_disabled, 'vim-vebugger')
-execute pathogen#infect()
 
+" EXPERIMENTS WITH vim-lsp, abandoned
+" call add(g:pathogen_disabled, 'vim-lsp')
+" if executable('/Users/tfeiler/development/tools/eclipse.jdt.ls/launchme.sh')
+    "u User lsp_setup call lsp#register_server({ 'name': 'jdtls', 'cmd': '/Users/tfeiler/development/tools/eclipse.jdt.ls/launchme.sh', 'allowlist': ['java'] })
+" endif
+
+execute pathogen#infect()

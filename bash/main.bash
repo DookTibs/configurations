@@ -103,4 +103,12 @@ declare -x PATH=${PATH}:~/development/tools/gtags_bin
 
 alias ngrok="/Users/tfeiler/development/tools/ngrok/ngrok"
 
-alias mkvirtualenv3='mkvirtualenv --python=`which python3`'
+# 202107 - python3 is now the default
+alias mkvirtualenv2='mkvirtualenv --python=`which python2`'
+# alias mkvirtualenv3='mkvirtualenv --python=`which python3`'
+declare -x PATH=${PATH}:/Users/tfeiler/bin
+
+# 202108 - start using Neovim for LSP support
+alias vi='nvim'
+alias vim='nvim'
+alias vimdiff='nvim -d'

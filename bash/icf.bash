@@ -1,6 +1,7 @@
+declare -x VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 declare -x PATH=${PATH}:~/bin/
 # declare -x PATH=${PATH}:/cygdrive/c/Program\ Files\ \(x86\)/Graphviz2.38/bin/
-declare -x PATH=/usr/local/Cellar/python\@2/2.7.14_3/bin:${PATH}
+# declare -x PATH=/usr/local/Cellar/python\@2/2.7.14_3/bin:${PATH}
 
 declare -x GOOGLE_APPLICATION_CREDENTIALS=~/development/acc/serviceAccount.json
 
@@ -46,7 +47,11 @@ alias gotemplates=godragontemplates
 alias gojs=godragonjs
 alias gocss=godragoncss
 
-alias launch_sqsd="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/event_queue_tfeiler_sqsd --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
+# alias launch_sqsd="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/event_queue_tfeiler_sqsd --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
+
+# alias launch_sqsd2021="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/litstream-prod2021-eq --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
+
+alias launch_sqsd="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/event_queue_tfeiler_sqsd --web-hook http://localhost:8081/eventhandler -d -s 5 -v --access-key-id $SQSD_AWS_ACCESS_KEY_ID --secret-access-key $SQSD_AWS_SECRET_ACCESS_KEY"
 
 alias launch_sqsd2021="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/litstream-prod2021-eq --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
 
@@ -68,15 +73,10 @@ alias activatehawc="initConda && conda activate hawc2021"
 # alias psql_hawc_local="psql -h localhost -p 5432 -d hawc_localdev -U hawc_user"
 alias psql_hawc_local="psql -h localhost -p 5432 -d hawc -U hawc"
 # alias psql_hawc_icfaws="psql -h hawc-internal-icf-dev-db.cotmuxecedep.us-east-1.rds.amazonaws.com -p 5432 -d icf_hawc_dev -U hawc_admin"
-alias psql_hawc_icfaws="psql -h ec2-3-228-3-19.compute-1.amazonaws.com -p 5432 -d hawc -U hawc"
+# alias psql_hawc_icfaws="psql -h ec2-3-228-3-19.compute-1.amazonaws.com -p 5432 -d hawc -U hawc"
+alias psql_hawc_icfaws="ssh -tt hawc_icfaws '/home/ubuntu/psql_to_hawc.sh'"
 
 alias goapi="cd ~/development/dragon_api"
-
-# alias psql_dragon_dev="psql -h dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com -p 5432 -d dragon -U dbadmin"
-
-alias psql_dragon_staging="psql -h dragon-postgresql-stage.c5vzduwbgj5d.us-east-1.rds.amazonaws.com -p 5432 -d stagedb -U dbadmin"
-
-# alias psql_dragon_production="psql -h icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com -p 5432 -d dragon -U dragon"
 
 alias mysql_accessdragon_prod="mysql -h${ACCESS_DRAGON_PROD_HOST} -u${ACCESS_DRAGON_PROD_USERNAME} -p${ACCESS_DRAGON_PROD_PASSWORD} -A ${ACCESS_DRAGON_PROD_SCHEMA}"
 alias mysql_accessdragon_backup="mysql -hdragonweekend.c5vzduwbgj5d.us-east-1.rds.amazonaws.com -u${ACCESS_DRAGON_PROD_USERNAME} -p${ACCESS_DRAGON_PROD_PASSWORD} -A ${ACCESS_DRAGON_PROD_SCHEMA}"
@@ -102,12 +102,15 @@ runMongoOnCygwin() {
 # alias mongo_dragon_prod2="runMongoOnCygwin ${MONGO_PROD_SECONDARY_CONN}"
 # alias mongo_dragon_sandbox="runMongoOnCygwin ${MONGO_SANDBOX_PRIMARY_CONN}"
 
-alias mongo_dragon_dev="mongo ${MONGO_DEV_PRIMARY_CONN}"
-alias mongo_dragon_dev2="mongo ${MONGO_DEV_SECONDARY_CONN}"
-alias mongo_dragon_prod="mongo ${MONGO_PROD_PRIMARY_CONN}"
-alias mongo_dragon_prod2="mongo ${MONGO_PROD_SECONDARY_CONN}"
+# alias mongo_dragon_dev="mongo ${MONGO_DEV_PRIMARY_CONN}"
+# alias mongo_dragon_dev2="mongo ${MONGO_DEV_SECONDARY_CONN}"
+# alias mongo_dragon_prod="mongo ${MONGO_PROD_PRIMARY_CONN}"
+# alias mongo_dragon_prod2="mongo ${MONGO_PROD_SECONDARY_CONN}"
 alias mongo_dragon_sandbox="mongo ${MONGO_SANDBOX_PRIMARY_CONN}"
-alias mongo_dragon_prod2021="mongo ${MONGO_PROD2021_PRIMARY_CONN}"
+alias mongo_litstream_prod2021="mongo ${MONGO_PROD2021_PRIMARY_CONN}"
+alias mongosh_litstream_prod2021="mongosh ${MONGO_PROD2021_PRIMARY_CONN}"
+alias mongo_litstream_dev2021="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEV2021_PRIMARY_CONN}"
+alias mongosh_litstream_dev2021="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEV2021_PRIMARY_CONN}"
 
 alias sqlserver_dcc_dev="sqlcmd -S ${DCC_DB_DEV_HOST} -U ${DCC_DB_DEV_USER} -P ${DCC_DB_DEV_PASSWORD}"
 
@@ -202,40 +205,22 @@ ssh_devweb() {
 #
 #    Similarly I think I can point my local development config at that to run a local DRAGON install
 #    that talks to prod database.
-#
-#    THINGS I MUST GET WORKING:
-#		A) get tunnel working without opening a shell / rewrite "stopTunneling" to be generic
-#       B) run local DRAGON instance that talks to prod
-#    C) get the API so it can talk to production too.
-#         ONCE I GET A/B/C WORKING, I THINK I CAN CLOSE THE TICKET...
-#    D) work on the keepalive settings
-#    E) get back to new test/live env setup
 alias tunnel_check="checkTunnels.sh"
 
 # autossh -M with a different monitor port for each instance. Keeps tunnel open on OSX
-# alias tunnel_dragon_prod_start="ssh -N -f -L 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
-# alias tunnel_dragon_prod_start="autossh -M 20005 -N -f -L 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9740:litstream-prod-elcache.nbwrk0.0001.use1.cache.amazonaws.com:6379 prod_jumpbox"
-# alias tunnel_dragon_prod_stop="stopTunnelling.sh 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
-
-alias tunnel_dragon_prod_OLD_start="ssh -N -f -L 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
-alias tunnel_dragon_prod_OLD_stop="stopTunnelling.sh 6432:icfdragon-1.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
-
-alias tunnel_dragon_prod_start="autossh -M 20045 -N -f -L 9432:litstream-pg-prod-20210308.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
-alias tunnel_dragon_prod_stop="stopTunnelling.sh 9432:litstream-pg-prod-20210308.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
-alias psql_dragon_production2="psql -h localhost -p 9432 -d dragon -U dragon"
+# alias tunnel_dragon_prod2020_start="autossh -M 20045 -N -f -L 9432:litstream-pg-prod-20210308.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
+# alias tunnel_dragon_prod2020_stop="stopTunnelling.sh 9432:litstream-pg-prod-20210308.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
 
 alias tunnel_litstream_prod2021_start="autossh -M 20055 -N -f -L 1432:litstream-prod2021-pg.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9742:litstream-prod2021-elcache.nbwrk0.0001.use1.cache.amazonaws.com:6379 prod2021_jumpbox"
 alias tunnel_litstream_prod2021_stop="stopTunnelling.sh 1432:litstream-prod2021-pg"
-alias psql_litstream_prod2021="psql -h localhost -p 1432 -d litstream -U litstream_admin"
 alias redis_litstream_prod2021="redis-cli -h localhost -p 9742"
 
-# alias tunnel_dragon_prod3_start="autossh -M 20055 -N -f -L 2432:litstream-pg-prod-20210309-b.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
-# alias tunnel_dragon_prod3_stop="stopTunnelling.sh 2432:litstream-pg-prod-20210309-b.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
-# alias psql_dragon_production3="psql -h localhost -p 2432 -d dragon -U dragon"
+alias tunnel_litstream_dev2021_start="autossh -M 20065 -N -f -L 2432:litstream-dev2021-pg.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9744:litstream-dev2021-elcache.nbwrk0.0001.use1.cache.amazonaws.com:6379 dev2021_jumpbox"
+alias tunnel_litstream_dev2021_stop="stopTunnelling.sh 2432:litstream-dev2021-pg"
+alias redis_litstream_dev2021="redis-cli -h localhost -p 9744"
 
-# alias tunnel_dragon_dev_start="autossh -M 20010 -N -f -L 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_jumpbox"
-alias tunnel_dragon_dev_start="autossh -M 20010 -N -f -L 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9738:litstream-dev-elcache.nbwrk0.0001.use1.cache.amazonaws.com:6379 dev_jumpbox"
-alias tunnel_dragon_dev_stop="stopTunnelling.sh 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
+# alias tunnel_dragon_dev_start="autossh -M 20010 -N -f -L 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9738:litstream-dev-elcache.nbwrk0.0001.use1.cache.amazonaws.com:6379 dev_jumpbox"
+# alias tunnel_dragon_dev_stop="stopTunnelling.sh 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
 
 alias tunnel_accessdragon_recovery_start="autossh -M 20030 -N -f -L 3310:accessdragon-20180903-recovery.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:3306 dev_jumpbox"
 alias tunnel_accessdragon_recovery_stop="stopTunnelling.sh 3310:accessdragon-20180903-recovery.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:3306"
@@ -243,16 +228,11 @@ alias mysql_accessdragon_recovery="mysql -h127.0.0.1 -P3310 -u${ACCESS_DRAGON_PR
 
 # alias tunnel_dragon_sandbox_start="autossh -M 20000 -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_jumpbox"
 # Dec 2019 - tunnel to both postgres AND redis!
-alias tunnel_dragon_sandbox_start='autossh -M 20000 -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9736:litstream-sandbox-elcache-001.nbwrk0.0001.use1.cache.amazonaws.com:6379 dev_jumpbox'
+alias tunnel_dragon_sandbox_start='autossh -M 20000 -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9736:litstream-sandbox-elcache-002.nbwrk0.0001.use1.cache.amazonaws.com:6379 dev_jumpbox'
 # Jan 2020 - at the office, tunnel Mongo too, why not?
 # alias tunnel_dragon_sandbox_start='autossh -M 20000 -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9736:litstream-sandbox-elcache-001.nbwrk0.0001.use1.cache.amazonaws.com:6379 -L 4545:aws-us-east-1-portal.20.dblayer.com:11426 dev_jumpbox'
 alias tunnel_dragon_sandbox_stop="stopTunnelling.sh 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
 
-# alias tunnel_docter_dev_psql_start="autossh -M 20015 -N -f -L 5937:docter-dev-psql.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_docter_jumpbox"
-# alias tunnel_docter_dev_psql_stop="stopTunnelling.sh 5937:docter-dev-psql"
-
-# alias tunnel_docter_prod_start="autossh -M 20025 -N -f -L 9439:docter-prod-psql.cazjljg8okvt.us-east-2.rds.amazonaws.com:5432 prod_docter_jumpbox"
-# alias tunnel_docter_prod_start="autossh -M 20025 -N -f -L 9439:docter-prod-psql.cazjljg8okvt.us-east-2.rds.amazonaws.com:5432 -L 3312:mmdb-ord-20181127.cazjljg8okvt.us-east-2.rds.amazonaws.com:3306 prod_docter_jumpbox"
 alias tunnel_docter_prod_start="autossh -M 20025 -N -f -L 9439:docter-prod-psql.cazjljg8okvt.us-east-2.rds.amazonaws.com:5432 -L 3312:${MMDBORD_MYSQL_HOST}:3306 prod_docter_jumpbox"
 alias tunnel_docter_prod_stop="stopTunnelling.sh 9439:docter-prod-psql.cazjljg8okvt.us-east-2.rds.amazonaws.com:5432"
 
@@ -274,13 +254,17 @@ alias tunnel_embsi_prod_start="autossh -M 20035 -N -f -L 6472:emut-prod-psql.c9b
 alias tunnel_embsi_prod_stop="stopTunnelling.sh 6472:emut-prod-psql"
 
 # curl localhost:9250/_cluster/health?pretty
-alias psql_dragon_production="psql -h localhost -p 6432 -d dragon -U dragon"
-alias psql_dragon_development="psql -h localhost -p 7432 -d dragon -U dbadmin"
+# alias psql_dragon_development="psql -h localhost -p 7432 -d dragon -U dbadmin"
 alias psql_dragon_sandbox="psql -h localhost -p 8432 -d dragon_env_backup -U dragon_sandbox_admin"
+# alias psql_dragon_production2020="psql -h localhost -p 9432 -d dragon -U dragon"
+# alias psql_dragon_staging="psql -h dragon-postgresql-stage.c5vzduwbgj5d.us-east-1.rds.amazonaws.com -p 5432 -d stagedb -U dbadmin"
+alias psql_litstream_dev2021="psql -h localhost -p 2432 -d litstream_dev -U litstream_dev_admin"
+alias psql_litstream_prod2021="psql -h localhost -p 1432 -d litstream -U litstream_admin"
+
 
 alias redis_dragon_sandbox="redis-cli -h localhost -p 9736"
-alias redis_dragon_dev="redis-cli -h localhost -p 9738"
-alias redis_dragon_prod="redis-cli -h localhost -p 9740"
+# alias redis_dragon_dev="redis-cli -h localhost -p 9738"
+# alias redis_dragon_prod="redis-cli -h localhost -p 9740"
 
 # alias psql_docter_development="psql -h localhost -p 5937 -d docter -U docter"
 alias psql_docter_prod="psql -h localhost -p 9439 -d docter_db_prod -U docter_admin"
@@ -332,42 +316,139 @@ alias hg='~/development/tools/mercurial/mercurial-4.5.3/hg'
 
 alias godcc="cd ~/development/dcc/vmMountpoint"
 
-declare -x DRAGON_11_UPGRADE="yes"
+if [ 0 -eq 1 ]; then
+	declare -x DRAGON_11_UPGRADE="yes"
 
-cd $DRAGON_HOME
-current_dragon_branch=`git rev-parse --abbrev-ref HEAD`
-cd -
+	cd $DRAGON_HOME
+	current_dragon_branch=`git rev-parse --abbrev-ref HEAD`
+	cd -
 
 
-if [ "${DRAGON_11_UPGRADE}" == "yes" ]; then
-	# we have this split while testing so we can switch back and forth easily. Eventually
-	# this should be our default.
-	echo "SPLIT CONFIG (icf.bash); setting up for Java 11 upgrade work"
+	if [ "${DRAGON_11_UPGRADE}" == "yes" ]; then
+		# we have this split while testing so we can switch back and forth easily. Eventually
+		# this should be our default.
+		echo "SPLIT CONFIG (icf.bash); setting up for Java 11 upgrade work"
 
-	if [ "${current_dragon_branch}" != "feature/fall2020upgrades" ]; then
-		echo "litstream is NOT currently on the 'feature/fall2020upgrades' branch and it probably SHOULD be!"
+		if [ "${current_dragon_branch}" != "feature/fall2020upgrades" ]; then
+			echo "litstream is NOT currently on the 'feature/fall2020upgrades' branch and it probably SHOULD be!"
+		fi
+
+		declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-8.5.58/"
+		# set DRAGON to use Java 11
+		echo "corretto64-11.0.8" > $DRAGON_HOME/.java-version
+
+		# don't need to do this; correct branch ensures it
+		# cat $DRAGON_HOME/pom.xml | sed 's-.*target.*-                    <target>11</target>-' > DRAGON_HOME/fixed.xml
+	else
+		echo "SPLIT CONFIG (icf.bash); falling back to Java 1.8 work"
+
+		if [ "${current_dragon_branch}" = "feature/fall2020upgrades" ]; then
+			echo "litstream IS currently on the 'feature/fall2020upgrades' branch and it probably should NOT be!"
+		fi
+
+		declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-9.0.0.M18/"
+		echo "1.8" > $DRAGON_HOME/.java-version
+		# cat $DRAGON_HOME/pom.xml | sed 's-.*target.*-                    <target>1.7</target>-' > DRAGON_HOME/pom.xml
+		# cat $DRAGON_HOME/pom.xml | sed 's-.*source.*-                    <source>1.7</source>-' > DRAGON_HOME/pom.xml
 	fi
-
-	declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-8.5.58/"
-	# set DRAGON to use Java 11
-	echo "corretto64-11.0.8" > $DRAGON_HOME/.java-version
-
-	# don't need to do this; correct branch ensures it
-	# cat $DRAGON_HOME/pom.xml | sed 's-.*target.*-                    <target>11</target>-' > DRAGON_HOME/fixed.xml
 else
-	echo "SPLIT CONFIG (icf.bash); falling back to Java 1.8 work"
-
-	if [ "${current_dragon_branch}" = "feature/fall2020upgrades" ]; then
-		echo "litstream IS currently on the 'feature/fall2020upgrades' branch and it probably should NOT be!"
-	fi
-
-	declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-9.0.0.M18/"
-	echo "1.8" > $DRAGON_HOME/.java-version
-	# cat $DRAGON_HOME/pom.xml | sed 's-.*target.*-                    <target>1.7</target>-' > DRAGON_HOME/pom.xml
-	# cat $DRAGON_HOME/pom.xml | sed 's-.*source.*-                    <source>1.7</source>-' > DRAGON_HOME/pom.xml
+	echo "SPLIT LITSTREAM 8/11 CONFIG DISABLED FOR SANITY'S SAKE; see icf.bash"
+	declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-8.5.69/"
 fi
 
 alias gotomcat="cd $TOMCAT_HOME"
 
 # GCLOUD SDK - installed in ~/development/tools/google-cloud-sdk
 declare -x CLOUDSDK_PYTHON="/usr/local/bin/python3"
+
+
+# JAVA INSTALL ON NEW LAPTOP, JULY 2021
+# declare -x PATH="/usr/local/opt/openjdk@11/bin:$PATH"
+# export CPPFLAGS="-I/usr/local/opt/openjdk@11/include"
+
+
+# JENV - START (jenv.be)
+declare -x PATH="$HOME/.jenv/bin:${PATH}"
+# echo 'eval "$(jenv init -)"' >> ~/.bash_profile
+
+export PATH="/Users/tfeiler/.jenv/shims:${PATH}"
+export JENV_SHELL=bash
+export JENV_LOADED=1
+unset JAVA_HOME
+source '/usr/local/Cellar/jenv/0.5.4/libexec/libexec/../completions/jenv.bash'
+jenv rehash 2>/dev/null
+jenv refresh-plugins
+
+# alias javaHomeReset="declare -x JAVA_HOME=$(/usr/libexec/java_home)"
+
+# aliases to switch between versions, setting JAVA_HOME appropriately
+alias javaHomeReset='declare -x JAVA_HOME=$(jenv javahome)'
+alias jenv11="jenv global corretto64-11.0.12 && javaHomeReset"
+alias jenv16="jenv global openjdk64-16.0.2 && javaHomeReset"
+
+jenv() {
+  typeset command
+  command="$1"
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
+
+  case "$command" in
+  enable-plugin|rehash|shell|shell-options)
+    eval `jenv "sh-$command" "$@"`;;
+  *)
+    command jenv "$command" "$@";;
+  esac
+}
+
+javaHomeReset
+# JENV - END
+# installed "homebrew install java11"
+# then did "jenv add /usr/local/opt/openjdk@11
+# then did "jenv add /Library/Java/JavaVirtualMachines/amazon-corretto-11.jdk/Contents/Home
+# jenv global corretto64-11.0.12 # using this as global default on my new machine
+# etc.
+# 
+
+# POSTGRES INSTALLATION NOTES (via homebrew)
+# To migrate existing data from a previous major version of PostgreSQL run:
+#   brew postgresql-upgrade-database
+# 
+# This formula has created a default database cluster with:
+#   initdb --locale=C -E UTF-8 /usr/local/var/postgres
+# For more details, read:
+#   https://www.postgresql.org/docs/13/app-initdb.html
+# 
+# To start postgresql:
+#   brew services start postgresql
+# Or, if you don't want/need a background service you can just run:
+#   /usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres
+
+# MONGO INSTALLATION NOTES (via homebrew; I installed via "brew install mongodb-community@5.0"
+# 
+# To have launchd start mongodb/brew/mongodb-community now and restart at login:
+#   brew services start mongodb/brew/mongodb-community
+# Or, if you don't want/need a background service you can just run:
+#   mongod --config /usr/local/etc/mongod.conf
+# ==> Summary
+# 🍺  /usr/local/Cellar/mongodb-community/5.0.1: 11 files, 179.9MB, built in 5 seconds
+# ==> Caveats
+# ==> mongodb-community
+# To have launchd start mongodb/brew/mongodb-community now and restart at login:
+#   brew services start mongodb/brew/mongodb-community
+# Or, if you don't want/need a background service you can just run:
+#   mongod --config /usr/local/etc/mongod.conf
+
+# MYSQL INSTALLATION NOTES VIA HOMEBREW
+# We've installed your MySQL database without a root password. To secure it run:
+#     mysql_secure_installation
+# 
+# MySQL is configured to only allow connections from localhost by default
+# 
+# To connect run:
+#     mysql -uroot
+# 
+# To have launchd start mysql now and restart at login:
+#   brew services start mysql
+# Or, if you don't want/need a background service you can just run:
+#   mysql.server start

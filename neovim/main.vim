@@ -1,14 +1,9 @@
-" vimdiff didn't work on OSX for me; I had to do:
-" sudo ln -s /usr/bin/diff /usr/share/vim/vim73diff
-" to get it working right
-
 " this is ok, but only one file with a given name can be backed up at a time.
 " i guess leave it this way for now.
-" set backupdir=/cygdrive/c/Users/tfeiler/vimBackups/,.
 set backupdir=~/vimBackups/,.
 
-" let mapleader=";"
-let mapleader=" "
+let mapleader=";"
+" let mapleader=" "
 
 set diffopt=filler,vertical
 
@@ -18,7 +13,7 @@ set diffopt=filler,vertical
 
 " this vimrc is used by cygwin vim.
 set nocompatible
-source $VIMRUNTIME/vimrc_example.vim
+" source $VIMRUNTIME/vimrc_example.vim
 " source $VIMRUNTIME/mswin.vim
 
 set nu
@@ -40,7 +35,7 @@ filetype on
 " course, if I wanted to enforce that type of separation, adding this back in
 " would be good incentive!)
 " unfortunately -- having this disabled breaks eclim. So gotta leave it on.a
-filetype plugin indent on
+" filetype plugin indent on
 
 " set working directory to whatever we just opened, interesting...
 set autochdir
@@ -49,8 +44,6 @@ set autochdir
 map + :e #
 
 map ^ :call IndentBouncer(1, 0)<enter>
-" map <Space> :call ShowTagPrototype()<enter>
-map <leader><Space> :call ShowTagPrototype()<enter>
 
 " by default # does reverse search of current word (like * but opposite direction)
 " I don't use that all that much so instead let's map it to toggle line numbers
@@ -69,12 +62,10 @@ map <bar> :call ToggleVerticalGuidelines()<enter>
 " colorscheme solarized " see https://github.com/altercation/vim-colors-solarized / http://ethanschoonover.com/solarized
 " colorscheme torte
 
-
 " new way - decide on solarized/torte on the fly. have to use "execute" to
 " build up the command dynamically
 let appropriateColorScheme = system("selectAppropriateVimColorScheme.sh")
 execute 'colorscheme' appropriateColorScheme
-
 
 " if g:colors_name == "solarized"
 	" syntax enable
@@ -95,44 +86,13 @@ let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
 let g:slime_dont_ask_default = 1
 
-" CTAGS STUFF START
-let tlist_actionscript_settings = 'actionscript;c:classes;k:consts;p:properties;F:public methods;f:private methods;z:protected methods;g:getters;s:setters;v:variables'
-let tlist_coffee_settings = 'coffee;c:classes;s:static methods;f:function;v:variable'
-let Tlist_Auto_Open=0
-let Tlist_Sort_Type='name'
-let Tlist_Exit_OnlyWindow=1
-if &diff
-	" if diffing (especially with git), leaving this as 1 causes some errors
-	" in generating tags
-	let Tlist_Process_File_Always=0
-else
-	let Tlist_Process_File_Always=1
-endif
-map TT :TlistToggle<enter>
-" nota bene - if taglist isn't working right (TlistToggle is empty for instance) then check to see if you are using
-" windows ctags and cygwin vim, etc. Path can screw it up. If so edit taglist.vim and replace command like:
-"             let ctags_cmd = ctags_cmd . ' "' . a:filename . '"'
-" with:
-"			  let ctags_cmd = ctags_cmd . ' `cygpath -m "' . a:filename . '"`'
-"
-" CTAGS STUFF END
-
-" not ctags, but let's map TL to show listing of matching tags
-map TL g]
-
 " use "gx" to open urls in browser
 
 " when editing php, make shift-K run this command that looks stuff up from php docs!
-map K :call EnhancedKeywordLookup()<enter>
+" map K :call EnhancedKeywordLookup()<enter>
 " au FileType php set keywordprg=~/development/shellScripts/vim/keyword/shortcuts/sc_php.sh
 " au FileType javascript set keywordprg=~/development/shellScripts/vim/keyword/shortcuts/sc_javascript.sh
 
-" rainbow parentheses
-" " au VimEnter * RainbowParenthesesActivate
-" au Syntax * RainbowParenthesesLoadRound
-" au Syntax * RainbowParenthesesLoadSquare
-" au Syntax * RainbowParenthesesLoadBraces
-" map ) :RainbowParenthesesToggle<enter>
 
 " map CTRL-P to toggle paste mode. Interesting - once in cmd mode, can use
 " C-P/C-N to look at prev/next command history in vim
@@ -148,16 +108,6 @@ map <C-I> :call IndentSurroundingBlock()<enter>
 " au BufWinLeave ?* mkview
 " au BufWinEnter ?* silent loadview
 
-" syntax setup
-au BufRead,BufNewFile *.as set filetype=actionscript
-au BufRead,BufNewFile *.jsfl set filetype=javascript
-au BufRead,BufNewFile *.json set filetype=json
-au BufRead,BufNewFile *.clj set filetype=clojure
-au BufRead,BufNewFile *.coffee set filetype=coffee
-au BufRead,BufNewFile Cakefile set filetype=coffee
-" unnecessary: on windows and osx gvim (there just drop the syntax file in the right dir and it will autoload),
-" but needed on cygwin vim (which looks in a different syntax directory, /usr/share/vim/vim73/syntax)
-" au! Syntax actionscript source /cygdrive/c/Vim/vim73/syntax/actionscript.vim
 
 " whenever I open a python/coffee/etc file, set tabs to expand
 " au FileType python set expandtab
