@@ -24,6 +24,7 @@ elseif stridx(currentDir, "/Users/tfeiler/development/hawc_project/hawc") == 0
 		" see https://github.com/dense-analysis/ale/tree/master/doc
 		let g:ale_linters = {'javascript': ['eslint'], 'python': ['flake8']}
 		let g:ale_fixers = {'javascript': ['eslint'], 'python': ['black']}
+		" this .flake8 file coems with the HAWC repo...
 		let g:ale_python_flake8_options = '--config=/Users/tfeiler/development/hawc_project/hawc/.flake8'
 		" let g:ale_linters_explicit = 1
 		

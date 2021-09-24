@@ -3,7 +3,8 @@
 " this should live in shellScripts
 if stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/java") == 0
 	" STARTS IT EVERY TIME which is kinda costly -- could I launch myself and just attach? For now just only run it while working on icf_dragon java stuff
-	lua require('lspconfig').jdtls.setup{ cmd = { '/Users/tfeiler/development/tools/eclipse.jdt.ls/launchme.sh' } }
+	" lua require('lspconfig').jdtls.setup{ cmd = { '/Users/tfeiler/development/tools/eclipse.jdt.ls/launchme.sh' } }
+	lua require('lspconfig').jdtls.setup{ cmd = { '/Users/tfeiler/development/shellScripts/launchEclipseJdtLanguageServer.sh' } }
 endif
 
 " these all from chrisatmachine.com/Neovim/27-native-lsp/

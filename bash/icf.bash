@@ -18,7 +18,8 @@ declare -x DOWNLOADS=/Users/tfeiler/Downloads/
 declare -x WORKSPACE=/Users/tfeiler/eclipse-workspace/
 alias goworkspace="cd $WORKSPACE"
 
-declare -x ONEDRIVE_HOME="/Users/tfeiler/OneDriveData/OneDrive - ICF"
+# declare -x ONEDRIVE_HOME="/Users/tfeiler/OneDriveData/OneDrive - ICF"
+declare -x ONEDRIVE_HOME="/Users/tfeiler/OneDrive - ICF"
 alias goonedrive='cd "$ONEDRIVE_HOME"'
 
 alias bc="/Applications/Beyond\ Compare.app/Contents/MacOS/bcomp"
@@ -69,7 +70,8 @@ alias djt='source /Users/tfeiler/development/shellScripts/special/djs.sh templat
 alias djp='source /Users/tfeiler/development/shellScripts/special/djs.sh python'
 
 alias gohawc="cd ${HAWC_HOME}"
-alias activatehawc="initConda && conda activate hawc2021"
+# alias activatehawc="initConda && conda activate hawc2021"
+alias activatehawc="workon hawc2021"
 # alias psql_hawc_local="psql -h localhost -p 5432 -d hawc_localdev -U hawc_user"
 alias psql_hawc_local="psql -h localhost -p 5432 -d hawc -U hawc"
 # alias psql_hawc_icfaws="psql -h hawc-internal-icf-dev-db.cotmuxecedep.us-east-1.rds.amazonaws.com -p 5432 -d icf_hawc_dev -U hawc_admin"
@@ -353,7 +355,7 @@ if [ 0 -eq 1 ]; then
 	fi
 else
 	echo "SPLIT LITSTREAM 8/11 CONFIG DISABLED FOR SANITY'S SAKE; see icf.bash"
-	declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-8.5.69/"
+	declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-8.5.70/"
 fi
 
 alias gotomcat="cd $TOMCAT_HOME"
@@ -385,6 +387,9 @@ jenv refresh-plugins
 alias javaHomeReset='declare -x JAVA_HOME=$(jenv javahome)'
 alias jenv11="jenv global corretto64-11.0.12 && javaHomeReset"
 alias jenv16="jenv global openjdk64-16.0.2 && javaHomeReset"
+
+declare -x LAPTOP_OLD="10.0.1.190"
+alias ssh_old_laptop="ssh $LAPTOP_OLD"
 
 jenv() {
   typeset command

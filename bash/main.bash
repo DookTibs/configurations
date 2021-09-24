@@ -112,3 +112,8 @@ declare -x PATH=${PATH}:/Users/tfeiler/bin
 alias vi='nvim'
 alias vim='nvim'
 alias vimdiff='nvim -d'
+
+# current Mac has Python2 and 3.8 preinstalled. I homebrew'ed 3.9
+declare -x PATH=/usr/local/share/python:${PATH}
+
+declare -x EDITOR=nvim
