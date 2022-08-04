@@ -3,6 +3,8 @@
 
 " set tags to whoever's install I'm looking at
 if stridx("foo", "bar") == 0
+elseif stridx(currentDir, "/Users/tfeiler/development/expoagg-pipeline/serverless/expoagg-pipeline/py_handlers") == 0
+	map \ :call RunCurrentExpoaggLambda("1")<enter>
 elseif stridx(currentDir, $DRAGON_HOME . "src/main/CloudFormation") == 0
 	set expandtab
 	set tabstop=2
@@ -10,7 +12,8 @@ elseif stridx(currentDir, $DRAGON_HOME . "src/main/CloudFormation") == 0
 	set shiftwidth=2
 	set syntax=yaml
 elseif stridx(currentDir, "/Users/tfeiler/development/hawc_project/hawc") == 0
-	let &tags = "tags," . "/Users/tfeiler/development/hawc_project/hawc/.hawcTags"
+	" let &tags = "tags," . "/Users/tfeiler/development/hawc_project/hawc/.hawcTags"
+	let &tags = "tags," . "/Users/tfeiler/development/hawc_project/hawc/.hawcTags," . "/Users/tfeiler/development/hawc_project/hawc/.hawcVirtualEnvInstalledPackagesTags"
 
 
 
@@ -306,6 +309,36 @@ function! DragonOnlineDevUtil(userInteraction)
 		endif
 	else
 		" echo "don't know how to handle this in " . currentDir . "..."
+	endif
+endfunction
+
+function! RunCurrentExpoaggLambda(...)
+	let tmuxTarget="1"
+	let customEvent=v:null
+	if a:0 > 0
+		let tmuxTarget = a:1
+	end
+
+	if a:0 > 1
+		let customEvent = a:2
+	end
+
+	" echo "runncurr, target='" . tmuxTarget . "', customEvent='" . customEvent . "'"
+
+	" let workingDir = system("pwd")
+	" let workingDir = substitute(workingDir, "\n", "", "")
+	" let workingDir = fnamemodify(workingDir, ':t')
+
+	let currFilename = @%
+	" echo "file is " . currFilename
+
+	let lambdaName = substitute(currFilename, ".py", "", "")
+	" echo "lambda is " . lambdaName
+
+	if customEvent is v:null
+		call SendFreshCommandToTMUX("./runLambdaLocally.py " . lambdaName, tmuxTarget)
+	else
+		call SendFreshCommandToTMUX("./runLambdaLocally.py -f " . lambdaName . " -e " . customEvent, tmuxTarget)
 	endif
 endfunction
 

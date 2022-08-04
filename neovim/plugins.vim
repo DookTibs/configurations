@@ -39,6 +39,7 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 	Plug 'vim-airline/vim-airline-themes'
 	Plug 'altercation/vim-colors-solarized'
 	Plug 'vim-scripts/taglist.vim'
+	Plug 'tpope/vim-unimpaired'
 
 	" do I still use these?
 	Plug 'mileszs/ack.vim'
@@ -48,6 +49,13 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 	if stridx(system("pwd"), "/Users/tfeiler/development/hawc_project/hawc") == 0
 		Plug 'dense-analysis/ale'
 	endif
+
+	" July 2022 - try https://github.com/mfussenegger/nvim-dap for using jdb.
+	" I was previously using nvim-jdtls; see  "Debugger" instrux at https://github.com/mfussenegger/nvim-jdtls
+	" and I:
+	"	1. cloned the "java-debug" project into ~/development/tools/java-debug
+	" Plug 'mfussenegger/nvim-dap'
+	" ABANDONED -- needs Java 17 - and I am going with my own tibs_jdb_vim bridge stuff!
 
 	" if I'm in the litstream codebase I am using LSP instead of ctags,
 	" etc.

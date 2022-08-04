@@ -167,9 +167,14 @@ map // :TibsSearch!
 map zz :call FoldBlock()<enter>
 
 " code for easy line highlights. dash will highlight line as cursor moves
-hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white
-hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white
+" colors like darkred, etc. see https://vim.fandom.com/wiki/Xterm256_color_names_for_console_Vim
+" 170 is sort of purplish
+hi CursorLine   cterm=NONE ctermbg=170 ctermfg=white
+hi CursorColumn cterm=NONE ctermbg=170 ctermfg=white
 map - :set cursorline!<enter>
+
+" default it to on?
+" set cursorline
 
 " and underscore will let me add custom highlights (useful if I am jumping around and interested in 
 " particular areas, or want to mark temp debug code, etc.)
@@ -212,3 +217,19 @@ autocmd FileType qf if (getwininfo(win_getid())[0].loclist != 1) | wincmd J | en
 
 " close Vim if all that's left is help/quickfix/NERDTree/etc.
 autocmd BufEnter * call CheckLeftBuffers()
+
+" make */? work when selecting text in visual mode!
+" thank you https://vim.fandom.com/wiki/Search_for_visually_selected_text
+" Search for selected text, forwards or backwards.
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> ? :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+
+autocmd FileType yaml setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2

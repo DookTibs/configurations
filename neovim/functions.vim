@@ -524,10 +524,6 @@ function! MyHandler(rawJson)
 
 endfunction
 
-function! ServerTest()
-	let g:channel = ch_open('localhost:8765')
-endfunction
-
 "if () {
 	"sadfdasf
 	"dsaf
@@ -603,7 +599,7 @@ function! ToggleCustomLineHighlight()
 	endfor
 	
 	call matchadd('TempLineMarker', linePattern)
-	echo "Press - again to remove; or ':call clearmatches()' to remove all"
+	echo "Press _ again to remove; or ':call clearmatches()' to remove all"
 endfunction
 
 " see https://vi.stackexchange.com/questions/666/how-to-add-indentation-guides-lines

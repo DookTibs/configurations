@@ -1,4 +1,42 @@
 # function
+
+assume_aws_profile () {
+	if [ -z $1 ]; then
+
+		if [ -z $AWS_PROFILE ]; then
+			echo 'No profile specified/no change being made. No profile set as $AWS_PROFILE; using default.'
+		else
+			echo "No profile specified/no change being made. Profile '$AWS_PROFILE' currently active."
+		fi
+
+		echo "AVAILABLE PROFILES:"
+		cat ~/.aws/credentials | grep "\[.*\]" | sed 's/\[//' | sed 's/\]//' | sed 's/^/\t/'
+
+	else
+		# profile_to_use="$1"
+
+		# new way - let's look for matches on the supplied argument!
+		# https://stackoverflow.com/questions/11426529/reading-output-of-a-command-into-an-array-in-bash
+		IFS=$'\n' read -r -d '' -a profiles < <( cat ~/.aws/credentials | grep "\[.*\]" | sed 's/\[//' | sed 's/\]//' | grep $1 && printf '\0' )
+
+		num_matches=${#profiles[@]}
+
+		if [ $num_matches -eq 0 ]; then
+			echo "No matches found for argument '$1'; not switching profiles"
+		elif [ $num_matches -eq 1 ]; then
+			profile_to_use="${profiles[0]}"
+
+			echo "Assuming role '$profile_to_use'..."
+			export AWS_PROFILE=$profile_to_use
+		else
+			echo "Ambiguous profile; multiple matches found for argument '$1'; not switching profiles"
+		fi
+
+	fi
+
+	aws sts get-caller-identity --output table
+}
+
 untitle () { 
 	echo "restoring window title to default..."
 	PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n\$ '
@@ -29,8 +67,19 @@ tmp() {
 	tmuxPrompter.sh 'move-pane -t' 'Enter destination pane (<SESSION>:<WINDOW>.<PANE>)' $1
 }
 
+# tmux pwd - returns the working directory of a targetted tmux pane
+# useful for things like:
+# cp *.txt `tpwd DRAGON:1.0`
+tpwd() {
+	tmux display-message -p -F "#{pane_current_path}" -t$1
+}
+
 http() {
-	python -m SimpleHTTPServer $1
+	# python 2
+	# python -m SimpleHTTPServer $1
+
+	# python 3
+	python -m http.server $1
 }
 
 # function

@@ -48,13 +48,41 @@ alias gotemplates=godragontemplates
 alias gojs=godragonjs
 alias gocss=godragoncss
 
+launch_sqsd () { 
+	if [ -n "$1" ]; then
+		targetEnv="$1"
+		dynamic_key_env_lookup="LITSTREAM_APP_SDK_USER_ACCESS_KEY_ID_${targetEnv}"
+		dynamic_secret_env_lookup="LITSTREAM_APP_SDK_USER_SECRET_ACCESS_KEY_${targetEnv}"
+		dynamic_queue_env_lookup="LITSTREAM_LOCALWORK_TESTQUEUE_${targetEnv}"
+
+		aws_access_key_id="${!dynamic_key_env_lookup}"
+		aws_secret_access_key="${!dynamic_secret_env_lookup}"
+		queue_url="${!dynamic_queue_env_lookup}"
+
+		if [ -z "${queue_url}" ]; then
+			echo "'${targetEnv}' is not a supported environment; see sensitive_data.bash and grep for LITSTREAM_APP_SDK and LITSTREAM_LOCALWORK_TESTQUEUE for this environment."
+			return
+		fi
+
+		# echo "in fxn, for '${targetEnv}', gonna use [${aws_access_key_id}] and [${aws_secret_access_key}] to connect to '${queue_url}' (defined in sensitive_data.sh which should never get checked in..."
+		echo "env==${targetEnv}, running SQSD on queue '${queue_url}..."
+
+		sqsd --queue-url $queue_url --web-hook http://localhost:8081/eventhandler -d -s 5 -v --access-key-id $aws_access_key_id --secret-access-key $aws_secret_access_key
+	else
+		echo "No environment specified. Try again with e.g. 'launch_sqsd dev'"
+	fi
+}
+
 # alias launch_sqsd="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/event_queue_tfeiler_sqsd --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
 
 # alias launch_sqsd2021="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/litstream-prod2021-eq --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
 
-alias launch_sqsd="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/event_queue_tfeiler_sqsd --web-hook http://localhost:8081/eventhandler -d -s 5 -v --access-key-id $SQSD_AWS_ACCESS_KEY_ID --secret-access-key $SQSD_AWS_SECRET_ACCESS_KEY"
+# alias launch_sqsd="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/event_queue_tfeiler_sqsd --web-hook http://localhost:8081/eventhandler -d -s 5 -v --access-key-id $SQSD_AWS_ACCESS_KEY_ID --secret-access-key $SQSD_AWS_SECRET_ACCESS_KEY"
 
-alias launch_sqsd2021="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/litstream-prod2021-eq --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
+# LAST ONES USED BEFORE REOWRKING INTO A function...
+# alias xxxlaunch_sqsd="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/736887025159/litstream-dev-developertesting-tfeiler-eq --web-hook http://localhost:8081/eventhandler -d -s 5 -v --access-key-id $SQSD_AWS_ACCESS_KEY_ID --secret-access-key $SQSD_AWS_SECRET_ACCESS_KEY"
+
+# alias xxxlaunch_sqsd2021="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/litstream-prod2021-eq --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
 
 # declare -x DOCTER_HOME="/Users/tfeiler/development/docter_online/"
 declare -x DOCTER_HOME="/Users/tfeiler/development/docterOnline/"
@@ -98,21 +126,7 @@ runMongoOnCygwin() {
 
 # alias sqlite="winpty /cygdrive/c/development/tools/sqlite/sqlite3.exe"
 
-# alias mongo_dragon_dev="runMongoOnCygwin ${MONGO_DEV_PRIMARY_CONN}"
-# alias mongo_dragon_dev2="runMongoOnCygwin ${MONGO_DEV_SECONDARY_CONN}"
-# alias mongo_dragon_prod="runMongoOnCygwin ${MONGO_PROD_PRIMARY_CONN}"
-# alias mongo_dragon_prod2="runMongoOnCygwin ${MONGO_PROD_SECONDARY_CONN}"
-# alias mongo_dragon_sandbox="runMongoOnCygwin ${MONGO_SANDBOX_PRIMARY_CONN}"
-
-# alias mongo_dragon_dev="mongo ${MONGO_DEV_PRIMARY_CONN}"
-# alias mongo_dragon_dev2="mongo ${MONGO_DEV_SECONDARY_CONN}"
-# alias mongo_dragon_prod="mongo ${MONGO_PROD_PRIMARY_CONN}"
-# alias mongo_dragon_prod2="mongo ${MONGO_PROD_SECONDARY_CONN}"
-alias mongo_dragon_sandbox="mongo ${MONGO_SANDBOX_PRIMARY_CONN}"
-alias mongo_litstream_prod2021="mongo ${MONGO_PROD2021_PRIMARY_CONN}"
-alias mongosh_litstream_prod2021="mongosh ${MONGO_PROD2021_PRIMARY_CONN}"
-alias mongo_litstream_dev2021="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEV2021_PRIMARY_CONN}"
-alias mongosh_litstream_dev2021="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEV2021_PRIMARY_CONN}"
+alias mongo_litstream_sandbox="mongo --tls --tlsAllowInvalidCertificates ${MONGO_SANDBOX_PRIMARY_CONN}"
 
 alias sqlserver_dcc_dev="sqlcmd -S ${DCC_DB_DEV_HOST} -U ${DCC_DB_DEV_USER} -P ${DCC_DB_DEV_PASSWORD}"
 
@@ -207,33 +221,71 @@ ssh_devweb() {
 #
 #    Similarly I think I can point my local development config at that to run a local DRAGON install
 #    that talks to prod database.
-alias tunnel_check="checkTunnels.sh"
+# alias tunnel_check="checkTunnels.sh"
 
 # autossh -M with a different monitor port for each instance. Keeps tunnel open on OSX
 # alias tunnel_dragon_prod2020_start="autossh -M 20045 -N -f -L 9432:litstream-pg-prod-20210308.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
 # alias tunnel_dragon_prod2020_stop="stopTunnelling.sh 9432:litstream-pg-prod-20210308.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
 
-alias tunnel_litstream_prod2021_start="autossh -M 20055 -N -f -L 1432:litstream-prod2021-pg.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9742:litstream-prod2021-elcache.nbwrk0.0001.use1.cache.amazonaws.com:6379 prod2021_jumpbox"
-alias tunnel_litstream_prod2021_stop="stopTunnelling.sh 1432:litstream-prod2021-pg"
+
+
+
+
+# CLEANED UP AS OF DECEMBER 2022
+alias tunnel_check="tunneler.py -o check_tunnels"
+
+alias tunnel_litstream_prod2021_start="tunneler.py -e prod2021 -o start_tunnel"
+alias tunnel_litstream_prod2021_stop="tunneler.py -e prod2021 -o stop_tunnel"
+alias psql_litstream_prod2021="psql -h localhost -p 1432 -d litstream -U litstream_admin"
 alias redis_litstream_prod2021="redis-cli -h localhost -p 9742"
+alias mongo_litstream_prod2021="mongo ${MONGO_PROD2021_PRIMARY_CONN}"
+alias mongosh_litstream_prod2021="mongosh ${MONGO_PROD2021_PRIMARY_CONN}"
 
-alias tunnel_litstream_dev2021_start="autossh -M 20065 -N -f -L 2432:litstream-dev2021-pg.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9744:litstream-dev2021-elcache.nbwrk0.0001.use1.cache.amazonaws.com:6379 dev2021_jumpbox"
-alias tunnel_litstream_dev2021_stop="stopTunnelling.sh 2432:litstream-dev2021-pg"
+alias tunnel_litstream_dev2021_start="tunneler.py -e dev2021 -o start_tunnel"
+alias tunnel_litstream_dev2021_stop="tunneler.py -e dev2021 -o stop_tunnel"
+alias psql_litstream_dev2021="psql -h localhost -p 2432 -d litstream_dev -U litstream_dev_admin"
 alias redis_litstream_dev2021="redis-cli -h localhost -p 9744"
+alias mongo_litstream_dev2021="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEV2021_PRIMARY_CONN}"
+alias mongosh_litstream_dev2021="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEV2021_PRIMARY_CONN}"
 
-# alias tunnel_dragon_dev_start="autossh -M 20010 -N -f -L 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9738:litstream-dev-elcache.nbwrk0.0001.use1.cache.amazonaws.com:6379 dev_jumpbox"
-# alias tunnel_dragon_dev_stop="stopTunnelling.sh 7432:dbinstance.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
+alias tunnel_litstream_sandbox2021_start="tunneler.py -e sandbox2021 -o start_tunnel"
+alias tunnel_litstream_sandbox2021_stop="tunneler.py -e sandbox2021 -o stop_tunnel"
+alias psql_litstream_sandbox2021="psql -h localhost -p 8432 -d dragon_env_backup -U dragon_sandbox_admin"
+alias redis_litstream_sandbox2021="redis-cli -h localhost -p 9760"
+
+alias tunnel_litstream_sandbox_start="tunneler.py -e sandbox -o start_tunnel"
+alias tunnel_litstream_sandbox_stop="tunneler.py -e sandbox -o stop_tunnel"
+alias psql_litstream_sandbox="psql -h localhost -p 8432 -d litstream_sandbox -U ls_sandbox_admin"
+alias redis_litstream_sandbox="redis-cli -h localhost -p 9736"
+
+alias tunnel_litstream_dev_start="tunneler.py -e dev -o start_tunnel"
+alias tunnel_litstream_dev_stop="tunneler.py -e dev -o stop_tunnel"
+alias psql_litstream_dev="psql -h localhost -p 3432 -d litstream_dev -U litstream_dev_admin"
+alias redis_litstream_dev="redis-cli -h localhost -p 9750"
+alias mongo_litstream_dev="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
+alias mongosh_litstream_dev="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
+
+
+alias tunnel_litstream_prod_start="tunneler.py -e prod -o start_tunnel"
+alias tunnel_litstream_prod_stop="tunneler.py -e prod -o stop_tunnel"
+alias psql_litstream_prod="psql -h localhost -p 4432 -d litstream_prod -U litstream_prod_admin"
+alias redis_litstream_prod="redis-cli -h localhost -p 9752"
+alias mongo_litstream_prod="mongo --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
+alias mongosh_litstream_prod="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
+
+
+
+
+
 
 alias tunnel_accessdragon_recovery_start="autossh -M 20030 -N -f -L 3310:accessdragon-20180903-recovery.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:3306 dev_jumpbox"
 alias tunnel_accessdragon_recovery_stop="stopTunnelling.sh 3310:accessdragon-20180903-recovery.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:3306"
 alias mysql_accessdragon_recovery="mysql -h127.0.0.1 -P3310 -u${ACCESS_DRAGON_PROD_USERNAME} -p${ACCESS_DRAGON_PROD_PASSWORD} -A ${ACCESS_DRAGON_PROD_SCHEMA}"
 
-# alias tunnel_dragon_sandbox_start="autossh -M 20000 -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 dev_jumpbox"
-# Dec 2019 - tunnel to both postgres AND redis!
-alias tunnel_dragon_sandbox_start='autossh -M 20000 -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9736:litstream-sandbox-elcache-002.nbwrk0.0001.use1.cache.amazonaws.com:6379 dev_jumpbox'
+# alias tunnel_dragon_sandbox_start='autossh -M 20000 -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9736:litstream-sandbox-elcache-003.nbwrk0.0001.use1.cache.amazonaws.com:6379 dev_jumpbox'
 # Jan 2020 - at the office, tunnel Mongo too, why not?
 # alias tunnel_dragon_sandbox_start='autossh -M 20000 -N -f -L 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 -L 9736:litstream-sandbox-elcache-001.nbwrk0.0001.use1.cache.amazonaws.com:6379 -L 4545:aws-us-east-1-portal.20.dblayer.com:11426 dev_jumpbox'
-alias tunnel_dragon_sandbox_stop="stopTunnelling.sh 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
+# alias tunnel_dragon_sandbox_stop="stopTunnelling.sh 8432:dragon-sandbox.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
 
 alias tunnel_docter_prod_start="autossh -M 20025 -N -f -L 9439:docter-prod-psql.cazjljg8okvt.us-east-2.rds.amazonaws.com:5432 -L 3312:${MMDBORD_MYSQL_HOST}:3306 prod_docter_jumpbox"
 alias tunnel_docter_prod_stop="stopTunnelling.sh 9439:docter-prod-psql.cazjljg8okvt.us-east-2.rds.amazonaws.com:5432"
@@ -252,19 +304,22 @@ alias tunnel_embsi_olddev_stop="stopTunnelling.sh 6462:embsi-dev-psql"
 alias tunnel_embsi_dev_start="autossh -M 20040 -N -f -L 6482:emut-dev-psql.c9bgatqk4une.us-east-1.rds.amazonaws.com:5432 dev_embsi_jumpbox"
 alias tunnel_embsi_dev_stop="stopTunnelling.sh 6482:emut-dev-psql"
 
-alias tunnel_embsi_prod_start="autossh -M 20035 -N -f -L 6472:emut-prod-psql.c9bgatqk4une.us-east-1.rds.amazonaws.com:5432 prod_embsi_jumpbox"
-alias tunnel_embsi_prod_stop="stopTunnelling.sh 6472:emut-prod-psql"
+# alias tunnel_embsi_prod_start="autossh -M 20035 -N -f -L 6472:emut-prod-psql.c9bgatqk4une.us-east-1.rds.amazonaws.com:5432 prod_embsi_jumpbox"
+# alias tunnel_embsi_prod_stop="stopTunnelling.sh 6472:emut-prod-psql"
+
+alias tunnel_embsi_prod_start="tunneler.py -e embsi_prod -o start_tunnel"
+alias tunnel_embsi_prod_stop="tunneler.py -e embsi_prod -o stop_tunnel"
 
 # curl localhost:9250/_cluster/health?pretty
 # alias psql_dragon_development="psql -h localhost -p 7432 -d dragon -U dbadmin"
-alias psql_dragon_sandbox="psql -h localhost -p 8432 -d dragon_env_backup -U dragon_sandbox_admin"
+# alias psql_litstream_sandbox="psql -h localhost -p 8432 -d dragon_env_backup -U dragon_sandbox_admin"
 # alias psql_dragon_production2020="psql -h localhost -p 9432 -d dragon -U dragon"
 # alias psql_dragon_staging="psql -h dragon-postgresql-stage.c5vzduwbgj5d.us-east-1.rds.amazonaws.com -p 5432 -d stagedb -U dbadmin"
-alias psql_litstream_dev2021="psql -h localhost -p 2432 -d litstream_dev -U litstream_dev_admin"
-alias psql_litstream_prod2021="psql -h localhost -p 1432 -d litstream -U litstream_admin"
+# alias psql_litstream_dev2021="psql -h localhost -p 2432 -d litstream_dev -U litstream_dev_admin"
+# alias psql_litstream_prod2021="psql -h localhost -p 1432 -d litstream -U litstream_admin"
 
 
-alias redis_dragon_sandbox="redis-cli -h localhost -p 9736"
+# alias redis_dragon_sandbox="redis-cli -h localhost -p 9736"
 # alias redis_dragon_dev="redis-cli -h localhost -p 9738"
 # alias redis_dragon_prod="redis-cli -h localhost -p 9740"
 
@@ -457,3 +512,14 @@ javaHomeReset
 #   brew services start mysql
 # Or, if you don't want/need a background service you can just run:
 #   mysql.server start
+
+
+# I installed pyenv with homebrew; is any of this actually needed?
+declare -x PYENV_ROOT="$HOME/.pyenv"
+declare -x PATH="$PYENV_ROOT/bin:$PATH"
+declare -x PATH="$PYENV_ROOT/shims:$PATH"
+# export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
+export PYENV_SHELL=bash
+# source '/usr/local/Cellar/pyenv/2.2.0/libexec/../completions/pyenv.bash'
+source '/usr/local/Cellar/pyenv/2.3.0/completions/pyenv.bash'
+eval "$(pyenv init -)"

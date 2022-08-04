@@ -104,8 +104,22 @@ declare -x PATH=${PATH}:~/development/tools/gtags_bin
 alias ngrok="/Users/tfeiler/development/tools/ngrok/ngrok"
 
 # 202107 - python3 is now the default
-alias mkvirtualenv2='mkvirtualenv --python=`which python2`'
+# alias mkvirtualenv2='mkvirtualenv --python=`which python2`'
 # alias mkvirtualenv3='mkvirtualenv --python=`which python3`'
+
+# 20211117 -- try it again, now use pyenv
+# old virtual envs work fine, but going forward make sure you have pyenv set to the correct
+# version and then make a virtual env based on that.
+# "pyenv install -l" to list possible versions to install
+# "pyenv install 1.2.3" to install a specific version
+# "pyenv versions" to list installed versions
+# "pyenv shell 1.2.3" to switch to an installed version in just the current shell
+# "pyenv local 1.2.3" to persistently set the current directory to use that version
+# edit ~/.penv/version to set the system default; 3.9.7 as of this writing
+#
+# this alias will use whatever the currently active pyenv version is to build the virtual env
+alias mkvirtualpyenv='mkvirtualenv --python=`pyenv which python`'
+
 declare -x PATH=${PATH}:/Users/tfeiler/bin
 
 # 202108 - start using Neovim for LSP support
@@ -117,3 +131,11 @@ alias vimdiff='nvim -d'
 declare -x PATH=/usr/local/share/python:${PATH}
 
 declare -x EDITOR=nvim
+
+alias excel="open -a /Applications/Microsoft\ Excel.app/"
+
+alias yaml_to_json="yq eval -j"
+alias json_to_yaml="yq eval -P"
+
+# generates a random number between 1 and supplied number, inclusive
+alias random="jot -r 1 1 $1"
