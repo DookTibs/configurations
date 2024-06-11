@@ -309,6 +309,6 @@ exe 'nnoremap ' . g:tibsdebug_leader . 'c' . ' :call SimpleJdbCmd("cont")<enter>
 
 " temp for debugging only!!!
 " map _ :call SetDebugLineMarker(1)<enter>
-map <BS> :call ToggleJdbBridgeConnection()<enter>
+" map <BS> :call ToggleJdbBridgeConnection()<enter>
 " map <BS> :call LookForFile("com/icfi/dragon/web/gateway/ApiGateway.java")<enter>
 " map <BS> :call DisplayBufferForFile("/Users/tfeiler/development/icf_dragon/src/main/java/com/icfi/dragon/web/gateway/ApiGateway.java", 1209)<enter>

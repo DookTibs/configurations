@@ -30,6 +30,13 @@ fi
 # use vi for shell editing
 set -o vi
 
+# use vi for editor when using the fc (fix command) command
+# I used to just use neovim; at some point in late 2023/early 2024 it stopped working for some reason?
+# like the editor would launch but on exit/save it would not run the corrected command.
+#
+# I don't need anything fancy for that type of editing, just vanilla vi with no plugins is good enough
+declare -x FCEDIT=vi
+
 # declare -x PS1="\h:\W \u\$ "
 # declare -x PS1="[\u@office \W]$ "
 declare -x PS1="[tfeiler@ICF \W]$ "
@@ -70,6 +77,8 @@ alias tc="clear ; tmux clear-history"
 alias tb="tmux_backcolor"
 alias tf="tmux_forecolor"
 alias tra="tmux -L NvimR attach -t NvimR" # attach to the NvimR socket server tmux instance
+alias lw="tmux last-window" # toggle to the previous window
+alias lp="tmux last-pane" # toggle to the previous window
 
 # changed to be functions so we can optionally pass in a value...
 # alias tmw="tmuxPrompter.sh 'move-window -t' 'Enter destination window (<SESSION>:<WINDOW>)'"
@@ -139,3 +148,29 @@ alias json_to_yaml="yq eval -P"
 
 # generates a random number between 1 and supplied number, inclusive
 alias random="jot -r 1 1 $1"
+
+# git helpers
+
+# helper to make it simple to compare a branch and indiviudla files in it against master
+# without remembering a bunch of complicated git commands
+gitDiffIndividualFileHelper () {
+	branchToCompareAgainst=""
+	if [ -e $2 ]; then
+		branchToCompareAgainst="master"
+	else
+		branchToCompareAgainst="$2"
+	fi
+
+	gitCmd=""
+	if [ -e $3 ]; then
+		gitCmd="diff"
+	else
+		gitCmd="$3"
+	fi
+
+	echo "comparing './$1' against '$branchToCompareAgainst' using $gitCmd"
+	echo "git $gitCmd $branchToCompareAgainst:./$1 ./$1"
+	echo "-----------------------------------"
+
+	git $gitCmd $branchToCompareAgainst:./$1 ./$1
+}

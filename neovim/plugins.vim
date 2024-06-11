@@ -4,7 +4,7 @@
 "
 " then
 " 1. call "Plug" commands as needed
-" 2. call :PluginInstall to actually install the new ones. They go in:
+" 2. call :PlugInstall to actually install the new ones. They go in:
 " :echo stdpath('data') == /Users/tfeiler/.local/share/nvim
 " 3. can call :PlugStatus to check on things.
 "
@@ -45,8 +45,20 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 	Plug 'mileszs/ack.vim'
 	Plug 'scrooloose/nerdtree'
 
+	" 20240124 -- trying CoPilot
+	Plug 'github/copilot.vim'
+	"Plug 'gptlang/CopilotChat.nvim'
+	"Plug 'jellydn/CopilotChat.nvim'
+	" Plug 'z0rzi/ai-chat.nvim'
+
 	" for now, only run ALE when doing HAWC.
 	if stridx(system("pwd"), "/Users/tfeiler/development/hawc_project/hawc") == 0
+		" https://black.readthedocs.io/en/stable/integrations/editors.html
+		" Plug 'psf/black', { 'branch': 'stable' }
+		"
+		" https://github.com/averms/black-nvim
+		" let g:python3_host_prog = "/Users/tfeiler/.virtualenvs/hawc2023/bin/python"
+		" Plug 'averms/black-nvim', {'do': ':UpdateRemotePlugins'}
 		Plug 'dense-analysis/ale'
 	endif
 

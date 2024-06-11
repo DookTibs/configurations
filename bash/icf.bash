@@ -1,4 +1,4 @@
-declare -x VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
+declare -x VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3.9
 declare -x PATH=${PATH}:~/bin/
 # declare -x PATH=${PATH}:/cygdrive/c/Program\ Files\ \(x86\)/Graphviz2.38/bin/
 # declare -x PATH=/usr/local/Cellar/python\@2/2.7.14_3/bin:${PATH}
@@ -68,6 +68,8 @@ launch_sqsd () {
 		echo "env==${targetEnv}, running SQSD on queue '${queue_url}..."
 
 		sqsd --queue-url $queue_url --web-hook http://localhost:8081/eventhandler -d -s 5 -v --access-key-id $aws_access_key_id --secret-access-key $aws_secret_access_key
+		# echo "RUN THIS COMMAND:"
+		# echo "sqsd --queue-url $queue_url --web-hook http://localhost:8081/eventhandler -d -s 5 -v --access-key-id $aws_access_key_id --secret-access-key $aws_secret_access_key"
 	else
 		echo "No environment specified. Try again with e.g. 'launch_sqsd dev'"
 	fi
@@ -99,7 +101,8 @@ alias djp='source /Users/tfeiler/development/shellScripts/special/djs.sh python'
 
 alias gohawc="cd ${HAWC_HOME}"
 # alias activatehawc="initConda && conda activate hawc2021"
-alias activatehawc="workon hawc2021"
+# alias activatehawc="workon hawc2021"
+alias activatehawc="workon hawc2023 && declare -x SKIP_BMDS_TESTS=True"
 # alias psql_hawc_local="psql -h localhost -p 5432 -d hawc_localdev -U hawc_user"
 alias psql_hawc_local="psql -h localhost -p 5432 -d hawc -U hawc"
 # alias psql_hawc_icfaws="psql -h hawc-internal-icf-dev-db.cotmuxecedep.us-east-1.rds.amazonaws.com -p 5432 -d icf_hawc_dev -U hawc_admin"
@@ -125,8 +128,6 @@ runMongoOnCygwin() {
 }
 
 # alias sqlite="winpty /cygdrive/c/development/tools/sqlite/sqlite3.exe"
-
-alias mongo_litstream_sandbox="mongo --tls --tlsAllowInvalidCertificates ${MONGO_SANDBOX_PRIMARY_CONN}"
 
 alias sqlserver_dcc_dev="sqlcmd -S ${DCC_DB_DEV_HOST} -U ${DCC_DB_DEV_USER} -P ${DCC_DB_DEV_PASSWORD}"
 
@@ -234,29 +235,30 @@ ssh_devweb() {
 # CLEANED UP AS OF DECEMBER 2022
 alias tunnel_check="tunneler.py -o check_tunnels"
 
-alias tunnel_litstream_prod2021_start="tunneler.py -e prod2021 -o start_tunnel"
-alias tunnel_litstream_prod2021_stop="tunneler.py -e prod2021 -o stop_tunnel"
-alias psql_litstream_prod2021="psql -h localhost -p 1432 -d litstream -U litstream_admin"
-alias redis_litstream_prod2021="redis-cli -h localhost -p 9742"
-alias mongo_litstream_prod2021="mongo ${MONGO_PROD2021_PRIMARY_CONN}"
-alias mongosh_litstream_prod2021="mongosh ${MONGO_PROD2021_PRIMARY_CONN}"
+# alias tunnel_litstream_prod2021_start="tunneler.py -e prod2021 -o start_tunnel"
+# alias tunnel_litstream_prod2021_stop="tunneler.py -e prod2021 -o stop_tunnel"
+# alias psql_litstream_prod2021="psql -h localhost -p 1432 -d litstream -U litstream_admin"
+# alias redis_litstream_prod2021="redis-cli -h localhost -p 9742"
 
-alias tunnel_litstream_dev2021_start="tunneler.py -e dev2021 -o start_tunnel"
-alias tunnel_litstream_dev2021_stop="tunneler.py -e dev2021 -o stop_tunnel"
-alias psql_litstream_dev2021="psql -h localhost -p 2432 -d litstream_dev -U litstream_dev_admin"
-alias redis_litstream_dev2021="redis-cli -h localhost -p 9744"
-alias mongo_litstream_dev2021="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEV2021_PRIMARY_CONN}"
-alias mongosh_litstream_dev2021="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEV2021_PRIMARY_CONN}"
+# alias tunnel_litstream_dev2021_start="tunneler.py -e dev2021 -o start_tunnel"
+# alias tunnel_litstream_dev2021_stop="tunneler.py -e dev2021 -o stop_tunnel"
+# alias psql_litstream_dev2021="psql -h localhost -p 2432 -d litstream_dev -U litstream_dev_admin"
+# alias redis_litstream_dev2021="redis-cli -h localhost -p 9744"
 
-alias tunnel_litstream_sandbox2021_start="tunneler.py -e sandbox2021 -o start_tunnel"
-alias tunnel_litstream_sandbox2021_stop="tunneler.py -e sandbox2021 -o stop_tunnel"
-alias psql_litstream_sandbox2021="psql -h localhost -p 8432 -d dragon_env_backup -U dragon_sandbox_admin"
-alias redis_litstream_sandbox2021="redis-cli -h localhost -p 9760"
+# alias tunnel_litstream_sandbox2021_start="tunneler.py -e sandbox2021 -o start_tunnel"
+# alias tunnel_litstream_sandbox2021_stop="tunneler.py -e sandbox2021 -o stop_tunnel"
+# alias psql_litstream_sandbox2021="psql -h localhost -p 8432 -d dragon_env_backup -U dragon_sandbox_admin"
+# alias redis_litstream_sandbox2021="redis-cli -h localhost -p 9760"
 
 alias tunnel_litstream_sandbox_start="tunneler.py -e sandbox -o start_tunnel"
 alias tunnel_litstream_sandbox_stop="tunneler.py -e sandbox -o stop_tunnel"
 alias psql_litstream_sandbox="psql -h localhost -p 8432 -d litstream_sandbox -U ls_sandbox_admin"
 alias redis_litstream_sandbox="redis-cli -h localhost -p 9736"
+alias mongo_litstream_sandboxcompose="mongo --tls --tlsAllowInvalidCertificates ${MONGO_SANDBOXCOMPOSE_PRIMARY_CONN}"
+alias mongo_litstream_sandbox="mongo --tls --tlsAllowInvalidCertificates ${MONGO_SANDBOX_PRIMARY_CONN}"
+
+alias mongo_lfc_sandbox="mongosh ${MONGO_LFC_SANDBOX_PRIMARY_CONN}"
+
 
 alias tunnel_litstream_dev_start="tunneler.py -e dev -o start_tunnel"
 alias tunnel_litstream_dev_stop="tunneler.py -e dev -o stop_tunnel"
@@ -264,6 +266,8 @@ alias psql_litstream_dev="psql -h localhost -p 3432 -d litstream_dev -U litstrea
 alias redis_litstream_dev="redis-cli -h localhost -p 9750"
 alias mongo_litstream_dev="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
 alias mongosh_litstream_dev="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
+alias mongo_litstream_devcompose="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEVCOMPOSE_PRIMARY_CONN}"
+alias mongosh_litstream_devcompose="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEVCOMPOSE_PRIMARY_CONN}"
 
 
 alias tunnel_litstream_prod_start="tunneler.py -e prod -o start_tunnel"
@@ -272,6 +276,29 @@ alias psql_litstream_prod="psql -h localhost -p 4432 -d litstream_prod -U litstr
 alias redis_litstream_prod="redis-cli -h localhost -p 9752"
 alias mongo_litstream_prod="mongo --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
 alias mongosh_litstream_prod="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
+alias mongo_litstream_prodcompose="mongo --tls --tlsAllowInvalidCertificates ${MONGO_PRODCOMPOSE_PRIMARY_CONN}"
+alias mongosh_litstream_prodcompose="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_PRODCOMPOSE_PRIMARY_CONN}"
+
+alias tunnel_litstream_unittest_start="tunneler.py -e unittest -o start_tunnel"
+alias tunnel_litstream_unittest_stop="tunneler.py -e unittest -o stop_tunnel"
+alias psql_litstream_unittest="psql -h localhost -p 9432 -d litstream_dev -U litstream_dev_admin"
+alias redis_litstream_unittest="redis-cli -h localhost -p 9748"
+alias mongo_litstream_unittest="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
+alias mongosh_litstream_unittest="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
+
+# PYTRIM
+alias mysql_pytrim_local="mysql -uroot pytrim"
+
+alias tunnel_pytrim_dev_start="tunneler.py -e pytrim_dev -o start_tunnel"
+alias tunnel_pytrim_dev_stop="tunneler.py -e pytrim_dev -o stop_tunnel"
+alias mysql_pytrim_dev="mysql -h 127.0.0.1 -P 6603 -u ${PYTRIM_DEV_USERNAME} -p${PYTRIM_DEV_PASSWORD} pytrim_dev"
+
+# as of 20221031
+# tunnels don't quite work yet...
+# alias tunnel_litmc_dev_start="tunneler.py -e litmc_dev -o start_tunnel"
+# alias tunnel_litmc_dev_stop="tunneler.py -e litmc_dev -o stop_tunnel"
+# this works but the name is annoying with litstream, so I disable
+# alias psql_litmc_dev="psql -h localhost -p 6420 -d litemcee -U icflitemcee" #password testtest
 
 
 
@@ -521,5 +548,20 @@ declare -x PATH="$PYENV_ROOT/shims:$PATH"
 # export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
 export PYENV_SHELL=bash
 # source '/usr/local/Cellar/pyenv/2.2.0/libexec/../completions/pyenv.bash'
-source '/usr/local/Cellar/pyenv/2.3.0/completions/pyenv.bash'
+# source '/usr/local/Cellar/pyenv/2.3.0/completions/pyenv.bash'
+# source '/usr/local/Cellar/pyenv/2.3.17/completions/pyenv.bash'
+# source '/usr/local/Cellar/pyenv/2.3.35/completions/pyenv.bash'
+source '/usr/local/Cellar/pyenv/2.3.36/completions/pyenv.bash'
 eval "$(pyenv init -)"
+
+# 20240124 I installed the github CLI, see https://dev.to/github/stop-struggling-with-terminal-commands-github-copilot-in-the-cli-is-here-to-help-4pnb
+# but it seems out account doesn't have Copilot CLI enabled.
+# alias copilot='gh copilot'
+# alias gcs='gh copilot suggest'
+# alias gce='gh copilot explain'
+
+alias mysql_localserver_start="mysql.server start"
+alias mysql_localserver_stop="mysql.server stop"
+alias mysql_localserver_restart="mysql.server restart"
+
+alias aws_whoami="aws sts get-caller-identity"

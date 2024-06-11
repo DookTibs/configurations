@@ -638,3 +638,55 @@ function! CheckLeftBuffers()
     unlet i
   endif
 endfunction
+
+" given a set of:
+" private String foo;
+" private SomeThing bar;
+"
+" this will generate getters setters like:
+"
+" public String getFoo() { return foo; }
+" public void setFoo(String foo) { this.foo = foo; }
+"
+" runs on the current line, inserts the getters/setters at the bottom of the file,
+" and then moves to the next line. So like if you do:
+"
+" :map <BS> :call TomJavaGetSet()<enter>
+"
+" you can then position the cursor on the first line and just hit backspace a few
+" times to generate all your getters/setters.
+"
+" might be nice to support input ranges (:5,10TomJavaGetSet) but for now this works well.
+function! TomJavaGetSet()
+	" get the current line, and figure out the variable type and name.
+	" like if current line is "private String foo; // blah blah"
+	" then probe will be a list with the second element being "String"
+	" and the third element being "foo"
+	let lineContents = getline(".")
+	let probe = matchlist(lineContents, ".*private\\s*\\(\\S*\\)\\s*\\(\\S*\\)\\s*;.*")
+
+	let lineNum = line(".")
+
+	if len(probe) > 0
+		let varType = probe[1]
+		let varName = probe[2]
+
+		let upperedName = toupper(varName[0:0]) . varName[1:]
+		" echo "work on '" . varType . "' / '" . varName . "' and then return to " . lineNum
+
+		" neat trick - [{ and ]} in normal mode go to the parent opening/closing brace!!!
+		" so these next two lines basically go to the bottom of the class
+		" definition
+		normal! ]}
+		normal! k
+
+
+		let getter = "public " . varType . " get" . upperedName . "() { return " . varName . "; }"
+		let setter = "public void set" . upperedName . "(" . varType . " " . varName . ") { this." . varName . " = " . varName . "; }"
+		exe "normal! o" . getter . "\<Esc>"
+		exe "normal! o" . setter . "\<Esc>"
+
+		" and now return to the line after the one we started at
+		exe "normal! " . (lineNum+1) . "G"
+	endif
+endfunction

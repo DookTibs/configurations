@@ -11,24 +11,64 @@ elseif stridx(currentDir, $DRAGON_HOME . "src/main/CloudFormation") == 0
 	set softtabstop=2
 	set shiftwidth=2
 	set syntax=yaml
+elseif stridx(currentDir, "/Users/tfeiler/development/llr/llrsim") == 0
+	" let's try it instead with git commit hooks...
+	" if executable("black") == 0
+		" echo "WARNING - cannot find black/etc. on PATH; probably not in right venv."
+		" echo "Consider quitting and run 'workon llrsim' before re-opening Vim"
+	" else
+		" echo "black will run on save...run 'cd /Users/tfeiler/development/llr/llrsim && make lint' before pushing to Github"
+		" autocmd BufWritePost *.py silent! !black -q --config /Users/tfeiler/development/llr/llrsim/pyproject.toml %
+	" endif
+	map \ :call LlrSimDevUtil(1)<enter>
 elseif stridx(currentDir, "/Users/tfeiler/development/hawc_project/hawc") == 0
 	" let &tags = "tags," . "/Users/tfeiler/development/hawc_project/hawc/.hawcTags"
 	let &tags = "tags," . "/Users/tfeiler/development/hawc_project/hawc/.hawcTags," . "/Users/tfeiler/development/hawc_project/hawc/.hawcVirtualEnvInstalledPackagesTags"
 
 
+	" 2023 - HAWC switched linters from flake8 -> ruff
+	" let hawcLinter="flake8"
+	let hawcLinter="ruff"
 
 	" CONSIDER MOVING SOME/ALL OF THIS OUT OF HAWC-SPECIFIC CONFIG AND INTO MAIN - ALE SEEMS MIGHTY USEFUL!!!
 	" right now I'm just using a small part of ALE; my attempts to get things like symbol definition/autocomplete
 	" were kind of annoying. Sticking with ctags for now; it's fast, good enough, and I understand it.
-	if executable("flake8") == 0
-		echo "WARNING - cannot find flake8/etc. on PATH; probably not in right venv."
+	if executable(hawcLinter) == 0
+		echo "WARNING - cannot find " . hawcLinter . "/etc. on PATH; probably not in right venv."
 		echo "Consider quitting and run 'activatehawc' before re-opening Vim"
 	else
 		" see https://github.com/dense-analysis/ale/tree/master/doc
-		let g:ale_linters = {'javascript': ['eslint'], 'python': ['flake8']}
-		let g:ale_fixers = {'javascript': ['eslint'], 'python': ['black']}
+		" let g:ale_linters = {'javascript': ['eslint'], 'python': [hawcLinter]}
+		" let g:ale_fixers = {'javascript': ['eslint'], 'python': ['black', hawcLinter]}
 		" this .flake8 file coems with the HAWC repo...
-		let g:ale_python_flake8_options = '--config=/Users/tfeiler/development/hawc_project/hawc/.flake8'
+
+		" 2023-10 changes
+		" I can't get Black working properly so let's go old school instead:
+		" (see plugins.vim; official psf/black doesn't work with neovim, and the alternate I found
+		" doesn't seem to work either)
+		" 1. disable it from ALE config...
+		let g:ale_linters = {'javascript': ['eslint'], 'python': []}
+		let g:ale_fixers = {'javascript': ['eslint'], 'python': []}
+
+		" echo "RUFF disabled; run 'make format' manually before committing/pushing..."
+
+		" echo "stuff runs on save...run 'cd $HAWC_HOME && \"make lint\" (to check) / \"make format\" (to fix)' before push to Github"
+		" autocmd BufWritePost *.py silent! !black -q --config /Users/tfeiler/development/hawc_project/hawc/pyproject.toml %
+		" autocmd BufWritePost *.py silent! !ruff format %
+		"autocmd BufWritePost *.py echo "write pythong!" . "(" . getcwd() . ")"
+
+		" https://vimtricks.com/p/get-the-current-file-path/
+		echo "ruff re-enabled...but also run 'make lint' and 'make format' and run tests before pushing to Github"
+		autocmd BufWritePost *.py silent !/Users/tfeiler/development/configurations/neovim/ruffHelper.sh %:p
+
+
+
+		if hawcLinter == "flake8"
+			let g:ale_python_flake8_options = '--config=/Users/tfeiler/development/hawc_project/hawc/.flake8'
+		elseif hawcLinter == "ruff"
+			" let g:ale_python_ruff_options = '--fix --show-fixes --config=/Users/tfeiler/development/hawc_project/hawc/pyproject.toml'
+			" let g:ale_python_ruff_options = '--fix'
+		endif
 		" let g:ale_linters_explicit = 1
 		
 		" I'd rather use the quickfix window; lets me use "unimpaired" to quickly move through any errors
@@ -120,6 +160,9 @@ elseif stridx(currentDir, "/Users/tfeiler/development/uncertainty") == 0
 
 	" let g:lsc_server_commands = { 'python': 'pyls' }
 	" let g:lsc_auto_map = v:true " use default vim-lsc mappings
+elseif stridx(currentDir, "/Users/tfeiler/development/trim-builder") == 0
+	map <BS> :call ReloadChromeTab("localhost:6060")<enter>
+	let &tags = "tags," . "/Users/tfeiler/development/trim-builder/.trimTags"
 elseif stridx(currentDir, "/Users/tfeiler/development/docter_online") == 0
 	map <BS> :call ReloadChromeTab("localhost:5678")<enter>
 	let &tags = "tags," . "/Users/tfeiler/development/docter_online/.docterOnlineTags"
@@ -137,6 +180,7 @@ elseif stridx(currentDir, "/Users/tfeiler/development/dragon_api") == 0
 elseif stridx(currentDir, "/Users/tfeiler/development/acc") == 0
 	map <BS> :call CellmateUpload("blink")<enter>
 	map \ :call ReloadChromeTab("https://awesome-table.com")<enter>
+" elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/scripts/customJsScriptStorage") == 0
 elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/scripts/flexFormCustomJsScripts") == 0
 	autocmd BufWritePost *.js :call StuffFlexFormJs()
 elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon") == 0
@@ -251,13 +295,20 @@ function! StuffFlexFormJs()
 	let currentDir = system("pwd")
 	let currentDir = substitute(currentDir, "\n", "", "")
 	let fullPath = currentDir . "/" . @%
+	
+	" old way, talks to flex_form_configurations
 	let stuffCmd = $DRAGON_HOME . "/src/main/scripts/flexFormCustomJsHelper.py stuff " . fullPath
+	
+	" new way, talks to custom_step_scripts and shared_custom_scripts
+	" let stuffCmd = $DRAGON_HOME . "/src/main/scripts/litstreamCustomJsHelper.py -o stuff -f " . fullPath
 	" echo stuffCmd
 	call system(stuffCmd)
 
 	if (v:shell_error != 0)
 		" checks exit code of flexFormCustomJsHelper.py; if non-zero, display this hint...
 		echo "error stuffing (" . v:shell_error . ") - this will only work if using a Python VM with psycopg2 (like flexform_customjs)"
+	" else
+		" echo "Remember - if this was a new shared script, reload your buffer!"
 	endif
 endfunction
 
@@ -339,6 +390,27 @@ function! RunCurrentExpoaggLambda(...)
 		call SendFreshCommandToTMUX("./runLambdaLocally.py " . lambdaName, tmuxTarget)
 	else
 		call SendFreshCommandToTMUX("./runLambdaLocally.py -f " . lambdaName . " -e " . customEvent, tmuxTarget)
+	endif
+endfunction
+
+function! LlrSimDevUtil(userInteraction)
+	let currentDir = system("pwd")
+	let currentDir = substitute(currentDir, "\n", "", "")
+
+    if stridx(currentDir, "/Users/tfeiler/development/llr/llrsim") == 0
+		" we only trigger a reploy if we actually launched the command intentionally.
+		" if this fired as a result of a save action, we don't do it.
+		if (a:userInteraction == 1)
+			" cancel whatever's running, and then redeploy/rewatch
+			
+			" new way - in a window named "runner"
+			call system("createTmuxWindowIfNotThere.sh runner")
+			call SendFreshCommandToTMUX("C-c", "runner")
+			call SendFreshCommandToTMUX("llrsim -c /Users/tfeiler/development/llr/llrsim/sample_config.yml -o /Users/tfeiler/development/llr/unsynced/output/", "runner")
+			call system("tmux select-window -t 'runner'")
+		endif
+	else
+		echo "don't know how to handle this in " . currentDir . "..."
 	endif
 endfunction
 

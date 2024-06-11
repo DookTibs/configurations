@@ -1,5 +1,79 @@
 # function
 
+# AWS SSO (https://docs.aws.amazon.com/cli/latest/userguide/sso-configure-profile-token.html#sso-configure-profile-token-auto-sso) is nice but requires you to do things like tack on "--profile X" on your command.
+# I want to assume the session; I think this does it, by exporting credentials as environment variables.
+#
+# at a shall we can just do "aws_sso_login staging" and it will wildcard search and get us set in that shell
+# (logging us in if needed; setting env variables either way), and then we can run aws CLI commands, use
+# boto3, etc. without having to append "--profile X" onto everything, it will just be the default in that shell.
+aws_sso_login () {
+	if [ -z $1 ]; then
+		echo "AVAILABLE SSO SETUPS:"
+		cat ~/.aws/config | grep "\[sso-session" | sed 's/\[sso-session //' | sed 's/\]//'
+
+		echo ""
+		echo "(To configure a new one, add a section in ~/.aws/config)"
+	else
+		IFS=$'\n' read -r -d '' -a matching_sessions < <( cat ~/.aws/config | grep "\[sso-session.*\]" | sed 's/\[sso-session //' | sed 's/\]//' | grep $1 && printf '\0' )
+		echo "SESSIONS IS ${matching_sessions}"
+
+		num_matches=${#matching_sessions[@]}
+		# echo "num matches is ${num_matches}"
+		if [ $num_matches -eq 0 ]; then
+			echo "No matches found for argument '$1'; not doing sso setup"
+		elif [ $num_matches -eq 1 ]; then
+			session_name="${matching_sessions[0]}"
+
+			echo "proceed with session '$session_name'..."
+
+			# two steps here -- [ONE] need to figure out the [profile Y] that goes with [sso-session X]
+			# so we know the name of the AWS profile. Need that to proceed.
+
+			# profile_name=`cat  ~/.aws/config | awk -v target_config_field="profile_name" -v target_aws_session="litstream_staging_admin_sso" -f ~/development/shellScripts/awsConfigExtracter.awk`
+			profile_name=`cat  ~/.aws/config | awk -v target_config_field="profile_name" -v target_aws_session="$session_name" -f ~/development/shellScripts/awsConfigExtracter.awk`
+			if [ $? -eq 0 ]; then
+				# echo "found profile name '${profile_name}'"
+
+				# [TWO] need to know if we're logged in already; if export-credentials worked, we are.
+				# If we are, just set some environment variables. If we're not, log in - and THEN set some
+				# environment variables.
+
+				# aws configure export-credentials --profile ${profile_name} --format env 2>&1 /dev/null
+				echo "checking current login status for '${session_name}' / '${profile_name}'"
+				logged_in=0
+
+				aws configure export-credentials --profile ${profile_name} --format env 1> /dev/null
+
+				if [ $? -eq 0 ]; then
+					echo "already logged in"
+					logged_in=1
+				else
+					echo "not logged in; check your browser..."
+					aws sso login --sso-session ${session_name}
+
+					if [ $? -eq 0 ]; then
+						logged_in=1
+					fi
+				fi
+
+				if [ $logged_in -eq 1 ]; then
+					echo "setting environment variables..."
+					eval $(aws configure export-credentials --profile ${profile_name} --format env)
+					echo "done! run 'aws sso logout' to logout..."
+				
+					aws sts get-caller-identity --output table
+				else
+					echo "sso setup failed."
+				fi
+
+			fi
+			
+		else
+			echo "Ambiguous session name; multiple matches found for argument '$1'; not changing"
+		fi
+	fi
+}
+
 assume_aws_profile () {
 	if [ -z $1 ]; then
 
@@ -35,6 +109,38 @@ assume_aws_profile () {
 	fi
 
 	aws sts get-caller-identity --output table
+}
+
+# once I'm logged in via e.g. aws_sso_login, maybe I want to assume a role that that Principal has access to? Supply the name and this function will do it!
+assume_aws_role() {
+	accountId=`aws sts get-caller-identity --output json | jq -r '.Account'`
+
+	if [ -z $1 ]; then
+		echo "Please supply a role to assume under account id $accountId"
+	else
+		roleToAssume="$1"
+		# echo "Checking details on role '$roleToAssume' under account id $accountId..."
+		# resp=`aws iam get-role --role-name $roleToAssume`
+		# maxDuration=`echo "$resp" | jq -r '.Role.MaxSessionDuration'`
+
+		# python -c "print('Role found; assuming with duration of ' + str($maxDuration / 60 / 60) + ' hours')"
+		maxDuration=3600 # during role-chaining, we are limited to one hour, no matter what max we've defined. :-(
+
+		resp=`aws sts assume-role --duration-seconds $maxDuration --role-arn arn:aws:iam::$accountId:role/$roleToAssume --role-session-name session_$roleToAssume`
+
+		# echo "RESPONSE IS '$resp'"
+
+		accessKey=`echo "$resp" | jq -r '.Credentials.AccessKeyId'`
+		secretKey=`echo "$resp" | jq -r '.Credentials.SecretAccessKey'`
+		sessionToken=`echo "$resp" | jq -r '.Credentials.SessionToken'`
+
+		export AWS_ACCESS_KEY_ID="${accessKey}"
+		export AWS_SECRET_ACCESS_KEY="${secretKey}"
+		export AWS_SESSION_TOKEN="${sessionToken}"
+
+		echo "You have assumed the following role:"
+		aws sts get-caller-identity
+	fi
 }
 
 untitle () { 

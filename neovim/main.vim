@@ -2,6 +2,10 @@
 " i guess leave it this way for now.
 set backupdir=~/vimBackups/,.
 
+" refresh syntax highlighting when I hit F12
+noremap <F12> <Esc>:syntax sync fromstart<CR>
+inoremap <F12> <C-o>:syntax sync fromstart<CR>
+
 let mapleader=";"
 " let mapleader=" "
 
@@ -165,6 +169,7 @@ command! -bang -nargs=* -complete=file TibsSearch           call ack#Ack('grep<b
 map // :TibsSearch! 
 
 map zz :call FoldBlock()<enter>
+map ff :'a,'bfo
 
 " code for easy line highlights. dash will highlight line as cursor moves
 " colors like darkred, etc. see https://vim.fandom.com/wiki/Xterm256_color_names_for_console_Vim
@@ -233,3 +238,23 @@ vnoremap <silent> ? :<C-U>
   \gVzv:call setreg('"', old_reg, old_regtype)<CR>
 
 autocmd FileType yaml setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
+
+" 
+" add a function in Vimscript that does this:
+" :60,81s-.*private \(.*\) \(.\)\(.*\);-^Ipublic \1 get\U\2\E\3() { return \2\3; }^M^Ipublic void set\U\2\E\3(\1 \2\3) { this.\2\3 = \2\3; }^M
+" given list of
+" 
+" private String foo;
+" private Date bar;
+" 
+" generates
+" 
+" public String getFoo() { return foo; }
+" public void setFoo(String foo) { this.foo = foo; }
+" etc.
+
+
+
+
+
+
