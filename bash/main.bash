@@ -1,6 +1,16 @@
 # make OSX stop complaining about me using bash instead of zsh
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
+# HOMEBREW ENV START
+# run "/opt/homebrew/bin/brew shellenv" to get these...
+export HOMEBREW_PREFIX="/opt/homebrew";
+export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+export HOMEBREW_REPOSITORY="/opt/homebrew";
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
+export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
+export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+# HOMEBREW ENV END
+
 # \vi will call the real vi not the alias.
 # alias vim='/Applications/MacVim.app/Contents/MacOS/Vim' # use homebrew vi 7.4.258 instead of 7.3 stock
 # OSX installs to /usr/bin/vim. As of 2018-12-11 I use a Homebrew version at /usr/local/bin/vim
@@ -39,7 +49,7 @@ declare -x FCEDIT=vi
 
 # declare -x PS1="\h:\W \u\$ "
 # declare -x PS1="[\u@office \W]$ "
-declare -x PS1="[tfeiler@ICF \W]$ "
+declare -x PS1="[tfeiler@ICF_NEW_LAPTOP \W]$ "
 
 declare -x BREW="/usr/local/Cellar"
 
@@ -110,7 +120,7 @@ alias list_ssh_aliases="cat ~/.ssh/* | grep \"Host \" | awk '{ print \$2 }' | so
 # declare -x PATH=${PATH}:~/development/pebble-dev/pebble-sdk-4.2-mac/bin
 declare -x PATH=${PATH}:~/development/tools/gtags_bin
 
-alias ngrok="/Users/tfeiler/development/tools/ngrok/ngrok"
+# alias ngrok="/Users/tfeiler/development/tools/ngrok/ngrok"
 
 # 202107 - python3 is now the default
 # alias mkvirtualenv2='mkvirtualenv --python=`which python2`'
@@ -129,7 +139,7 @@ alias ngrok="/Users/tfeiler/development/tools/ngrok/ngrok"
 # this alias will use whatever the currently active pyenv version is to build the virtual env
 alias mkvirtualpyenv='mkvirtualenv --python=`pyenv which python`'
 
-declare -x PATH=${PATH}:/Users/tfeiler/bin
+# declare -x PATH=${PATH}:/Users/tfeiler/bin
 
 # 202108 - start using Neovim for LSP support
 alias vi='nvim'

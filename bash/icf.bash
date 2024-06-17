@@ -1,4 +1,5 @@
-declare -x VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3.9
+# declare -x VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3.9
+declare -x VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 declare -x PATH=${PATH}:~/bin/
 # declare -x PATH=${PATH}:/cygdrive/c/Program\ Files\ \(x86\)/Graphviz2.38/bin/
 # declare -x PATH=/usr/local/Cellar/python\@2/2.7.14_3/bin:${PATH}
@@ -7,19 +8,21 @@ declare -x GOOGLE_APPLICATION_CREDENTIALS=~/development/acc/serviceAccount.json
 
 # virtualenv for python
 declare -x WORKON_HOME=${HOME}/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
+# source /usr/local/bin/virtualenvwrapper.sh
+source ~/Library/Python/3.9/bin/virtualenvwrapper.sh
+declare -x PATH=${PATH}:~/Library/Python/3.9/bin
 
-declare -x DOWNLOADS=/Users/tfeiler/Downloads/
+declare -x DOWNLOADS=$HOME/Downloads/
 
 # declare -x ECLIPSE_HOME=/cygdrive/c/Users/38593/eclipse/neon/eclipse/
 # alias goeclipse="cd $ECLIPSE_HOME"
 # alias launch_eclimd="goeclipse; ./eclimd.bat"
 
-declare -x WORKSPACE=/Users/tfeiler/eclipse-workspace/
+declare -x WORKSPACE=$HOME/eclipse-workspace/
 alias goworkspace="cd $WORKSPACE"
 
 # declare -x ONEDRIVE_HOME="/Users/tfeiler/OneDriveData/OneDrive - ICF"
-declare -x ONEDRIVE_HOME="/Users/tfeiler/OneDrive - ICF"
+declare -x ONEDRIVE_HOME="$HOME/OneDrive - ICF"
 alias goonedrive='cd "$ONEDRIVE_HOME"'
 
 alias bc="/Applications/Beyond\ Compare.app/Contents/MacOS/bcomp"
@@ -33,7 +36,7 @@ alias gonotes='cd "$ONEDRIVE_HOME/notes"'
 
 alias ls='ls -ltrG'
 
-declare -x DRAGON_HOME="/Users/tfeiler/development/icf_dragon/"
+declare -x DRAGON_HOME="$HOME/development/icf_dragon/"
 declare -x DRAGON_JAVA_HOME="${DRAGON_HOME}src/main/java/com/icfi/dragon/web/"
 declare -x DRAGON_CSS_HOME="${DRAGON_HOME}src/main/webapp/css/"
 declare -x DRAGON_TEMPLATES_HOME="${DRAGON_HOME}src/main/webapp/templates/"
@@ -87,17 +90,17 @@ launch_sqsd () {
 # alias xxxlaunch_sqsd2021="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/litstream-prod2021-eq --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
 
 # declare -x DOCTER_HOME="/Users/tfeiler/development/docter_online/"
-declare -x DOCTER_HOME="/Users/tfeiler/development/docterOnline/"
+declare -x DOCTER_HOME="$HOME/development/docterOnline/"
 # declare -x DOCTER_VM_HOME="/Users/tfeiler/development/docterVM/"
 alias godocter="cd ${DOCTER_HOME}"
 # alias godocterVM="cd ${DOCTER_VM_HOME}"
 
-declare -x HAWC_HOME="/Users/tfeiler/development/hawc_project/hawc/"
+declare -x HAWC_HOME="$HOME/development/hawc_project/hawc/"
 
-alias dj='source /Users/tfeiler/development/shellScripts/special/djs.sh'
-alias djj='source /Users/tfeiler/development/shellScripts/special/djs.sh javascript'
-alias djt='source /Users/tfeiler/development/shellScripts/special/djs.sh templates'
-alias djp='source /Users/tfeiler/development/shellScripts/special/djs.sh python'
+alias dj='source $HOME/development/shellScripts/special/djs.sh'
+alias djj='source $HOME/development/shellScripts/special/djs.sh javascript'
+alias djt='source $HOME/development/shellScripts/special/djs.sh templates'
+alias djp='source $HOME/development/shellScripts/special/djs.sh python'
 
 alias gohawc="cd ${HAWC_HOME}"
 # alias activatehawc="initConda && conda activate hawc2021"
@@ -254,8 +257,8 @@ alias tunnel_litstream_sandbox_start="tunneler.py -e sandbox -o start_tunnel"
 alias tunnel_litstream_sandbox_stop="tunneler.py -e sandbox -o stop_tunnel"
 alias psql_litstream_sandbox="psql -h localhost -p 8432 -d litstream_sandbox -U ls_sandbox_admin"
 alias redis_litstream_sandbox="redis-cli -h localhost -p 9736"
-alias mongo_litstream_sandboxcompose="mongo --tls --tlsAllowInvalidCertificates ${MONGO_SANDBOXCOMPOSE_PRIMARY_CONN}"
-alias mongo_litstream_sandbox="mongo --tls --tlsAllowInvalidCertificates ${MONGO_SANDBOX_PRIMARY_CONN}"
+# alias mongo_litstream_sandbox="mongo --tls --tlsAllowInvalidCertificates ${MONGO_SANDBOX_PRIMARY_CONN}"
+alias mongo_litstream_sandbox="mongosh ${MONGO_SANDBOX_PRIMARY_CONN}"
 
 alias mongo_lfc_sandbox="mongosh ${MONGO_LFC_SANDBOX_PRIMARY_CONN}"
 
@@ -264,34 +267,35 @@ alias tunnel_litstream_dev_start="tunneler.py -e dev -o start_tunnel"
 alias tunnel_litstream_dev_stop="tunneler.py -e dev -o stop_tunnel"
 alias psql_litstream_dev="psql -h localhost -p 3432 -d litstream_dev -U litstream_dev_admin"
 alias redis_litstream_dev="redis-cli -h localhost -p 9750"
-alias mongo_litstream_dev="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
-alias mongosh_litstream_dev="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
-alias mongo_litstream_devcompose="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEVCOMPOSE_PRIMARY_CONN}"
-alias mongosh_litstream_devcompose="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEVCOMPOSE_PRIMARY_CONN}"
+# alias mongo_litstream_dev="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
+# alias mongosh_litstream_dev="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
+alias mongo_litstream_dev="mongosh ${MONGO_DEV_PRIMARY_CONN}"
 
 
 alias tunnel_litstream_prod_start="tunneler.py -e prod -o start_tunnel"
 alias tunnel_litstream_prod_stop="tunneler.py -e prod -o stop_tunnel"
 alias psql_litstream_prod="psql -h localhost -p 4432 -d litstream_prod -U litstream_prod_admin"
 alias redis_litstream_prod="redis-cli -h localhost -p 9752"
-alias mongo_litstream_prod="mongo --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
-alias mongosh_litstream_prod="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
-alias mongo_litstream_prodcompose="mongo --tls --tlsAllowInvalidCertificates ${MONGO_PRODCOMPOSE_PRIMARY_CONN}"
-alias mongosh_litstream_prodcompose="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_PRODCOMPOSE_PRIMARY_CONN}"
+# alias mongo_litstream_prod="mongo --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
+# alias mongosh_litstream_prod="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
+alias mongo_litstream_prod="mongosh ${MONGO_PROD_PRIMARY_CONN}"
 
 alias tunnel_litstream_unittest_start="tunneler.py -e unittest -o start_tunnel"
 alias tunnel_litstream_unittest_stop="tunneler.py -e unittest -o stop_tunnel"
 alias psql_litstream_unittest="psql -h localhost -p 9432 -d litstream_dev -U litstream_dev_admin"
 alias redis_litstream_unittest="redis-cli -h localhost -p 9748"
-alias mongo_litstream_unittest="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
-alias mongosh_litstream_unittest="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
+# alias mongo_litstream_unittest="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
+# alias mongosh_litstream_unittest="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
+alias mongo_litstream_unittest="mongosh ${MONGO_DEV_PRIMARY_CONN}"
 
 # PYTRIM
 alias mysql_pytrim_local="mysql -uroot pytrim"
 
 alias tunnel_pytrim_dev_start="tunneler.py -e pytrim_dev -o start_tunnel"
 alias tunnel_pytrim_dev_stop="tunneler.py -e pytrim_dev -o stop_tunnel"
-alias mysql_pytrim_dev="mysql -h 127.0.0.1 -P 6603 -u ${PYTRIM_DEV_USERNAME} -p${PYTRIM_DEV_PASSWORD} pytrim_dev"
+alias mysql_pytrim_dev="mysql -h 127.0.0.1 -P 6603 -u ${PYTRIM_DEV_USERNAME} -p${PYTRIM_DEV_PASSWORD} pytrimv2"
+
+alias launch_trim_devserver="MYSQLPASSWORD= FLASK_DEBUG=development cd ~/development/trim-builder/Scripts/ && python dev.py"
 
 # as of 20221031
 # tunnels don't quite work yet...
@@ -373,9 +377,9 @@ alias psql_embsi_prod="psql -h localhost -p 6472 -d emut_db_prod -U emut_admin"
 
 
 # see http://www.saxonica.com/documentation/#!about/gettingstarted/gettingstartedjava
-alias saxon="java -cp /Users/tfeiler/development/tools/saxon97/saxon9he.jar"
-alias saxonq="java -cp /Users/tfeiler/development/tools/saxon97/saxon9he.jar net.sf.saxon.Query -t"
-alias saxont="java -cp /Users/tfeiler/development/tools/saxon97/saxon9he.jar net.sf.saxon.Transform -t"
+# alias saxon="java -cp $HOME/development/tools/saxon97/saxon9he.jar"
+# alias saxonq="java -cp $HOME/development/tools/saxon97/saxon9he.jar net.sf.saxon.Query -t"
+# alias saxont="java -cp $HOME/development/tools/saxon97/saxon9he.jar net.sf.saxon.Transform -t"
 
 # DOCKER SPECIFIC
 if [ "1" = "2" ]; then
@@ -417,7 +421,7 @@ if [ 0 -eq 1 ]; then
 			echo "litstream is NOT currently on the 'feature/fall2020upgrades' branch and it probably SHOULD be!"
 		fi
 
-		declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-8.5.58/"
+		declare -x TOMCAT_HOME="$HOME/development/tools/tomcat/apache-tomcat-8.5.58/"
 		# set DRAGON to use Java 11
 		echo "corretto64-11.0.8" > $DRAGON_HOME/.java-version
 
@@ -430,14 +434,14 @@ if [ 0 -eq 1 ]; then
 			echo "litstream IS currently on the 'feature/fall2020upgrades' branch and it probably should NOT be!"
 		fi
 
-		declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-9.0.0.M18/"
+		declare -x TOMCAT_HOME="$HOME/development/tools/tomcat/apache-tomcat-9.0.0.M18/"
 		echo "1.8" > $DRAGON_HOME/.java-version
 		# cat $DRAGON_HOME/pom.xml | sed 's-.*target.*-                    <target>1.7</target>-' > DRAGON_HOME/pom.xml
 		# cat $DRAGON_HOME/pom.xml | sed 's-.*source.*-                    <source>1.7</source>-' > DRAGON_HOME/pom.xml
 	fi
 else
-	echo "SPLIT LITSTREAM 8/11 CONFIG DISABLED FOR SANITY'S SAKE; see icf.bash"
-	declare -x TOMCAT_HOME="/Users/tfeiler/development/tools/tomcat/apache-tomcat-8.5.70/"
+	# echo "SPLIT LITSTREAM 8/11 CONFIG DISABLED FOR SANITY'S SAKE; see icf.bash"
+	declare -x TOMCAT_HOME="$HOME/development/tools/tomcat/apache-tomcat-8.5.100/"
 fi
 
 alias gotomcat="cd $TOMCAT_HOME"
@@ -455,11 +459,13 @@ declare -x CLOUDSDK_PYTHON="/usr/local/bin/python3"
 declare -x PATH="$HOME/.jenv/bin:${PATH}"
 # echo 'eval "$(jenv init -)"' >> ~/.bash_profile
 
-export PATH="/Users/tfeiler/.jenv/shims:${PATH}"
+export PATH="$HOME/jenv/shims:${PATH}"
 export JENV_SHELL=bash
 export JENV_LOADED=1
 unset JAVA_HOME
-source '/usr/local/Cellar/jenv/0.5.4/libexec/libexec/../completions/jenv.bash'
+# "brew --cellar jenv" will show you base path, then poke around...
+source '/opt/homebrew/Cellar/jenv/0.5.7/libexec/completions/jenv.bash'
+# source '/usr/local/Cellar/jenv/0.5.4/libexec/libexec/../completions/jenv.bash'
 jenv rehash 2>/dev/null
 jenv refresh-plugins
 
@@ -467,8 +473,10 @@ jenv refresh-plugins
 
 # aliases to switch between versions, setting JAVA_HOME appropriately
 alias javaHomeReset='declare -x JAVA_HOME=$(jenv javahome)'
-alias jenv11="jenv global corretto64-11.0.12 && javaHomeReset"
-alias jenv16="jenv global openjdk64-16.0.2 && javaHomeReset"
+# alias jenv11="jenv global corretto64-11.0.12 && javaHomeReset"
+# alias jenv16="jenv global openjdk64-16.0.2 && javaHomeReset"
+alias jenv11="jenv global corretto64-11.0.23 && javaHomeReset"
+alias jenv22="jenv global openjdk64-22.0.1 && javaHomeReset"
 
 declare -x LAPTOP_OLD="10.0.1.190"
 alias ssh_old_laptop="ssh $LAPTOP_OLD"
@@ -497,62 +505,87 @@ javaHomeReset
 # etc.
 # 
 
-# POSTGRES INSTALLATION NOTES (via homebrew)
-# To migrate existing data from a previous major version of PostgreSQL run:
-#   brew postgresql-upgrade-database
-# 
+# POSTGRES INSTALLATION NOTES (via "brew install postgresql@14")
 # This formula has created a default database cluster with:
-#   initdb --locale=C -E UTF-8 /usr/local/var/postgres
+  # initdb --locale=C -E UTF-8 /opt/homebrew/var/postgresql@14
 # For more details, read:
-#   https://www.postgresql.org/docs/13/app-initdb.html
+  # https://www.postgresql.org/docs/14/app-initdb.html
 # 
-# To start postgresql:
-#   brew services start postgresql
+# To start postgresql@14 now and restart at login:
+  # brew services start postgresql@14
 # Or, if you don't want/need a background service you can just run:
-#   /usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres
+  # /opt/homebrew/opt/postgresql@14/bin/postgres -D /opt/homebrew/var/postgresql@14
+# ==> Summary
+# 🍺  /opt/homebrew/Cellar/postgresql@14/14.12: 3,322 files, 46.1MB
+# ==> Running `brew cleanup postgresql@14`...
+# Disable this behaviour by setting HOMEBREW_NO_INSTALL_CLEANUP.
+# Hide these hints with HOMEBREW_NO_ENV_HINTS (see `man brew`).
+# ==> Caveats
+# ==> postgresql@14
+# This formula has created a default database cluster with:
+  # initdb --locale=C -E UTF-8 /opt/homebrew/var/postgresql@14
+# For more details, read:
+  # https://www.postgresql.org/docs/14/app-initdb.html
+# 
+# To start postgresql@14 now and restart at login:
+  # brew services start postgresql@14
+# Or, if you don't want/need a background service you can just run:
+  # /opt/homebrew/opt/postgresql@14/bin/postgres -D /opt/homebrew/var/postgresql@14
+
 
 # MONGO INSTALLATION NOTES (via homebrew; I installed via "brew install mongodb-community@5.0"
+# mongodb-community@5.0 is keg-only, which means it was not symlinked into /opt/homebrew,
+# because this is an alternate version of another formula.
 # 
-# To have launchd start mongodb/brew/mongodb-community now and restart at login:
-#   brew services start mongodb/brew/mongodb-community
-# Or, if you don't want/need a background service you can just run:
-#   mongod --config /usr/local/etc/mongod.conf
+# If you need to have mongodb-community@5.0 first in your PATH, run:
+  # echo 'export PATH="/opt/homebrew/opt/mongodb-community@5.0/bin:$PATH"' >> /Users/38593/.bash_profile
+# 
+# To start mongodb/brew/mongodb-community@5.0 now and restart at login:
+  # brew services start mongodb/brew/mongodb-community@5.0
 # ==> Summary
-# 🍺  /usr/local/Cellar/mongodb-community/5.0.1: 11 files, 179.9MB, built in 5 seconds
+# 🍺  /opt/homebrew/Cellar/mongodb-community@5.0/5.0.27: 13 files, 188.2MB, built in 2 seconds
+# ==> Running `brew cleanup mongodb-community@5.0`...
+# Disable this behaviour by setting HOMEBREW_NO_INSTALL_CLEANUP.
+# Hide these hints with HOMEBREW_NO_ENV_HINTS (see `man brew`).
 # ==> Caveats
-# ==> mongodb-community
-# To have launchd start mongodb/brew/mongodb-community now and restart at login:
-#   brew services start mongodb/brew/mongodb-community
-# Or, if you don't want/need a background service you can just run:
-#   mongod --config /usr/local/etc/mongod.conf
+# ==> mongodb-community@5.0
+# mongodb-community@5.0 is keg-only, which means it was not symlinked into /opt/homebrew,
+# because this is an alternate version of another formula.
+# 
+# If you need to have mongodb-community@5.0 first in your PATH, run:
+  # echo 'export PATH="/opt/homebrew/opt/mongodb-community@5.0/bin:$PATH"' >> /Users/38593/.bash_profile
+# 
+# To start mongodb/brew/mongodb-community@5.0 now and restart at login:
+  # brew services start mongodb/brew/mongodb-community@5.0
 
-# MYSQL INSTALLATION NOTES VIA HOMEBREW
+
+# MYSQL INSTALLATION NOTES VIA HOMEBREW ("brew install mysql")
 # We've installed your MySQL database without a root password. To secure it run:
-#     mysql_secure_installation
-# 
+    # mysql_secure_installation
+#
 # MySQL is configured to only allow connections from localhost by default
-# 
+#
 # To connect run:
-#     mysql -uroot
-# 
-# To have launchd start mysql now and restart at login:
-#   brew services start mysql
+    # mysql -u root
+#
+# To start mysql now and restart at login:
+  # brew services start mysql
 # Or, if you don't want/need a background service you can just run:
-#   mysql.server start
+  # /opt/homebrew/opt/mysql/bin/mysqld_safe --datadir\=/opt/homebrew/var/mysql
+
 
 
 # I installed pyenv with homebrew; is any of this actually needed?
-declare -x PYENV_ROOT="$HOME/.pyenv"
-declare -x PATH="$PYENV_ROOT/bin:$PATH"
-declare -x PATH="$PYENV_ROOT/shims:$PATH"
-# export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
-export PYENV_SHELL=bash
-# source '/usr/local/Cellar/pyenv/2.2.0/libexec/../completions/pyenv.bash'
-# source '/usr/local/Cellar/pyenv/2.3.0/completions/pyenv.bash'
-# source '/usr/local/Cellar/pyenv/2.3.17/completions/pyenv.bash'
-# source '/usr/local/Cellar/pyenv/2.3.35/completions/pyenv.bash'
-source '/usr/local/Cellar/pyenv/2.3.36/completions/pyenv.bash'
-eval "$(pyenv init -)"
+if [ 1 -eq 1 ]; then
+	declare -x PYENV_ROOT="$HOME/.pyenv"
+	declare -x PATH="$PYENV_ROOT/bin:$PATH"
+	declare -x PATH="$PYENV_ROOT/shims:$PATH"
+	# export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
+	export PYENV_SHELL=bash
+	# see "brew --cellar pyenv" for base path, then poke around
+	source '/opt/homebrew/Cellar/pyenv/2.4.2/completions/pyenv.bash'
+	eval "$(pyenv init -)"
+fi
 
 # 20240124 I installed the github CLI, see https://dev.to/github/stop-struggling-with-terminal-commands-github-copilot-in-the-cli-is-here-to-help-4pnb
 # but it seems out account doesn't have Copilot CLI enabled.

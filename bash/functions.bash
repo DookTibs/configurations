@@ -143,6 +143,42 @@ assume_aws_role() {
 	fi
 }
 
+# e.g. "aws_logwatch OnFileUploadedLambda"
+# converts this to something like:
+# aws logs tail /aws/lambda/lfc-sandbox-triggered-OnFileUploadedLambda-NfpdC1PGRGTM --follow
+aws_logwatch() {
+	if [ -z $1 ]; then
+		echo "Usage: aws_logwatch <NAME_OF_LOG_GROUP>"
+		echo "Most recent log group matching supplied name will be followed."
+	else
+		# log_group_data=`aws logs describe-log-groups --log-group-name-pattern "$1"`
+		log_group_data=`aws logs describe-log-groups --log-group-name-pattern "$1" 2>/dev/null`
+		
+		if [ $? -eq 0 ]; then
+			# echo "got data '$log_group_data'"
+			log_group_arn=`echo "$log_group_data" | jq -r '[ .logGroups[] ] | sort_by(.creationTime) | reverse | .[0].logGroupArn'`
+
+			num_groups=`echo "$log_group_data" | jq -r '.logGroups | length'`
+
+			# echo "arn is '$log_group_arn'"
+
+			if [ "$log_group_arn" == "null" ]; then
+				echo "'$1' did not match any log groups on the logged in account..."
+			else
+				path_only=`echo "$log_group_arn" | sed 's-.*:--'`
+				if [ $num_groups -gt 1 ]; then
+					echo ">>> NOTE - found multiple matching log groups (could be older versions of a lambda; could be name collision; etc.)"
+				fi
+				echo "tailing $path_only..."
+				aws logs tail $path_only --follow 
+			fi
+		else
+			echo "Unable to contact AWS; are you logged in? running 'aws_whoami' to check..."
+			aws sts get-caller-identity
+		fi
+	fi
+}
+
 untitle () { 
 	echo "restoring window title to default..."
 	PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n\$ '

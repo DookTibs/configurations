@@ -3,7 +3,7 @@
 
 " set tags to whoever's install I'm looking at
 if stridx("foo", "bar") == 0
-elseif stridx(currentDir, "/Users/tfeiler/development/expoagg-pipeline/serverless/expoagg-pipeline/py_handlers") == 0
+elseif stridx(currentDir, "/Users/38593/development/expoagg-pipeline/serverless/expoagg-pipeline/py_handlers") == 0
 	map \ :call RunCurrentExpoaggLambda("1")<enter>
 elseif stridx(currentDir, $DRAGON_HOME . "src/main/CloudFormation") == 0
 	set expandtab
@@ -11,19 +11,19 @@ elseif stridx(currentDir, $DRAGON_HOME . "src/main/CloudFormation") == 0
 	set softtabstop=2
 	set shiftwidth=2
 	set syntax=yaml
-elseif stridx(currentDir, "/Users/tfeiler/development/llr/llrsim") == 0
+elseif stridx(currentDir, "/Users/38593/development/llr/llrsim") == 0
 	" let's try it instead with git commit hooks...
 	" if executable("black") == 0
 		" echo "WARNING - cannot find black/etc. on PATH; probably not in right venv."
 		" echo "Consider quitting and run 'workon llrsim' before re-opening Vim"
 	" else
-		" echo "black will run on save...run 'cd /Users/tfeiler/development/llr/llrsim && make lint' before pushing to Github"
-		" autocmd BufWritePost *.py silent! !black -q --config /Users/tfeiler/development/llr/llrsim/pyproject.toml %
+		" echo "black will run on save...run 'cd /Users/38593/development/llr/llrsim && make lint' before pushing to Github"
+		" autocmd BufWritePost *.py silent! !black -q --config /Users/38593/development/llr/llrsim/pyproject.toml %
 	" endif
 	map \ :call LlrSimDevUtil(1)<enter>
-elseif stridx(currentDir, "/Users/tfeiler/development/hawc_project/hawc") == 0
-	" let &tags = "tags," . "/Users/tfeiler/development/hawc_project/hawc/.hawcTags"
-	let &tags = "tags," . "/Users/tfeiler/development/hawc_project/hawc/.hawcTags," . "/Users/tfeiler/development/hawc_project/hawc/.hawcVirtualEnvInstalledPackagesTags"
+elseif stridx(currentDir, "/Users/38593/development/hawc_project/hawc") == 0
+	" let &tags = "tags," . "/Users/38593/development/hawc_project/hawc/.hawcTags"
+	let &tags = "tags," . "/Users/38593/development/hawc_project/hawc/.hawcTags," . "/Users/38593/development/hawc_project/hawc/.hawcVirtualEnvInstalledPackagesTags"
 
 
 	" 2023 - HAWC switched linters from flake8 -> ruff
@@ -53,20 +53,20 @@ elseif stridx(currentDir, "/Users/tfeiler/development/hawc_project/hawc") == 0
 		" echo "RUFF disabled; run 'make format' manually before committing/pushing..."
 
 		" echo "stuff runs on save...run 'cd $HAWC_HOME && \"make lint\" (to check) / \"make format\" (to fix)' before push to Github"
-		" autocmd BufWritePost *.py silent! !black -q --config /Users/tfeiler/development/hawc_project/hawc/pyproject.toml %
+		" autocmd BufWritePost *.py silent! !black -q --config /Users/38593/development/hawc_project/hawc/pyproject.toml %
 		" autocmd BufWritePost *.py silent! !ruff format %
 		"autocmd BufWritePost *.py echo "write pythong!" . "(" . getcwd() . ")"
 
 		" https://vimtricks.com/p/get-the-current-file-path/
 		echo "ruff re-enabled...but also run 'make lint' and 'make format' and run tests before pushing to Github"
-		autocmd BufWritePost *.py silent !/Users/tfeiler/development/configurations/neovim/ruffHelper.sh %:p
+		autocmd BufWritePost *.py silent !/Users/38593/development/configurations/neovim/ruffHelper.sh %:p
 
 
 
 		if hawcLinter == "flake8"
-			let g:ale_python_flake8_options = '--config=/Users/tfeiler/development/hawc_project/hawc/.flake8'
+			let g:ale_python_flake8_options = '--config=/Users/38593/development/hawc_project/hawc/.flake8'
 		elseif hawcLinter == "ruff"
-			" let g:ale_python_ruff_options = '--fix --show-fixes --config=/Users/tfeiler/development/hawc_project/hawc/pyproject.toml'
+			" let g:ale_python_ruff_options = '--fix --show-fixes --config=/Users/38593/development/hawc_project/hawc/pyproject.toml'
 			" let g:ale_python_ruff_options = '--fix'
 		endif
 		" let g:ale_linters_explicit = 1
@@ -102,7 +102,7 @@ elseif stridx(currentDir, "/Users/tfeiler/development/hawc_project/hawc") == 0
 		let g:flake8_show_in_file=1
 
 		" the vim-flake8 plugin doesn't respect project specific .flake8 files by default, we need to force it
-		let g:flake8_cmd="/Users/tfeiler/opt/anaconda3/envs/hawc2020/bin/flake8\ --config=/Users/tfeiler/development/hawc_project/hawc/.flake8"
+		let g:flake8_cmd="/Users/38593/opt/anaconda3/envs/hawc2020/bin/flake8\ --config=/Users/38593/development/hawc_project/hawc/.flake8"
 		
 		" I use tpope's "unimpaired" plugin; can use [q / ]q to go to prev/next error. [Q to go to the first.
 		" Then you can use spacebar+q / spacebar+Q to navigate quickly through the quickfix list
@@ -110,8 +110,8 @@ elseif stridx(currentDir, "/Users/tfeiler/development/hawc_project/hawc") == 0
 		" nnoremap <silent> <buffer> <leader>Q :cp<enter>
 	endif
 
-elseif stridx(currentDir, "/Users/tfeiler/development/hawc/epahawc") == 0
-	let &tags = "tags," . "/Users/tfeiler/development/hawc/epahawc/.hawcTags"
+elseif stridx(currentDir, "/Users/38593/development/hawc/epahawc") == 0
+	let &tags = "tags," . "/Users/38593/development/hawc/epahawc/.hawcTags"
 	
 	" \ should send the cache.clear() command to the manage.py shell running in the tmux HAWC_SERVERS session,
 	" window 1, pane 1
@@ -121,7 +121,7 @@ elseif stridx(currentDir, "/Users/tfeiler/development/hawc/epahawc") == 0
 	" window 1, pane 0
 	map <BS> :call SendKeysToTMUX("HAWC_SERVERS:1.0", "Enter")<enter>
 
-elseif stridx(currentDir, "/Users/tfeiler/development/fhwa") == 0
+elseif stridx(currentDir, "/Users/38593/development/fhwa") == 0
 	" map caret to wrap the next character in a "superscript" tag (think footnotes)
 	map ^ li<sup>la</sup>
 
@@ -153,43 +153,43 @@ elseif stridx(currentDir, "/Users/tfeiler/development/fhwa") == 0
 	autocmd BufWritePost *.html :call SendFreshCommandToTMUX("./fhwaCompiler.sh appendixb.html 'APPENDIX B: Bridge Investment Analysis Methodology' APPB","2")
 
 
-elseif stridx(currentDir, "/Users/tfeiler/development/uncertainty") == 0
+elseif stridx(currentDir, "/Users/38593/development/uncertainty") == 0
 	map <BS> :call ReloadChromeTab("localhost:5000")<enter>
 	map \ :call SendFreshCommandToTMUX("python application.py")<enter>
-	let &tags = "tags," . "/Users/tfeiler/development/uncertainty/flask/.embsiTags"
+	let &tags = "tags," . "/Users/38593/development/uncertainty/flask/.embsiTags"
 
 	" let g:lsc_server_commands = { 'python': 'pyls' }
 	" let g:lsc_auto_map = v:true " use default vim-lsc mappings
-elseif stridx(currentDir, "/Users/tfeiler/development/trim-builder") == 0
+elseif stridx(currentDir, "/Users/38593/development/trim-builder") == 0
 	map <BS> :call ReloadChromeTab("localhost:6060")<enter>
-	let &tags = "tags," . "/Users/tfeiler/development/trim-builder/.trimTags"
-elseif stridx(currentDir, "/Users/tfeiler/development/docter_online") == 0
+	let &tags = "tags," . "/Users/38593/development/trim-builder/.trimTags"
+elseif stridx(currentDir, "/Users/38593/development/docter_online") == 0
 	map <BS> :call ReloadChromeTab("localhost:5678")<enter>
-	let &tags = "tags," . "/Users/tfeiler/development/docter_online/.docterOnlineTags"
+	let &tags = "tags," . "/Users/38593/development/docter_online/.docterOnlineTags"
 
-elseif stridx(currentDir, "/Users/tfeiler/development/dragon_api") == 0
+elseif stridx(currentDir, "/Users/38593/development/dragon_api") == 0
 	" old Lambda mappings
-	" let g:tibs_search_basedir="/Users/tfeiler/development/dragon_api"
-	" let &tags = "tags," . "/Users/tfeiler/development/dragon_api/src/aws_lambda/main/python/.heroApiTags"
+	" let g:tibs_search_basedir="/Users/38593/development/dragon_api"
+	" let &tags = "tags," . "/Users/38593/development/dragon_api/src/aws_lambda/main/python/.heroApiTags"
 	" map <BS> :call DragonAPITestSwitcher()<enter>
 	" map \ :call DragonAPITestRunner()<enter>
 	
 	" new Flask mappings
 	map \ :call SendFreshCommandToTMUX("python application.py", "1")<enter>
 	map <BS> :call SendFreshCommandToTMUX("python endpointTester.py local tom.feiler@icf.com /assessments/164241/studies?outputMapper=HeroMapper", "3")<enter>
-elseif stridx(currentDir, "/Users/tfeiler/development/acc") == 0
+elseif stridx(currentDir, "/Users/38593/development/acc") == 0
 	map <BS> :call CellmateUpload("blink")<enter>
 	map \ :call ReloadChromeTab("https://awesome-table.com")<enter>
-" elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/scripts/customJsScriptStorage") == 0
-elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/scripts/flexFormCustomJsScripts") == 0
+" elseif stridx(currentDir, "/Users/38593/development/icf_dragon/src/main/scripts/customJsScriptStorage") == 0
+elseif stridx(currentDir, "/Users/38593/development/icf_dragon/src/main/scripts/flexFormCustomJsScripts") == 0
 	autocmd BufWritePost *.js :call StuffFlexFormJs()
-elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon") == 0
-	" let g:lsc_server_commands = { 'java': '/Users/tfeiler/development/tools/java-language-server/dist/lang_server_mac.sh' }
+elseif stridx(currentDir, "/Users/38593/development/icf_dragon") == 0
+	" let g:lsc_server_commands = { 'java': '/Users/38593/development/tools/java-language-server/dist/lang_server_mac.sh' }
 	" let g:lsc_auto_map = v:true " use default vim-lsc mappings
 	
-	let g:tibs_search_basedir="/Users/tfeiler/development/icf_dragon/"
-	let projectTags = "/Users/tfeiler/development/icf_dragon/src/main/java/.dragonOnlineJavaTags"
-	let jdkTags = "/Users/tfeiler/development/java/jdk_source/jdktags"
+	let g:tibs_search_basedir="/Users/38593/development/icf_dragon/"
+	let projectTags = "/Users/38593/development/icf_dragon/src/main/java/.dragonOnlineJavaTags"
+	let jdkTags = "/Users/38593/development/java/jdk_source/jdktags"
 	" let &tags = "tags," . projectTags . "," . jdkTags
 	let &tags = "tags," . projectTags
 
@@ -199,7 +199,7 @@ elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon") == 0
 	autocmd BufWritePost * :call DragonOnlineDevUtil(0)
 	" map \ :call ReloadChromeTab("explorer")<enter>
 
-elseif stridx(currentDir, "/Users/tfeiler/development/java/ris") == 0
+elseif stridx(currentDir, "/Users/38593/development/java/ris") == 0
 	map <BS> :call SendFreshCommandToTMUX("ant")<enter>
 	map \ :call SendFreshCommandToTMUX("java -jar dist/lib/RisImporter.jar")<enter>
 endif
@@ -317,14 +317,14 @@ function! DragonOnlineDevUtil(userInteraction)
 	let currentDir = system("pwd")
 	let currentDir = substitute(currentDir, "\n", "", "")
 
-	if stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/webapp/css") == 0
+	if stridx(currentDir, "/Users/38593/development/icf_dragon/src/main/webapp/css") == 0
 		if (a:userInteraction == 1)
-			" let copyCmd = 'cp /Users/tfeiler/development/icf_dragon/src/main/webapp/css/main.css /Users/tfeiler/development/tools/tomcat/apache-tomcat-9.0.0.M18/webapps/ROOT/css/'
-			let copyCmd = 'cp /Users/tfeiler/development/icf_dragon/src/main/webapp/css/main.css $TOMCAT_HOME/webapps/ROOT/css/'
+			" let copyCmd = 'cp /Users/38593/development/icf_dragon/src/main/webapp/css/main.css /Users/38593/development/tools/tomcat/apache-tomcat-9.0.0.M18/webapps/ROOT/css/'
+			let copyCmd = 'cp /Users/38593/development/icf_dragon/src/main/webapp/css/main.css $TOMCAT_HOME/webapps/ROOT/css/'
 			call system(copyCmd)
 			echo "copied main.css to TOMCAT_HOME (did you have gulp running?)..."
 		endif
-	elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/webapp") == 0
+	elseif stridx(currentDir, "/Users/38593/development/icf_dragon/src/main/webapp") == 0
 		" let fullPath = currentDir . "/" . @%
 		silent write " save the file
 		let relativeDir = substitute(currentDir, ".*icf_dragon/src/main/webapp", "", "")
@@ -339,7 +339,7 @@ function! DragonOnlineDevUtil(userInteraction)
 			echo "copied " . relativeDir . "/" . @% . " to $TOMCAT_HOME webapps dir..."
 		" else just do it silently in the background...
 		endif
-	elseif stridx(currentDir, "/Users/tfeiler/development/icf_dragon/src/main/java") == 0
+	elseif stridx(currentDir, "/Users/38593/development/icf_dragon/src/main/java") == 0
 		" we only trigger a reploy if we actually launched the command intentionally.
 		" if this fired as a result of a save action, we don't do it.
 		if (a:userInteraction == 1)
@@ -397,7 +397,7 @@ function! LlrSimDevUtil(userInteraction)
 	let currentDir = system("pwd")
 	let currentDir = substitute(currentDir, "\n", "", "")
 
-    if stridx(currentDir, "/Users/tfeiler/development/llr/llrsim") == 0
+    if stridx(currentDir, "/Users/38593/development/llr/llrsim") == 0
 		" we only trigger a reploy if we actually launched the command intentionally.
 		" if this fired as a result of a save action, we don't do it.
 		if (a:userInteraction == 1)
@@ -406,7 +406,7 @@ function! LlrSimDevUtil(userInteraction)
 			" new way - in a window named "runner"
 			call system("createTmuxWindowIfNotThere.sh runner")
 			call SendFreshCommandToTMUX("C-c", "runner")
-			call SendFreshCommandToTMUX("llrsim -c /Users/tfeiler/development/llr/llrsim/sample_config.yml -o /Users/tfeiler/development/llr/unsynced/output/", "runner")
+			call SendFreshCommandToTMUX("llrsim -c /Users/38593/development/llr/llrsim/sample_config.yml -o /Users/38593/development/llr/unsynced/output/", "runner")
 			call system("tmux select-window -t 'runner'")
 		endif
 	else
@@ -416,3 +416,12 @@ endfunction
 
 " for fast development reloading...
 " map r :source ~/development/configurations/vim/icf.vim<enter>
+
+" June 2024 - on my new laptop by default neovim prints a warning but then happily lets you edit in 
+" multiple buffers. This is asking fo rtrouble.
+function! SwapFix()
+	echo "Warning - swap file for '" . expand("%") . "' ('" . v:swapname . "') exists; setting to read-only"
+	let v:swapchoice="o"
+endfunction
+" autocmd SwapExists * let v:swapchoice="o"
+autocmd SwapExists * call SwapFix()

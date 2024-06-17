@@ -8,7 +8,7 @@ let g:tibsdebug_tmuxtarget_jdb='1'
 let g:tibsdebug_tmuxtarget_bridge=':dragonTomcat.2'
 let g:tibsdebug_srcpaths = [
 	\"/some/fake/path/",
-	\"/Users/tfeiler/development/icf_dragon/src/main/java/",
+	\"/Users/38593/development/icf_dragon/src/main/java/",
 	\"/some/other/fake/path/"
 \]
 
@@ -50,7 +50,7 @@ sign define tibsDebugSign text=!!
 " hardcoded for Dragon right now...
 function! GetClassFromContext(fullPath)
 	" echo "working on [" . a:fullPath . "]"
-	let className = substitute(a:fullPath, "/Users/tfeiler/development/icf_dragon/src/main/java/", "", "")
+	let className = substitute(a:fullPath, "/Users/38593/development/icf_dragon/src/main/java/", "", "")
 	let className = substitute(className, ".java", "", "")
 	let className = substitute(className, "/", ".", "g")
 	return className
@@ -98,8 +98,8 @@ endfunction
 
 function! StartOrStopDebugger()
 	if g:tibsdebug_debugger_running == 0
-		call SendFreshCommandToTMUX("rlwrap jdb -connect com.sun.jdi.SocketAttach:port=" . g:tibsdebug_jdb_port . ",hostname=localhost -sourcepath /Users/tfeiler/development/icf_dragon/src/main/java/ \| tee $DRAGON_HOME/unsynced/jdb_output/jdb.log", g:tibsdebug_tmuxtarget_jdb)
-		call SendFreshCommandToTMUX("python /Users/tfeiler/development/shellScripts/jdb_vim_bridge.py $DRAGON_HOME/unsynced/jdb_output/jdb.log " . g:tibsdebug_bridge_port, g:tibsdebug_tmuxtarget_bridge)
+		call SendFreshCommandToTMUX("rlwrap jdb -connect com.sun.jdi.SocketAttach:port=" . g:tibsdebug_jdb_port . ",hostname=localhost -sourcepath /Users/38593/development/icf_dragon/src/main/java/ \| tee $DRAGON_HOME/unsynced/jdb_output/jdb.log", g:tibsdebug_tmuxtarget_jdb)
+		call SendFreshCommandToTMUX("python /Users/38593/development/shellScripts/jdb_vim_bridge.py $DRAGON_HOME/unsynced/jdb_output/jdb.log " . g:tibsdebug_bridge_port, g:tibsdebug_tmuxtarget_bridge)
 		echo "debugger/bridge launched..."
 		sleep 1
 		call OpenConnectionToJdbBridgeServer()
@@ -291,7 +291,7 @@ endfunction
 
 
 
-" exe 'nnoremap ' . g:tibsdebug_leader . 'D' . ' :call SendFreshCommandToTMUX("rlwrap jdb -connect com.sun.jdi.SocketAttach:port=9005,hostname=localhost -sourcepath /Users/tfeiler/development/icf_dragon/src/main/java/ \| tee $DRAGON_HOME/unsynced/jdb_output/jdb.log", g:tibsdebug_tmuxtarget_jdb)<enter>'
+" exe 'nnoremap ' . g:tibsdebug_leader . 'D' . ' :call SendFreshCommandToTMUX("rlwrap jdb -connect com.sun.jdi.SocketAttach:port=9005,hostname=localhost -sourcepath /Users/38593/development/icf_dragon/src/main/java/ \| tee $DRAGON_HOME/unsynced/jdb_output/jdb.log", g:tibsdebug_tmuxtarget_jdb)<enter>'
 exe 'nnoremap ' . g:tibsdebug_leader . 'D' . ' :call StartOrStopDebugger()<enter>'
 exe 'nnoremap ' . g:tibsdebug_leader . 'b' . ' :call ToggleBreakpoint()<enter>'
 exe 'nnoremap ' . g:tibsdebug_leader . 'B' . ' :call SimpleJdbCmd("clear")<enter>'
@@ -311,4 +311,4 @@ exe 'nnoremap ' . g:tibsdebug_leader . 'c' . ' :call SimpleJdbCmd("cont")<enter>
 " map _ :call SetDebugLineMarker(1)<enter>
 " map <BS> :call ToggleJdbBridgeConnection()<enter>
 " map <BS> :call LookForFile("com/icfi/dragon/web/gateway/ApiGateway.java")<enter>
-" map <BS> :call DisplayBufferForFile("/Users/tfeiler/development/icf_dragon/src/main/java/com/icfi/dragon/web/gateway/ApiGateway.java", 1209)<enter>
+" map <BS> :call DisplayBufferForFile("/Users/38593/development/icf_dragon/src/main/java/com/icfi/dragon/web/gateway/ApiGateway.java", 1209)<enter>

@@ -30,7 +30,22 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 	" LSP-related items for making Vim like an IDE for Java, etc.
 	Plug 'neovim/nvim-lspconfig'
 	Plug 'mfussenegger/nvim-jdtls'
-	Plug 'hrsh7th/nvim-compe'
+	
+	" NEW JUNE 2024 - KEEP OR NO? START
+	" Completion
+	" nvim-compe deprecated, replaced by nvim-cmp
+	Plug 'hrsh7th/nvim-cmp'
+	Plug 'hrsh7th/cmp-buffer'
+	Plug 'hrsh7th/cmp-path'
+	Plug 'hrsh7th/cmp-cmdline'
+	
+	" Snippets - works in tandem with Completion...
+	Plug 'L3MON4D3/LuaSnip'
+	Plug 'saadparwaiz1/cmp_luasnip'
+	" there's also vsnip -- didn't try that
+	Plug 'rafamadriz/friendly-snippets'
+	" see https://github.com/rafamadriz/friendly-snippets/tree/main/snippets for lots of snippets
+	" NEW JUNE 2024 - KEEP OR NO? END
 
 	Plug 'tpope/vim-fugitive'
 	Plug 'christoomey/vim-tmux-navigator'
@@ -46,13 +61,23 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 	Plug 'scrooloose/nerdtree'
 
 	" 20240124 -- trying CoPilot
-	Plug 'github/copilot.vim'
+	" this one does...
+	" Plug 'github/copilot.vim'
+	" Plug 'hrsh7th/cmp-copilot'
+	
+	" 20240616 - new laptop and alternate CoPilot setup (integrating with cmp)
+	" https://github.com/zbirenbaum/copilot.lua
+	" https://tamerlan.dev/setting-up-copilot-in-neovim-with-sane-settings/
+	" Plug 'zbirenbaum/copilot.lua'
+	"Plug 'zbirenbaum/copilot-cmp'
+
+	" NONE OF THESE WORK RIGHT
 	"Plug 'gptlang/CopilotChat.nvim'
 	"Plug 'jellydn/CopilotChat.nvim'
 	" Plug 'z0rzi/ai-chat.nvim'
 
 	" for now, only run ALE when doing HAWC.
-	if stridx(system("pwd"), "/Users/tfeiler/development/hawc_project/hawc") == 0
+	if stridx(system("pwd"), "/Users/38593/development/hawc_project/hawc") == 0
 		" https://black.readthedocs.io/en/stable/integrations/editors.html
 		" Plug 'psf/black', { 'branch': 'stable' }
 		"
@@ -72,3 +97,12 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 	" if I'm in the litstream codebase I am using LSP instead of ctags,
 	" etc.
 call plug#end()
+
+" in /Users/38593/.config/nvim do:
+" ln -s ~/development/configurations/neovim/luaconfigs/ lua
+" And then you can drop files like 'foobar.lua' into ~/development/configurations/neovim/luaconfigs/ and then do "lua require('foobar')" to hook into it from VimScript. "lua require('foo.bar')" for nested in directories.
+"
+" I CHANGED FROM MOnaco13 to this POS. find a better one later.
+
+lua require('my_cmp')
+" lua require('my_copilot')

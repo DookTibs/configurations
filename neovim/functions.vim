@@ -168,8 +168,8 @@ function! FIFO(cmd, ...)
 endfunction
 
 function! ReloadFirefoxTab(pattern)
-	" silent execute "!osascript /Users/tfeiler/development/appleScripts/firefoxReloader.scpt " . a:pattern
-	silent execute "!/Users/tfeiler/development/shellScripts/firefoxReloader.scpt " . a:pattern
+	" silent execute "!osascript /Users/38593/development/appleScripts/firefoxReloader.scpt " . a:pattern
+	silent execute "!/Users/38593/development/shellScripts/firefoxReloader.scpt " . a:pattern
 	redraw!
 	echo "reloading Firefox tab with [" . a:pattern . "] url's..."
 endfunction
@@ -263,7 +263,7 @@ function! SetExpandTabForIndentedLanguages()
 	set nosmartindent
 
 	" if currentFileType == "javascript" && (stridx(fullFilename, "/cygdrive/c/Users/38593/workspace/icf_dragon/src/main/webapp/js") == 0)
-	if currentFileType == "javascript" && (stridx(fullFilename, "/Users/tfeiler/development/icf_dragon/src/main/webapp/js") == 0)
+	if currentFileType == "javascript" && (stridx(fullFilename, "/Users/38593/development/icf_dragon/src/main/webapp/js") == 0)
 		set shiftwidth=2
 		set tabstop=2
 		set softtabstop=2
@@ -275,7 +275,7 @@ function! SetExpandTabForIndentedLanguages()
 		set softtabstop=4
 		set expandtab
 		return
-	elseif (currentFileType == "javascript" && (stridx(fullFilename, "/Users/tfeiler/development/hawc_project/hawc/frontend/") == 0)) || ((currentFileType == "html" || currentFileType == "htmldjango") && (stridx(fullFilename, "/Users/tfeiler/development/hawc_project/hawc/hawc/") == 0))
+	elseif (currentFileType == "javascript" && (stridx(fullFilename, "/Users/38593/development/hawc_project/hawc/frontend/") == 0)) || ((currentFileType == "html" || currentFileType == "htmldjango") && (stridx(fullFilename, "/Users/38593/development/hawc_project/hawc/hawc/") == 0))
 			if currentFileType == "javascript"
 				" javascript
 				set shiftwidth=4
@@ -303,7 +303,7 @@ function! SetExpandTabForIndentedLanguages()
 	else
 		" echo "full name [" fullFilename "]"
 
-		if currentFileType == "php" && (stridx(fullFilename, "${MOODLE_WSG}") == 0 || stridx(fullFilename, "/Users/tfeiler/remotes/mitreClampHome") == 0 || stridx(fullFilename, "/home/tfeiler/moodles") == 0)
+		if currentFileType == "php" && (stridx(fullFilename, "${MOODLE_WSG}") == 0 || stridx(fullFilename, "/Users/38593/remotes/mitreClampHome") == 0 || stridx(fullFilename, "/home/tfeiler/moodles") == 0)
 			" moodle coding standards call for spaces not tabs
 			" echo "php in moodle - expandtab"
 			set expandtab
@@ -690,3 +690,16 @@ function! TomJavaGetSet()
 		exe "normal! " . (lineNum+1) . "G"
 	endif
 endfunction
+
+" see also luaconfigs/my_cmp.lua, "enabled" function in cmp.setup
+let g:your_cmp_disable_enable_toggle = v:true
+function! ToggleAutocomplete()
+	if g:your_cmp_disable_enable_toggle == v:true
+		let g:your_cmp_disable_enable_toggle = v:false
+		echo "<F10> nvim-cmp autocomplete disabled!"
+	else
+		let g:your_cmp_disable_enable_toggle = v:true
+		echo "<F10> nvim-cmp autocomplete re-enabled!"
+	endif
+endfunction
+map <F10> :call ToggleAutocomplete()<enter>
