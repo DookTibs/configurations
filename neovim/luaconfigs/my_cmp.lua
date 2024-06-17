@@ -77,7 +77,11 @@ cmp.setup {
     ["<CR>"] = cmp.mapping.confirm { select = true },
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
-        cmp.select_next_item()
+		-- TOO ANNOYING to have tab go into autocomplete since it is ALWAYS UP.
+		-- so you gotta do CTRL-k/j to jump in; tab is acting normally while
+		-- typing now.
+        -- cmp.select_next_item()
+		fallback()
       elseif luasnip.expandable() then
         luasnip.expand()
       elseif luasnip.expand_or_jumpable() then
