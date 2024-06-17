@@ -8,6 +8,9 @@ if not cpcmp_status_ok then
   return
 end
 
+local cpchat_status_ok, cpchat = pcall(require, "CopilotChat")
+-- allow proceed even if chat disabled; we'll check before calling setup
+
 cpcmp.setup()
 
 
@@ -55,3 +58,10 @@ copilot.setup({
   copilot_node_command = 'node', -- Node.js version must be > 18.x
   server_opts_overrides = {},
 })
+
+if cpchat_status_ok then
+	cpchat.setup({
+	  debug = false, -- Enable debugging
+	  -- See Configuration section for rest
+	})
+end

@@ -72,6 +72,10 @@ if (1 == 1)
 		Plug 'zbirenbaum/copilot.lua'
 		Plug 'zbirenbaum/copilot-cmp'
 
+		" Copilot Chat
+		Plug 'nvim-lua/plenary.nvim' " needed for async lua or something?
+		Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
+
 		" NONE OF THESE WORK RIGHT
 		"Plug 'gptlang/CopilotChat.nvim'
 		"Plug 'jellydn/CopilotChat.nvim'
