@@ -68,8 +68,8 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 	" 20240616 - new laptop and alternate CoPilot setup (integrating with cmp)
 	" https://github.com/zbirenbaum/copilot.lua
 	" https://tamerlan.dev/setting-up-copilot-in-neovim-with-sane-settings/
-	" Plug 'zbirenbaum/copilot.lua'
-	"Plug 'zbirenbaum/copilot-cmp'
+	Plug 'zbirenbaum/copilot.lua'
+	Plug 'zbirenbaum/copilot-cmp'
 
 	" NONE OF THESE WORK RIGHT
 	"Plug 'gptlang/CopilotChat.nvim'
@@ -105,4 +105,4 @@ call plug#end()
 " I CHANGED FROM MOnaco13 to this POS. find a better one later.
 
 lua require('my_cmp')
-" lua require('my_copilot')
+lua require('my_copilot')

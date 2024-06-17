@@ -3,13 +3,18 @@ if not copilot_status_ok then
   return
 end
 
+local cpcmp_status_ok, cpcmp = pcall(require, "copilot_cmp")
+if not cpcmp_status_ok then
+  return
+end
+
+cpcmp.setup()
+
+
 copilot.setup({
-	-- disable defaults b/c we'll use it with cmp
-	-- suggestion = { enabled = false },
-	-- panel = { enabled = false },
   panel = {
-    enabled = true,
-    auto_refresh = true,
+    enabled = false,
+    auto_refresh = false,
     keymap = {
       jump_prev = "[[",
       jump_next = "]]",
@@ -23,7 +28,7 @@ copilot.setup({
     },
   },
   suggestion = {
-    enabled = true,
+    enabled = false,
     auto_trigger = true,
     hide_during_completion = true,
     debounce = 75,
@@ -50,5 +55,3 @@ copilot.setup({
   copilot_node_command = 'node', -- Node.js version must be > 18.x
   server_opts_overrides = {},
 })
-
-print("copilot loaded!")
