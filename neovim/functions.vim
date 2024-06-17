@@ -696,10 +696,12 @@ let g:your_cmp_disable_enable_toggle = v:true
 function! ToggleAutocomplete()
 	if g:your_cmp_disable_enable_toggle == v:true
 		let g:your_cmp_disable_enable_toggle = v:false
-		echo "<F10> nvim-cmp autocomplete disabled!"
+		Copilot disable
+		echo "<F10> nvim-cmp autocomplete & Github Copilot disabled!"
 	else
 		let g:your_cmp_disable_enable_toggle = v:true
-		echo "<F10> nvim-cmp autocomplete re-enabled!"
+		Copilot enable
+		echo "<F10> nvim-cmp autocomplete & Github Copilot re-enabled!"
 	endif
 endfunction
 map <F10> :call ToggleAutocomplete()<enter>
