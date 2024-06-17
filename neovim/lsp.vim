@@ -1,3 +1,4 @@
+echo "NOTE - this is no longer in use!!! See luaconfigs/my_lsp"
 " TODO - check out https://sookocheff.com/post/vim/neovim-java-ide/ and see if we can make this cleaner...
 
 

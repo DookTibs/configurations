@@ -29,8 +29,10 @@ if (1 == 1)
 
 	call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 		" LSP-related items for making Vim like an IDE for Java, etc.
+		Plug 'williamboman/mason.nvim'
+		Plug 'williamboman/mason-lspconfig.nvim'
 		Plug 'neovim/nvim-lspconfig'
-		Plug 'mfussenegger/nvim-jdtls'
+		" Plug 'mfussenegger/nvim-jdtls'
 		
 		" NEW JUNE 2024 - KEEP OR NO? START
 		" Completion
@@ -39,6 +41,7 @@ if (1 == 1)
 		Plug 'hrsh7th/cmp-buffer'
 		Plug 'hrsh7th/cmp-path'
 		Plug 'hrsh7th/cmp-cmdline'
+		Plug 'hrsh7th/cmp-nvim-lsp'
 		
 		" Snippets - works in tandem with Completion...
 		Plug 'L3MON4D3/LuaSnip'
@@ -109,8 +112,10 @@ if (1 == 1)
 	"
 	" I CHANGED FROM MOnaco13 to this POS. find a better one later.
 
+	" run configurations defined in lua
 	lua require('my_cmp')
 	lua require('my_copilot')
+	lua require('my_lsp')
 else
 	" June 2024 - experimenting with switching from vim-plug to packer
 	"

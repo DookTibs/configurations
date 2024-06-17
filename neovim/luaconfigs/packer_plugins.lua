@@ -1,3 +1,4 @@
+-- NOTE - not in use, this was an experiment
 print("packer plugins script")
 
 vim.cmd [[packadd packer.nvim]]
