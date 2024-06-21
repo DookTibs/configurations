@@ -410,3 +410,27 @@ rpn() {
 	res=$(echo "1.00000 k $* p" | dc)
 	echo "$* == $res"
 }
+
+# why is this here? sag/sack/silversearcher generates two files. When you
+# run "sag -l whatever *" or "sag whatever *.java", it:
+# 1. generates a list of matching lines/files in ~/.sack_shortcuts and 
+# 2. a file gets placed in ~/bin/F that launches vim/neovim/etc. with appropriate args
+#
+# The end result is following a search, you can do "f 3" and it will load that file/line
+# in the configured editor. This works great.
+#
+# However -- something about the F script - which I guess runs in its own bash
+# subshell process - causes trouble with the vim-tmux-navigator plugin (which lets you
+# seamlessly navigate both vim and tmux splits with the same shortcuts). So in other words,
+# when I launch vim just from the shell manually, vim-tmux-navigator works; but when I
+# launch it from this ~/bin/F shortcut, it does NOT. This is really annoying!!!
+#
+# As a workaround, you can either just alias 'alias f="source ~/bin/F' or define a function
+# as I've done here. This takes higher priority than the file in ~/bin.. Either way, by
+# sourcing it we run the commands in the current shell instead of in a subshell. To be
+# perfectly honest I don't know why this matters, and I got a little tired of digging! But
+# it fixes the issue which has really bugged me for years, so let's just document it in 
+# these comments and move on with our life.
+f() {
+	source ~/bin/F
+}

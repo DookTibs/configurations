@@ -598,3 +598,5 @@ alias mysql_localserver_stop="mysql.server stop"
 alias mysql_localserver_restart="mysql.server restart"
 
 alias aws_whoami="aws sts get-caller-identity"
+
+alias q=~/bin/macos-q
