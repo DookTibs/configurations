@@ -287,9 +287,10 @@ let g:SuperTabContextDefaultCompletionType = "<c-n>"
 " :ToggleLocationWindow toggles Vim's location-list window which gives details as to what the problem is
 " leader is \ by default - I use this key for LOTS of stuff. It still works,
 " but any command on \ is slower now that I am using leaders for stuff
-nnoremap <silent> <buffer> <leader>w :call ToggleLocationWindow()<enter>
-nnoremap <silent> <buffer> <leader>n :lnext<enter>
-nnoremap <silent> <buffer> <leader>p :lprev<enter>
+" disabling June 2024 - we no longer use eclim!
+"nnoremap <silent> <buffer> <leader>w :call ToggleLocationWindow()<enter>
+"nnoremap <silent> <buffer> <leader>n :lnext<enter>
+"nnoremap <silent> <buffer> <leader>p :lprev<enter>
 
 function! StuffFlexFormJs()
 	let currentDir = system("pwd")

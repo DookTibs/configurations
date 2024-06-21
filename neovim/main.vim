@@ -174,8 +174,10 @@ map ff :'a,'bfo
 " code for easy line highlights. dash will highlight line as cursor moves
 " colors like darkred, etc. see https://vim.fandom.com/wiki/Xterm256_color_names_for_console_Vim
 " 170 is sort of purplish
-hi CursorLine   cterm=NONE ctermbg=170 ctermfg=white
-hi CursorColumn cterm=NONE ctermbg=170 ctermfg=white
+" 178 is sort of gold
+" 202 is sort of orangey-red
+hi CursorLine   cterm=NONE ctermbg=202 ctermfg=white
+hi CursorColumn cterm=NONE ctermbg=202 ctermfg=white
 map - :set cursorline!<enter>
 
 " default it to on?
@@ -255,6 +257,21 @@ autocmd FileType yaml setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
 
 
 
-
-
-
+" NEW IN JUNE 2024 - disabling old eclim mappings and adding these.
+"
+" nvim diagnostic messages (e.g. warnings from the LSP) often scroll off the screen to the right.
+" stock ]d and [d jump forward/backwards, but still doesn't show the long messages. So some
+" custom maps are needed. These live in main.vim as they are generally useful - other things
+" besides LSP could generate diagnostic messages, so it is fine to use them here.
+" 
+" mnemonic is d for "diagnostic" - use "[d" / "]d" to cycle through warnings/info back&forwards, and
+" "<Leader>d" (currently that's ";d") when on current line. All three maps will also pop up a little
+" terminal overlay window showing the full message. hjkl (but not escape!) to close it.
+" 
+" note - if you do "<Leader>d" twice quickly you'll go into the overlay window - you then need "q" to close THAT.
+"
+" (I don't think this vim.diagnostic stuff is accessible from VimScript; appears to be a Lua
+" module. Hence the Lua keymap setting instead of good old "map X" style.
+lua vim.keymap.set('n', '[d', function() vim.diagnostic.goto_prev() end, opts)
+lua vim.keymap.set('n', ']d', function() vim.diagnostic.goto_next() end, opts)
+lua vim.keymap.set('n', '<Leader>d', function() vim.diagnostic.open_float() end, opts)

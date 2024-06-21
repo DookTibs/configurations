@@ -84,8 +84,8 @@ if (java_lsp_needed ~= "") then
 	print("Launching jdtls for " .. java_lsp_needed .. " development...(~/dev/cfgs/nvim/luaconfigs/my_lsp/mason.lua)")
 	lspconfig.jdtls.setup(lsp_cfg)
 elseif (python_lsp_needed ~= "") then
-	print("Launching python-lsp-server for " .. python_lsp_needed .. " development...(~/dev/cfgs/nvim/luaconfigs/my_lsp/mason.lua)" .. ": " .. dump(lsp_cfg))
-	lspconfig.pylsp.setup(lsp_cfg)
+	print("Launching python-lsp-server for " .. python_lsp_needed .. " development...(~/dev/cfgs/nvim/luaconfigs/my_lsp/mason.lua)") -- .. ": " .. dump(lsp_cfg))
+	lspconfig.pylsp.setup({})
 end
 
 if (java_lsp_needed ~= "" or python_lsp_needed ~= "") then

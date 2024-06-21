@@ -74,7 +74,14 @@ cmp.setup {
     },
     -- Accept currently selected item. If none selected, `select` first item.
     -- Set `select` to `false` to only confirm explicitly selected items.
-    ["<CR>"] = cmp.mapping.confirm { select = true },
+
+
+	-- otherwise if you type "awesome" and then enter to go to next line, you are likely to get the first suggestion from nvim-cmp.
+	-- nvim-cmp gives you SO many suggestions (esp. with LSP/Copilot enabled) so I'd rather have it there as a hint and have to go in,
+	-- rather than screw with 20+ years of Vim muscle memory by breaking what tab/enter do. Soo also the tab "TOO ANNOYING" comment.
+    ["<CR>"] = cmp.mapping.confirm { select = false },
+    -- ["<CR>"] = cmp.mapping.confirm { select = true },
+	
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
 		-- TOO ANNOYING to have tab go into autocomplete since it is ALWAYS UP.
