@@ -105,7 +105,7 @@ alias djp='source $HOME/development/shellScripts/special/djs.sh python'
 alias gohawc="cd ${HAWC_HOME}"
 # alias activatehawc="initConda && conda activate hawc2021"
 # alias activatehawc="workon hawc2021"
-alias activatehawc="workon hawc2023 && declare -x SKIP_BMDS_TESTS=True"
+alias activatehawc="workon hawc2024 && declare -x SKIP_BMDS_TESTS=True"
 # alias psql_hawc_local="psql -h localhost -p 5432 -d hawc_localdev -U hawc_user"
 alias psql_hawc_local="psql -h localhost -p 5432 -d hawc -U hawc"
 # alias psql_hawc_icfaws="psql -h hawc-internal-icf-dev-db.cotmuxecedep.us-east-1.rds.amazonaws.com -p 5432 -d icf_hawc_dev -U hawc_admin"

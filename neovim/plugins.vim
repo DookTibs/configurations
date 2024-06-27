@@ -133,3 +133,23 @@ else
 	lua require('packer_plugins')
 endif
 
+" TESTING!!! why does vim-tmux-navigator work normally -- but not when following a sag shortcut?
+" let g:tmux_navigator_no_mappings = 1
+
+" function! SackNavDebugger(xxx)
+	" echo "TIBSY '" .. a:xxx .. "'"
+" endfunction
+
+" this fails too...
+" echo "MAPPING ISSUE!"
+" let g:C_Ctrl_j = 'off'
+" let g:C_Ctrl_k = 'off'
+" let g:BASH_Ctrl_j = 'off'
+" map <C-j> :<C-U>call SackNavDebugger("down")<cr>
+" map <C-k> :<C-U>call SackNavDebugger("up")<cr>
+
+" nnoremap <silent> <C-h> :<C-U>TmuxNavigateLeft<cr>
+" nnoremap <silent> <C-j> :<C-U>TmuxNavigateDown<cr>
+" nnoremap <silent> <C-k> :<C-U>TmuxNavigateUp<cr>
+" nnoremap <silent> <C-l> :<C-U>TmuxNavigateRight<cr>
+"nnoremap <silent> {Previous-Mapping} :<C-U>TmuxNavigatePrevious<cr>

@@ -47,8 +47,10 @@ elseif stridx(currentDir, "/Users/38593/development/hawc_project/hawc") == 0
 		" (see plugins.vim; official psf/black doesn't work with neovim, and the alternate I found
 		" doesn't seem to work either)
 		" 1. disable it from ALE config...
-		let g:ale_linters = {'javascript': ['eslint'], 'python': []}
-		let g:ale_fixers = {'javascript': ['eslint'], 'python': []}
+		"
+		" as of June 2024 we're not using ALE
+		" let g:ale_linters = {'javascript': ['eslint'], 'python': []}
+		" let g:ale_fixers = {'javascript': ['eslint'], 'python': []}
 
 		" echo "RUFF disabled; run 'make format' manually before committing/pushing..."
 
@@ -58,8 +60,9 @@ elseif stridx(currentDir, "/Users/38593/development/hawc_project/hawc") == 0
 		"autocmd BufWritePost *.py echo "write pythong!" . "(" . getcwd() . ")"
 
 		" https://vimtricks.com/p/get-the-current-file-path/
-		echo "ruff re-enabled...but also run 'make lint' and 'make format' and run tests before pushing to Github"
-		autocmd BufWritePost *.py silent !/Users/38593/development/configurations/neovim/ruffHelper.sh %:p
+		echo "ruff/djhtml active...can also 'make lint' & 'make format' & 'make lint-html' (or 'pre-commit run --all-files') and run tests before pushing to Github"
+		autocmd BufWritePost *.py silent !/Users/38593/development/configurations/neovim/hawc_ruff_helper.sh %:p
+		autocmd BufWritePost *.html silent !/Users/38593/development/configurations/neovim/hawc_djhtml_helper.sh %:p
 
 
 

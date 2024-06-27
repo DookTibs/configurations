@@ -27,7 +27,8 @@ if "testing" == "testingx"
 endif
 
 " these all from chrisatmachine.com/Neovim/27-native-lsp/
-if "foo" == "foo"
+" currently setting these all in mason.lua, only when LSP is running...
+if "foo" == "bar"
 	nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
 	nnoremap <silent> gD <cmd>lua vim.lsp.buf.declaration()<CR>
 	nnoremap <silent> gr <cmd>lua vim.lsp.buf.references()<CR>
