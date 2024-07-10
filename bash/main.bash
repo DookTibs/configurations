@@ -184,3 +184,16 @@ gitDiffIndividualFileHelper () {
 
 	git $gitCmd $branchToCompareAgainst:./$1 ./$1
 }
+
+# AZURE CLI (installed by "brew update && brew install azure-cli"
+# first time I did "az login" I set a default tenant/subscription. If we need to
+# ever change it (thx https://stackoverflow.com/questions/38475104/azure-cli-how-to-change-subscription-default/62897854#62897854):
+# 1. List all the subscriptions you have
+# az account list --output table
+#		Name             CloudName     SubscriptionId     State     IsDefault
+#	---------------   ------------  ----------------  ---------  ----------
+#	AssociateProd      AzureCloud    xxxxxxxxxxxx       Enabled    False
+#
+# 2. Pick the subscription you want and use it in the command below.
+#
+#	az account set --subscription <subscription_id>

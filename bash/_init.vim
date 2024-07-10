@@ -6,7 +6,10 @@ source ~/development/configurations/neovim/functions.vim
 source ~/development/configurations/neovim/main.vim
 
 " source ~/development/configurations/neovim/ctags.vim
-source ~/development/configurations/neovim/lsp.vim
+" source ~/development/configurations/neovim/lsp.vim
+
+source ~/development/debuggerVimBridge/plugin/dvb.vim
+source ~/development/configurations/neovim/tfeiler_bridged_debugger.vim
 
 source ~/development/configurations/neovim/icf.vim
 

@@ -84,6 +84,9 @@ if (1 == 1)
 		"Plug 'jellydn/CopilotChat.nvim'
 		" Plug 'z0rzi/ai-chat.nvim'
 
+		" used by my DVB debugger to show nice temporary notifications...
+		Plug 'rcarriga/nvim-notify'
+
 		" for now, only run ALE when doing HAWC.
 		if stridx(system("pwd"), "/Users/38593/development/hawc_project/hawc") == 0
 			" https://black.readthedocs.io/en/stable/integrations/editors.html

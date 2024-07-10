@@ -705,3 +705,16 @@ function! ToggleAutocomplete()
 	endif
 endfunction
 map <F10> :call ToggleAutocomplete()<enter>
+
+function! SavePreJumpPos()
+	let preJumpPos = [bufnr()] + getcurpos()[1:]
+	let preJumpItem = {'bufnr': preJumpPos[0], 'from': preJumpPos, 'tagname': expand('<cword>')}
+	return preJumpItem
+endfunction
+
+function! AddToTagStack(preJumpItem)
+	let winId = win_getid()
+	let stack = gettagstack(winId)
+	let stack['items'] = [a:preJumpItem]
+	call settagstack(winId, stack, 't')
+endfunction

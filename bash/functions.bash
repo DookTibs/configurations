@@ -434,3 +434,28 @@ rpn() {
 f() {
 	source ~/bin/F
 }
+
+# thx https://unix.stackexchange.com/questions/6463/find-searching-in-parent-directories-instead-of-subdirectories
+# bash function that takes a filename, and then optionally a start dir. Recurses upwards
+# looking for a the filename. If it finds it, print the directory where it was.
+find-up() {
+  if [ -z "${1}" ]; then
+	  echo "no search pattern specified. Usage: 'find-up <filename> (<start_dir>)"
+	  return
+  fi
+  fileSearchPattern="${1}"
+
+  if [ -z "${2}" ]; then
+	  path=$(pwd)
+  else
+	  path=$2
+  fi
+
+  path=$(pwd)
+  while [[ "$path" != "" && ! -e "$path/$1" ]]; do
+    path=${path%/*}
+  done
+  if [ "$path" != "" ]; then
+	  echo "$path"
+  fi
+}
