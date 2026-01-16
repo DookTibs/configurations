@@ -11,6 +11,9 @@
 
 --]]
 
+local LSP_GLOBALLY_DISABLED = true
+
+
 local mason_status_ok, mason = pcall(require, "mason")
 if not mason_status_ok then
   return
@@ -52,7 +55,7 @@ local lsp_cfg = {}
 if (string.find(currentDir, "/Users/38593/development/icf_dragon/src/main/java") == 1) then
 	java_lsp_needed = "litstream"
 elseif (string.find(currentDir, "/Users/38593/development/lfc") == 1) then
-	python_lsp_needed = "LFC"
+	-- python_lsp_needed = "LFC"
 elseif (string.find(currentDir, "/Users/38593/development/hawc_project/hawc") == 1) then
 	python_lsp_needed = "HAWC"
 elseif (string.find(currentDir, "/Users/38593/development/trim%-builder") == 1) then
@@ -77,6 +80,14 @@ elseif (string.find(currentDir, "/Users/38593/development/trim%-builder") == 1) 
 		}
 	}
 	--]]
+end
+
+if (LSP_GLOBALLY_DISABLED == true) then
+	if (java_lsp_needed ~= "" or python_lsp_needed ~= "") then
+		print("LSP GLOBALLY DISABLED - see tjf cfgfile mason.lua...")
+		python_lsp_needed = ""
+		java_lsp_needed = ""
+	end
 end
 
 

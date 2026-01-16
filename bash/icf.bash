@@ -1,18 +1,20 @@
-# declare -x VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3.9
+# echo "SPEEDCHECK: problem seems to be between 5&6 within virtualenvwrapper - sometimes fast, sometimes lag?"
+# echo "SPEEDCHECK-A `date`"
 declare -x VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 declare -x PATH=${PATH}:~/bin/
-# declare -x PATH=${PATH}:/cygdrive/c/Program\ Files\ \(x86\)/Graphviz2.38/bin/
-# declare -x PATH=/usr/local/Cellar/python\@2/2.7.14_3/bin:${PATH}
 
 declare -x GOOGLE_APPLICATION_CREDENTIALS=~/development/acc/serviceAccount.json
 
 # virtualenv for python
 declare -x WORKON_HOME=${HOME}/.virtualenvs
 # source /usr/local/bin/virtualenvwrapper.sh
+echo "SPEEDCHECK-before virtualenvwrapper `date`"
 source ~/Library/Python/3.9/bin/virtualenvwrapper.sh
+echo "SPEEDCHECK-after virtualenvwrapper `date`"
 declare -x PATH=${PATH}:~/Library/Python/3.9/bin
 
 declare -x DOWNLOADS=$HOME/Downloads/
+# echo "SPEEDCHECK-B `date`"
 
 # declare -x ECLIPSE_HOME=/cygdrive/c/Users/38593/eclipse/neon/eclipse/
 # alias goeclipse="cd $ECLIPSE_HOME"
@@ -31,6 +33,7 @@ alias bc="/Applications/Beyond\ Compare.app/Contents/MacOS/bcomp"
 # alias mongo="/cygdrive/c/Program\ Files/MongoDB/Server/3.4/bin/mongo.exe"
 
 # alias start_mysql_server="echo 'mysqladmin -uroot shutdown to kill...' ; mysqld_safe &"
+# echo "SPEEDCHECK-C `date`"
 
 alias gonotes='cd "$ONEDRIVE_HOME/notes"'
 
@@ -54,12 +57,12 @@ alias gocss=godragoncss
 launch_sqsd () { 
 	if [ -n "$1" ]; then
 		targetEnv="$1"
-		dynamic_key_env_lookup="LITSTREAM_APP_SDK_USER_ACCESS_KEY_ID_${targetEnv}"
-		dynamic_secret_env_lookup="LITSTREAM_APP_SDK_USER_SECRET_ACCESS_KEY_${targetEnv}"
+		# dynamic_key_env_lookup="LITSTREAM_APP_SDK_USER_ACCESS_KEY_ID_${targetEnv}"
+		# dynamic_secret_env_lookup="LITSTREAM_APP_SDK_USER_SECRET_ACCESS_KEY_${targetEnv}"
 		dynamic_queue_env_lookup="LITSTREAM_LOCALWORK_TESTQUEUE_${targetEnv}"
 
-		aws_access_key_id="${!dynamic_key_env_lookup}"
-		aws_secret_access_key="${!dynamic_secret_env_lookup}"
+		# aws_access_key_id="${!dynamic_key_env_lookup}"
+		# aws_secret_access_key="${!dynamic_secret_env_lookup}"
 		queue_url="${!dynamic_queue_env_lookup}"
 
 		if [ -z "${queue_url}" ]; then
@@ -68,9 +71,17 @@ launch_sqsd () {
 		fi
 
 		# echo "in fxn, for '${targetEnv}', gonna use [${aws_access_key_id}] and [${aws_secret_access_key}] to connect to '${queue_url}' (defined in sensitive_data.sh which should never get checked in..."
-		echo "env==${targetEnv}, running SQSD on queue '${queue_url}..."
+		echo "env==${targetEnv}, running SQSD on queue '${queue_url}...NEW 3.0.0 sqsd"
+		# 2025-10-31 -- don't pass in explicit key/secret; just assume environment
+		# variables have been set via SSO...
+		# sqsd --queue-url $queue_url --web-hook http://localhost:8081/eventhandler -d -s 5 -v --access-key-id $aws_access_key_id --secret-access-key $aws_secret_access_key
+		sqsd --queue-url $queue_url --web-hook http://localhost:8081/eventhandler -d -s 5 -v # --access-key-id "ASIA2XEPDVYDZR4CE5L6" --secret-access-key "mNnsiI8/2TknEA8r2upO9x0vcP+K82y9vhXDhK+s"
 
-		sqsd --queue-url $queue_url --web-hook http://localhost:8081/eventhandler -d -s 5 -v --access-key-id $aws_access_key_id --secret-access-key $aws_secret_access_key
+		if [ $? -eq 0 ]; then
+			echo "Failed to start sqsd. Are you maybe signed into wrong/no account for '$targetEnv' sqs queue '$queue_url'? AWS credentials currently:"
+			echo "-----"
+			aws sts get-caller-identity
+		fi
 		# echo "RUN THIS COMMAND:"
 		# echo "sqsd --queue-url $queue_url --web-hook http://localhost:8081/eventhandler -d -s 5 -v --access-key-id $aws_access_key_id --secret-access-key $aws_secret_access_key"
 	else
@@ -78,6 +89,7 @@ launch_sqsd () {
 	fi
 }
 
+# echo "SPEEDCHECK-D `date`"
 # alias launch_sqsd="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/event_queue_tfeiler_sqsd --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
 
 # alias launch_sqsd2021="sqsd --queue-url https://sqs.us-east-1.amazonaws.com/692679271423/litstream-prod2021-eq --web-hook http://localhost:8081/eventhandler -d -s 5 -v"
@@ -95,7 +107,7 @@ declare -x DOCTER_HOME="$HOME/development/docterOnline/"
 alias godocter="cd ${DOCTER_HOME}"
 # alias godocterVM="cd ${DOCTER_VM_HOME}"
 
-declare -x HAWC_HOME="$HOME/development/hawc_project/hawc/"
+declare -x HAWC_HOME="$HOME/development/hawc_project/hawc2025/"
 
 alias dj='source $HOME/development/shellScripts/special/djs.sh'
 alias djj='source $HOME/development/shellScripts/special/djs.sh javascript'
@@ -105,7 +117,7 @@ alias djp='source $HOME/development/shellScripts/special/djs.sh python'
 alias gohawc="cd ${HAWC_HOME}"
 # alias activatehawc="initConda && conda activate hawc2021"
 # alias activatehawc="workon hawc2021"
-alias activatehawc="workon hawc2024 && declare -x SKIP_BMDS_TESTS=True"
+alias activatehawc="workon hawc2025_py313 && declare -x SKIP_BMDS_TESTS=True"
 # alias psql_hawc_local="psql -h localhost -p 5432 -d hawc_localdev -U hawc_user"
 alias psql_hawc_local="psql -h localhost -p 5432 -d hawc -U hawc"
 # alias psql_hawc_icfaws="psql -h hawc-internal-icf-dev-db.cotmuxecedep.us-east-1.rds.amazonaws.com -p 5432 -d icf_hawc_dev -U hawc_admin"
@@ -152,6 +164,7 @@ alias sqlserver_dcc_dev="sqlcmd -S ${DCC_DB_DEV_HOST} -U ${DCC_DB_DEV_USER} -P $
 # declare -x DRAGON_DEV_WORKER_HOST="ec2-54-161-82-161.compute-1.amazonaws.com"
 # declare -x DRAGON_PROD_WEB_HOST="ec2-34-229-165-35.compute-1.amazonaws.com"
 # declare -x DRAGON_PROD_WORKER_HOST="ec2-54-234-49-64.compute-1.amazonaws.com"
+# echo "SPEEDCHECK-G `date`"
 
 # alias ssh_dev_web="ssh -i $DRAGON_AWS_KEYPAIR $DRAGON_AWS_USER@$DRAGON_DEV_WEB_HOST"
 # alias lw_dev_web="ssh_dev_web tail -f /var/log/tomcat8/catalina.out"
@@ -227,6 +240,7 @@ ssh_devweb() {
 #    that talks to prod database.
 # alias tunnel_check="checkTunnels.sh"
 
+# echo "SPEEDCHECK-J `date`"
 # autossh -M with a different monitor port for each instance. Keeps tunnel open on OSX
 # alias tunnel_dragon_prod2020_start="autossh -M 20045 -N -f -L 9432:litstream-pg-prod-20210308.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432 prod_jumpbox"
 # alias tunnel_dragon_prod2020_stop="stopTunnelling.sh 9432:litstream-pg-prod-20210308.c5vzduwbgj5d.us-east-1.rds.amazonaws.com:5432"
@@ -236,53 +250,57 @@ ssh_devweb() {
 
 
 # CLEANED UP AS OF DECEMBER 2022
-alias tunnel_check="tunneler.py -o check_tunnels"
+# alias tunnel_check="tunneler.py -o check_tunnels"
 
-# alias tunnel_litstream_prod2021_start="tunneler.py -e prod2021 -o start_tunnel"
-# alias tunnel_litstream_prod2021_stop="tunneler.py -e prod2021 -o stop_tunnel"
-# alias psql_litstream_prod2021="psql -h localhost -p 1432 -d litstream -U litstream_admin"
-# alias redis_litstream_prod2021="redis-cli -h localhost -p 9742"
+alias tunnel_python="~/.virtualenvs/tunneler/bin/python ~/development/ssm_tunneler/ssm_tunneler.py -c ~/development/shellScripts/tunneler_cfg.json -o tunnel"
 
-# alias tunnel_litstream_dev2021_start="tunneler.py -e dev2021 -o start_tunnel"
-# alias tunnel_litstream_dev2021_stop="tunneler.py -e dev2021 -o stop_tunnel"
-# alias psql_litstream_dev2021="psql -h localhost -p 2432 -d litstream_dev -U litstream_dev_admin"
-# alias redis_litstream_dev2021="redis-cli -h localhost -p 9744"
+# use like "ssm_remoter -e litstream_dev -r web1"
+alias ssm_remoter="~/.virtualenvs/tunneler/bin/python ~/development/ssm_tunneler/ssm_tunneler.py -c ~/development/shellScripts/tunneler_cfg.json -o session"
 
-# alias tunnel_litstream_sandbox2021_start="tunneler.py -e sandbox2021 -o start_tunnel"
-# alias tunnel_litstream_sandbox2021_stop="tunneler.py -e sandbox2021 -o stop_tunnel"
-# alias psql_litstream_sandbox2021="psql -h localhost -p 8432 -d dragon_env_backup -U dragon_sandbox_admin"
-# alias redis_litstream_sandbox2021="redis-cli -h localhost -p 9760"
-
-alias tunnel_litstream_sandbox_start="tunneler.py -e sandbox -o start_tunnel"
-alias tunnel_litstream_sandbox_stop="tunneler.py -e sandbox -o stop_tunnel"
+# alias tunnel_litstream_sandbox_start="tunneler.py -e sandbox -o start_tunnel"
+# alias tunnel_litstream_sandbox_stop="tunneler.py -e sandbox -o stop_tunnel"
+alias tunnel_litstream_sandbox="tunnel_python -e litstream_sandbox"
 alias psql_litstream_sandbox="psql -h localhost -p 8432 -d litstream_sandbox -U ls_sandbox_admin"
 alias redis_litstream_sandbox="redis-cli -h localhost -p 9736"
 # alias mongo_litstream_sandbox="mongo --tls --tlsAllowInvalidCertificates ${MONGO_SANDBOX_PRIMARY_CONN}"
 alias mongo_litstream_sandbox="mongosh ${MONGO_SANDBOX_PRIMARY_CONN}"
 
+alias psql_litstream_sandbox_keepalive="watch -r -n 300 -x psql -h localhost -p 8432 -d litstream_sandbox -U ls_sandbox_admin -c 'SELECT NOW();'"
+alias redis_litstream_sandbox_keepalive="watch -r -n 300 -x redis-cli -h localhost -p 9736 -n 0 ACL WHOAMI"
+
+# alias tunnel_litstream_sandbox_keepalive="tmux split-window -h -d ; tmux split-window -t 1 -d ; tmux send-keys -t 1 'psql_litstream_sandbox_keepalive' ; tmux send-keys -t 2 'redis_litstream_sandbox_keepalive' ; tmux send-keys -t 0 'tunnel_litstream_sandbox'"
+
 alias mongo_lfc_sandbox="mongosh ${MONGO_LFC_SANDBOX_PRIMARY_CONN}"
+alias mongo_lfc_prod="mongosh ${MONGO_LFC_PROD_PRIMARY_CONN}"
 
 
-alias tunnel_litstream_dev_start="tunneler.py -e dev -o start_tunnel"
-alias tunnel_litstream_dev_stop="tunneler.py -e dev -o stop_tunnel"
+# alias tunnel_litstream_dev_start="tunneler.py -e dev -o start_tunnel"
+# alias tunnel_litstream_dev_stop="tunneler.py -e dev -o stop_tunnel"
+alias tunnel_litstream_dev="tunnel_python -e litstream_dev"
 alias psql_litstream_dev="psql -h localhost -p 3432 -d litstream_dev -U litstream_dev_admin"
 alias redis_litstream_dev="redis-cli -h localhost -p 9750"
 # alias mongo_litstream_dev="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
 # alias mongosh_litstream_dev="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
 alias mongo_litstream_dev="mongosh ${MONGO_DEV_PRIMARY_CONN}"
+alias psql_litstream_dev_keepalive="watch -r -n 300 -x psql -h localhost -p 3432 -d litstream_dev -U litstream_dev_admin -c 'SELECT NOW();'"
+alias redis_litstream_dev_keepalive="watch -r -n 300 -x redis-cli -h localhost -p 9750 -n 0 ACL WHOAMI"
 
-
-alias tunnel_litstream_prod_start="tunneler.py -e prod -o start_tunnel"
-alias tunnel_litstream_prod_stop="tunneler.py -e prod -o stop_tunnel"
+# alias tunnel_litstream_prod_start="tunneler.py -e prod -o start_tunnel"
+# alias tunnel_litstream_prod_stop="tunneler.py -e prod -o stop_tunnel"
+alias tunnel_litstream_prod="tunnel_python -e litstream_prod"
 alias psql_litstream_prod="psql -h localhost -p 4432 -d litstream_prod -U litstream_prod_admin"
 alias redis_litstream_prod="redis-cli -h localhost -p 9752"
 # alias mongo_litstream_prod="mongo --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
 # alias mongosh_litstream_prod="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
 alias mongo_litstream_prod="mongosh ${MONGO_PROD_PRIMARY_CONN}"
 
-alias tunnel_litstream_unittest_start="tunneler.py -e unittest -o start_tunnel"
-alias tunnel_litstream_unittest_stop="tunneler.py -e unittest -o stop_tunnel"
-alias psql_litstream_unittest="psql -h localhost -p 9432 -d litstream_dev -U litstream_dev_admin"
+alias psql_litstream_prod_keepalive="watch -r -n 300 -x psql -h localhost -p 4432 -d litstream_prod -U litstream_prod_admin -c 'SELECT NOW();'"
+alias redis_litstream_prod_keepalive="watch -r -n 300 -x redis-cli -h localhost -p 9752 -n 0 ACL WHOAMI"
+
+# alias tunnel_litstream_unittest_start="tunneler.py -e unittest -o start_tunnel"
+# alias tunnel_litstream_unittest_stop="tunneler.py -e unittest -o stop_tunnel"
+alias tunnel_litstream_unittest="tunnel_python -e litstream_unittest"
+alias psql_litstream_unittest="psql -h localhost -p 9432 -d litstream_unittest -U litstream_test"
 alias redis_litstream_unittest="redis-cli -h localhost -p 9748"
 # alias mongo_litstream_unittest="mongo --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
 # alias mongosh_litstream_unittest="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_DEV_PRIMARY_CONN}"
@@ -291,19 +309,43 @@ alias mongo_litstream_unittest="mongosh ${MONGO_DEV_PRIMARY_CONN}"
 # PYTRIM
 alias mysql_pytrim_local="mysql -uroot pytrim"
 
-alias tunnel_pytrim_dev_start="tunneler.py -e pytrim_dev -o start_tunnel"
-alias tunnel_pytrim_dev_stop="tunneler.py -e pytrim_dev -o stop_tunnel"
-alias mysql_pytrim_dev="mysql -h 127.0.0.1 -P 6603 -u ${PYTRIM_DEV_USERNAME} -p${PYTRIM_DEV_PASSWORD} pytrimv2"
+# alias tunnel_pytrim_dev_start="tunneler.py -e pytrim_dev -o start_tunnel"
+# alias tunnel_pytrim_dev_stop="tunneler.py -e pytrim_dev -o stop_tunnel"
+alias tunnel_pytrim_test="tunnel_python -e pytrim_test"
+# alias mysql_pytrim_dev="mysql -h 127.0.0.1 -P 6603 -u ${PYTRIM_DEV_USERNAME} -p${PYTRIM_DEV_PASSWORD} pytrimv2"
+alias mysql_pytrim_test="echo 'mysql cmdline borked; use MySQL Workbench (NOT DBeaver!) instead'"
 
 alias launch_trim_devserver="MYSQLPASSWORD= FLASK_DEBUG=development cd ~/development/trim-builder/Scripts/ && python dev.py"
 
-# as of 20221031
-# tunnels don't quite work yet...
-# alias tunnel_litmc_dev_start="tunneler.py -e litmc_dev -o start_tunnel"
-# alias tunnel_litmc_dev_stop="tunneler.py -e litmc_dev -o stop_tunnel"
-# this works but the name is annoying with litstream, so I disable
-# alias psql_litmc_dev="psql -h localhost -p 6420 -d litemcee -U icflitemcee" #password testtest
+# echo "SPEEDCHECK-M `date`"
 
+# LANGQS
+# alias tunnel_langqs_dev_tfeiler_start="tunneler.py -e langqs_dev_tfeiler -o start_tunnel"
+# alias tunnel_langqs_dev_tfeiler_stop="tunneler.py -e langqs_dev_tfeiler -o stop_tunnel"
+alias tunnel_langqs_dev_tfeiler="tunnel_python -e langqs_dev_tfeiler"
+alias psql_langqs_dev_tfeiler="psql -h localhost -p 6740 -d langqs_dev_tfeiler -U lqs_dev_tfeiler_admin"
+
+# alias tunnel_langqs_uat_start="tunneler.py -e langqs_uat -o start_tunnel"
+# alias tunnel_langqs_uat_stop="tunneler.py -e langqs_uat -o stop_tunnel"
+alias tunnel_langqs_uat="tunnel_python -e langqs_uat"
+alias psql_langqs_uat="psql -h localhost -p 6730 -d langqs_uat -U lqs_uat_admin"
+
+# alias tunnel_langqs_prod_start="tunneler.py -e langqs_prod -o start_tunnel"
+# alias tunnel_langqs_prod_stop="tunneler.py -e langqs_prod -o stop_tunnel"
+alias tunnel_langqs_prod="tunnel_python -e langqs_prod"
+alias psql_langqs_prod="psql -h localhost -p 6710 -d langqs_prod -U lqs_prod_admin"
+
+alias psql_langqs_localtest="psql -h localhost -p 5432 -d langqs_test"
+
+# adds current IP to security group (so db access works) and API gateway (so actual requests work)
+# alias coffeeshop_ingress_langqs_start="/Users/38593/development/langqs/cicd/shell_scripts/manage_sg_ingress_of_current_ip.sh sg-0b25730c7f1cb0157 \"TEMP coffeeshop ssh access for tom to langqs-dev-tfeiler VPC\" ensure && /Users/38593/development/langqs/cicd/shell_scripts/manage_api_policy_ingress_of_current_ip.sh yb38rq1auc ensure"
+
+# removes ""
+# alias coffeeshop_ingress_langqs_stop="/Users/38593/development/langqs/cicd/shell_scripts/manage_sg_ingress_of_current_ip.sh sg-0b25730c7f1cb0157 \"TEMP coffeeshop ssh access for tom to langqs-dev-tfeiler VPC\" remove && /Users/38593/development/langqs/cicd/shell_scripts/manage_api_policy_ingress_of_current_ip.sh yb38rq1auc remove"
+
+# alias coffeeshop_ingress_litstreamsandbox_start="/Users/38593/development/langqs/cicd/shell_scripts/manage_sg_ingress_of_current_ip.sh sg-0c85de9dc722c95d5 \"TEMP coffeeshop ssh access for tom to litstream-sandbox VPC\" ensure"
+
+# alias coffeeshop_ingress_litstreamsandbox_stop="/Users/38593/development/langqs/cicd/shell_scripts/manage_sg_ingress_of_current_ip.sh sg-0c85de9dc722c95d5 \"TEMP coffeeshop ssh access for tom to litstream-sandbox VPC\" remove"
 
 
 
@@ -583,7 +625,7 @@ if [ 1 -eq 1 ]; then
 	# export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
 	export PYENV_SHELL=bash
 	# see "brew --cellar pyenv" for base path, then poke around
-	source '/opt/homebrew/Cellar/pyenv/2.4.2/completions/pyenv.bash'
+	source '/opt/homebrew/Cellar/pyenv/2.4.22/completions/pyenv.bash'
 	eval "$(pyenv init -)"
 fi
 
@@ -600,3 +642,4 @@ alias mysql_localserver_restart="mysql.server restart"
 alias aws_whoami="aws sts get-caller-identity"
 
 alias q=~/bin/macos-q
+# echo "SPEEDCHECK-Z `date`"

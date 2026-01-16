@@ -3,6 +3,31 @@
 
 " set tags to whoever's install I'm looking at
 if stridx("foo", "bar") == 0
+elseif stridx(currentDir, "-----/Users/38593/development/langqs") == 0
+	let langqsLinter="ruff"
+
+	" CONSIDER MOVING SOME/ALL OF THIS OUT OF HAWC-SPECIFIC CONFIG AND INTO MAIN - ALE SEEMS MIGHTY USEFUL!!!
+	" right now I'm just using a small part of ALE; my attempts to get things like symbol definition/autocomplete
+	" were kind of annoying. Sticking with ctags for now; it's fast, good enough, and I understand it.
+	if executable(langqsLinter) == 0
+		echo "WARNING - cannot find " . langqsLinter . "/etc. on PATH; probably not in right venv."
+		echo "Consider quitting and run 'workon langqs_deploy' before re-opening Vim"
+	else
+		echo "ruff active...don't forget to run tests before pushing to github..."
+		" autocmd BufWritePost *.py silent !/Users/38593/development/configurations/neovim/langqs_ruff_helper.sh %:p
+	endif
+	
+	
+elseif stridx(currentDir, "/Users/38593/development/hawc/epahawc") == 0
+	let &tags = "tags," . "/Users/38593/development/hawc/epahawc/.hawcTags"
+	
+	" \ should send the cache.clear() command to the manage.py shell running in the tmux HAWC_SERVERS session,
+	" window 1, pane 1
+	" map \ :call SendFreshCommandToTMUX("cache.clear()", "HAWC_SERVERS:1.1")<enter>
+	
+	" backspace should add some empty spaces on the debug console running in the tmux HAWC_SERVERS session,
+	" window 1, pane 0
+	map <BS> :call SendKeysToTMUX("HAWC_SERVERS:1.0", "Enter")<enter>
 elseif stridx(currentDir, "/Users/38593/development/expoagg-pipeline/serverless/expoagg-pipeline/py_handlers") == 0
 	map \ :call RunCurrentExpoaggLambda("1")<enter>
 elseif stridx(currentDir, $DRAGON_HOME . "src/main/CloudFormation") == 0
@@ -21,9 +46,9 @@ elseif stridx(currentDir, "/Users/38593/development/llr/llrsim") == 0
 		" autocmd BufWritePost *.py silent! !black -q --config /Users/38593/development/llr/llrsim/pyproject.toml %
 	" endif
 	map \ :call LlrSimDevUtil(1)<enter>
-elseif stridx(currentDir, "/Users/38593/development/hawc_project/hawc") == 0
-	" let &tags = "tags," . "/Users/38593/development/hawc_project/hawc/.hawcTags"
-	let &tags = "tags," . "/Users/38593/development/hawc_project/hawc/.hawcTags," . "/Users/38593/development/hawc_project/hawc/.hawcVirtualEnvInstalledPackagesTags"
+elseif stridx(currentDir, "/Users/38593/development/hawc_project/hawc2025") == 0
+	" let &tags = "tags," . "/Users/38593/development/hawc_project/hawc2025/.hawcTags"
+	let &tags = "tags," . "/Users/38593/development/hawc_project/hawc2025/.hawcTags," . "/Users/38593/development/hawc_project/hawc2025/.hawcVirtualEnvInstalledPackagesTags"
 
 
 	" 2023 - HAWC switched linters from flake8 -> ruff
@@ -67,7 +92,7 @@ elseif stridx(currentDir, "/Users/38593/development/hawc_project/hawc") == 0
 
 
 		if hawcLinter == "flake8"
-			let g:ale_python_flake8_options = '--config=/Users/38593/development/hawc_project/hawc/.flake8'
+			let g:ale_python_flake8_options = '--config=/Users/38593/development/hawc_project/hawc2025/.flake8'
 		elseif hawcLinter == "ruff"
 			" let g:ale_python_ruff_options = '--fix --show-fixes --config=/Users/38593/development/hawc_project/hawc/pyproject.toml'
 			" let g:ale_python_ruff_options = '--fix'
@@ -105,7 +130,7 @@ elseif stridx(currentDir, "/Users/38593/development/hawc_project/hawc") == 0
 		let g:flake8_show_in_file=1
 
 		" the vim-flake8 plugin doesn't respect project specific .flake8 files by default, we need to force it
-		let g:flake8_cmd="/Users/38593/opt/anaconda3/envs/hawc2020/bin/flake8\ --config=/Users/38593/development/hawc_project/hawc/.flake8"
+		let g:flake8_cmd="/Users/38593/opt/anaconda3/envs/hawc2020/bin/flake8\ --config=/Users/38593/development/hawc_project/hawc2025/.flake8"
 		
 		" I use tpope's "unimpaired" plugin; can use [q / ]q to go to prev/next error. [Q to go to the first.
 		" Then you can use spacebar+q / spacebar+Q to navigate quickly through the quickfix list

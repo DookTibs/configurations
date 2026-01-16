@@ -49,7 +49,7 @@ declare -x FCEDIT=vi
 
 # declare -x PS1="\h:\W \u\$ "
 # declare -x PS1="[\u@office \W]$ "
-declare -x PS1="[tfeiler@ICF_NEW_LAPTOP \W]$ "
+declare -x PS1="[tfeiler@ICF \W]$ "
 
 declare -x BREW="/usr/local/Cellar"
 
@@ -71,6 +71,7 @@ alias dg='diffgit'
 alias diffgitb='git difftool -t bc3 --no-prompt'
 alias diffgitv='git difftool -t vimdiff --no-prompt'
 alias diffgitdir='git bcdiff'
+alias calc='\bc'
 # show branches sorted by recent modification
 alias gbs='for k in `git branch|perl -pe s/^..//`;do echo -e `git show --pretty=format:"%Cgreen%ci %C(cyan)%cr%Creset" $k|head -n 1`\\t$k;done|sort -r'
 
@@ -121,6 +122,8 @@ alias list_ssh_aliases="cat ~/.ssh/* | grep \"Host \" | awk '{ print \$2 }' | so
 declare -x PATH=${PATH}:~/development/tools/gtags_bin
 
 # alias ngrok="/Users/tfeiler/development/tools/ngrok/ngrok"
+# try "localtunnel" instead: "lt --port 8000" (https://www.npmjs.com/package/localtunnel)
+# ACTUALLY -- reinstalled ngrok with homebrew on 2025-10-22 and seems to be working ok again
 
 # 202107 - python3 is now the default
 # alias mkvirtualenv2='mkvirtualenv --python=`which python2`'

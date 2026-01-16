@@ -9,12 +9,12 @@
 aws_sso_login () {
 	if [ -z $1 ]; then
 		echo "AVAILABLE SSO SETUPS:"
-		cat ~/.aws/config | grep "\[sso-session" | sed 's/\[sso-session //' | sed 's/\]//'
+		cat ~/.aws/config | grep "\[sso-session" | grep -v "^#" | sed 's/\[sso-session //' | sed 's/\]//' | sort
 
 		echo ""
 		echo "(To configure a new one, add a section in ~/.aws/config)"
 	else
-		IFS=$'\n' read -r -d '' -a matching_sessions < <( cat ~/.aws/config | grep "\[sso-session.*\]" | sed 's/\[sso-session //' | sed 's/\]//' | grep $1 && printf '\0' )
+		IFS=$'\n' read -r -d '' -a matching_sessions < <( cat ~/.aws/config | grep "\[sso-session.*\]" | grep -v "^#" | sed 's/\[sso-session //' | sed 's/\]//' | grep $1 && printf '\0' )
 		echo "SESSIONS IS ${matching_sessions}"
 
 		num_matches=${#matching_sessions[@]}
@@ -61,7 +61,7 @@ aws_sso_login () {
 					eval $(aws configure export-credentials --profile ${profile_name} --format env)
 					echo "done! run 'aws sso logout' to logout..."
 				
-					aws sts get-caller-identity --output table
+					aws sts get-caller-identity # --output table
 				else
 					echo "sso setup failed."
 				fi
@@ -167,7 +167,9 @@ aws_logwatch() {
 			else
 				path_only=`echo "$log_group_arn" | sed 's-.*:--'`
 				if [ $num_groups -gt 1 ]; then
-					echo ">>> NOTE - found multiple matching log groups (could be older versions of a lambda; could be name collision; etc.)"
+					echo ">>> NOTE - found multiple matching log groups (could be older versions of a lambda; could be name collision; etc.):"
+					echo "$log_group_data" | jq '.logGroups[].logGroupName'
+					echo "-----"
 				fi
 				echo "tailing $path_only..."
 				aws logs tail $path_only --follow 
@@ -185,12 +187,22 @@ untitle () {
 }
 
 weather() {
-	curl -s http://wttr.in/$1 | head -n 7
+	loc="55057"
+	if [ ! -z "$1" ]; then
+		loc="$1"
+	fi
+
+	curl -s http://wttr.in/$loc?u | head -n 7
 	echo "('forecast' will return next 3 days of data.)"
 }
 
 forecast() {
-	curl -s http://wttr.in/$1
+	loc="55057"
+	if [ ! -z "$1" ]; then
+		loc="$1"
+	fi
+
+	curl -s http://wttr.in/$loc?u
 }
 
 dice() {

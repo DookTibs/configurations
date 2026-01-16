@@ -718,3 +718,48 @@ function! AddToTagStack(preJumpItem)
 	let stack['items'] = [a:preJumpItem]
 	call settagstack(winId, stack, 't')
 endfunction
+
+" https://stackoverflow.com/a/6271254, thanks xolox!
+function! s:get_visual_selection()
+    let [line_start, column_start] = getpos("'<")[1:2]
+    let [line_end, column_end] = getpos("'>")[1:2]
+    if (line2byte(line_start) + column_start) > (line2byte(line_end) + column_end)
+        let [line_start, column_start, line_end, column_end] = [line_end, column_end, line_start, column_start]
+    endif
+    let lines = getline(line_start, line_end)
+    if empty(lines)
+        return ''
+    endif
+    let lines[-1] = lines[-1][: column_end - (&selection ==# 'inclusive' ? 1 : 2)]
+    let lines[0] = lines[0][column_start - 1:]
+    return join(lines, "\n")
+endfunction
+
+" function that takes visual selection and:
+" 1. puts it into the "*" register (e.g. the system clipboard)
+" 2. runs the equivalent of the "*" command (e.g. searches for it in the document)
+" Seems very specialized - but I do this several times a week when filling out
+" my timesheet. It actually saves me a lot of time to be able to do this in one shot!
+"
+" In main.vim we map this to the semicolon when in visual mode.
+function! CopyAndHighlight()
+	" get the visual selection as a variable
+	let selected_text = s:get_visual_selection()
+	" echo "v is [" . selected_text . "]"
+
+	" copy that text into the "*" register (@ is register variable scope).
+	let @* = selected_text
+
+	" none of these work...
+	" simulate user pressing "*" to search for the next occurrence!
+	" (we have some fairly complicated mapping set up for this; look in main.vim
+	" for "vnoremap <silent> * :<C-U>". So simulating the keypress is easiest way
+	" to leverage that mapping.
+	" call feedkeys("*", "i")
+	" execute "normal! /" . selected_text
+	
+	" ...but this does!
+	let @/ = selected_text
+	call feedkeys("n")
+
+endfunction

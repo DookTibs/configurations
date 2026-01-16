@@ -275,3 +275,7 @@ autocmd FileType yaml setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
 lua vim.keymap.set('n', '[d', function() vim.diagnostic.goto_prev() end, opts)
 lua vim.keymap.set('n', ']d', function() vim.diagnostic.goto_next() end, opts)
 lua vim.keymap.set('n', '<Leader>d', function() vim.diagnostic.open_float() end, opts)
+
+" vmap <F7> :call CopyAndHighlight()<enter>
+vmap ; :call CopyAndHighlight()<enter>
+" vmap ; :set nohlsearch\|:call CopyAndHighlight()\|:set hlsearch<enter>
