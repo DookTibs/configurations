@@ -692,7 +692,7 @@ function! TomJavaGetSet()
 endfunction
 
 " see also luaconfigs/my_cmp.lua, "enabled" function in cmp.setup
-let g:your_cmp_disable_enable_toggle = v:true
+let g:your_cmp_disable_enable_toggle = v:false
 function! ToggleAutocomplete()
 	if g:your_cmp_disable_enable_toggle == v:true
 		let g:your_cmp_disable_enable_toggle = v:false

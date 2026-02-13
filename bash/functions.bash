@@ -111,6 +111,14 @@ assume_aws_profile () {
 	aws sts get-caller-identity --output table
 }
 
+git_branch_filterer () {
+	if [ -z $1 ]; then
+		git branch
+	else
+		git branch | grep "$1"
+	fi
+}
+
 # once I'm logged in via e.g. aws_sso_login, maybe I want to assume a role that that Principal has access to? Supply the name and this function will do it!
 assume_aws_role() {
 	accountId=`aws sts get-caller-identity --output json | jq -r '.Account'`
