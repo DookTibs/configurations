@@ -479,3 +479,32 @@ find-up() {
 	  echo "$path"
   fi
 }
+
+# find a docker container id by its name. Useful for various things.
+dockercont() {
+	# not super useful on its own but see the last example...
+	# a command like:
+	#		docker container logs --follow SOME_MANUAL_ID | grep TIBS
+	#
+	# is nicer like:
+	#		docker container logs --follow `docker container ls | grep nexus-mvp-backend-app | cut -d ' ' -f 1` | grep TIBS
+	#
+	# but even nicer like:
+	#		docker container logs --follow `dockercont nexus-mvp-backend-app` | grep TIBS
+
+	if [ -z "${1}" ]; then
+		echo "no-docker-container-name-specified"
+	else
+		matching_containers=( $(docker container ls | grep $1 | cut -d ' ' -f 1) )
+
+		if [ ${#matching_containers[*]} == 0 ]; then
+			echo "no-matches-for-specified-container-name"
+		elif [ ${#matching_containers[*]} -gt 1 ]; then
+			echo "Too many matches for '$1'; try one of these:"
+			# I don't really know how to use cut so this is dumb...
+			docker container ls | grep $1 | sed 's/[a-z0-9]* *//' | cut -d ' ' -f 1
+		else
+			echo ${matching_containers[0]}
+		fi
+	fi
+}
