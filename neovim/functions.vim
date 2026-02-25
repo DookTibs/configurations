@@ -763,3 +763,27 @@ function! CopyAndHighlight()
 	call feedkeys("n")
 
 endfunction
+
+" Slime special mongosh handling
+"
+" Once Mongo switched to Mongosh, slime stopped working correctly for me...any
+" multi-line regions sent weren't working right; single lines were. But that's
+" not very readable. Turns out we can customize Slime -- this function takes the
+" multiline region and strips out newlines and tabs - and that works! So now
+" I can have nice readable queries in the browser, and send them as one-liners to
+" mongosh.
+"
+" You need ":set filetype=mongo" for this to fire; or just work in a buffer with a
+" ".mongo" or ".mongosh" extension and we'll set that via AutoCmds.
+"
+" see https://github.com/jpalardy/vim-slime/blob/main/assets/doc/advanced.md#how-to-override-language-transformations
+au! BufRead,BufNewFile *.mongo setfiletype mongo
+au! BufRead,BufNewFile *.mongosh setfiletype mongo
+function SlimeOverride_EscapeText_mongo(text)
+  " can also run this through external scripts, but this is simple enough
+  " even I can get it to work with VimScript!
+  " return system("some-command-line-script", a:text)
+  let l:one_liner = substitute(a:text, "\n", "", "g")
+  let l:one_liner = substitute(l:one_liner, "\t", "", "g")
+  return l:one_liner . "\n"
+endfunction
