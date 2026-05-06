@@ -117,7 +117,8 @@ alias djp='source $HOME/development/shellScripts/special/djs.sh python'
 alias gohawc="cd ${HAWC_HOME}"
 # alias activatehawc="initConda && conda activate hawc2021"
 # alias activatehawc="workon hawc2021"
-alias activatehawc="workon hawc2025_py313 && declare -x SKIP_BMDS_TESTS=True"
+# alias activatehawc="workon hawc2025_py313 && declare -x SKIP_BMDS_TESTS=True"
+alias activatehawc="workon hawc2026_py314_editable && declare -x SKIP_BMDS_TESTS=True"
 # alias psql_hawc_local="psql -h localhost -p 5432 -d hawc_localdev -U hawc_user"
 alias psql_hawc_local="psql -h localhost -p 5432 -d hawc -U hawc"
 # alias psql_hawc_icfaws="psql -h hawc-internal-icf-dev-db.cotmuxecedep.us-east-1.rds.amazonaws.com -p 5432 -d icf_hawc_dev -U hawc_admin"
@@ -255,7 +256,7 @@ ssh_devweb() {
 alias tunnel_python="~/.virtualenvs/tunneler/bin/python ~/development/ssm_tunneler/ssm_tunneler.py -c ~/development/shellScripts/tunneler_cfg.json -o tunnel"
 
 # use like "ssm_remoter -e litstream_dev -r web1"
-alias ssm_remoter="~/.virtualenvs/tunneler/bin/python ~/development/ssm_tunneler/ssm_tunneler.py -c ~/development/shellScripts/tunneler_cfg.json -o session"
+alias ssm_remoter="echo '!!!!! HEY TOM: logs generally in /var/log/tomcat/catalina.out; exploded war generally in /usr/share/tomcat/webapps/ROOT; cloudformation logs in /var/log/cfn-init-cmd.log etc. !!!!!' && ~/.virtualenvs/tunneler/bin/python ~/development/ssm_tunneler/ssm_tunneler.py -c ~/development/shellScripts/tunneler_cfg.json -o session"
 
 # alias tunnel_litstream_sandbox_start="tunneler.py -e sandbox -o start_tunnel"
 # alias tunnel_litstream_sandbox_stop="tunneler.py -e sandbox -o stop_tunnel"
@@ -486,6 +487,66 @@ else
 	declare -x TOMCAT_HOME="$HOME/development/tools/tomcat/apache-tomcat-8.5.100/"
 fi
 
+
+
+
+
+# 2026 - updating:
+# Java version (Corretto 11 -> Corretto 25)
+# Tomcat (8.5 -> 11)
+# packages (Spring, etc.)
+#
+# put work in branch feature/capex26_ls614_balerion_aka_java_tomcat_etc_version_bumps, and use the below to specify versions for things
+if [ 1 -eq 1 ]; then
+	cd $DRAGON_HOME
+	current_dragon_branch=`git rev-parse --abbrev-ref HEAD`
+	cd -
+
+	# if [ "${current_dragon_branch}" == "feature/capex26_ls614_balerion_aka_java_tomcat_etc_version_bumps" ]; then
+	test -e /Users/38593/development/icf_dragon/src/main/java/com/icfi/dragon/web/model/dto/IsDtoAware.java
+	if [ $? -eq 0 ]; then
+		declare -x DRAGON_2026_UPGRADE="yes"
+	else
+		declare -x DRAGON_2026_UPGRADE="no"
+	fi
+
+	if [ "${DRAGON_2026_UPGRADE}" == "yes" ]; then
+		# we have this split while testing so we can switch back and forth easily. Eventually
+		# this should be our default.
+		echo "!!!!! SPLIT CONFIG (icf.bash); setting up for Corretto25 / Tomcat 11 / etc. 2026 upgrade work. On the '${current_dragon_branch}' branch."
+
+		declare -x TOMCAT_HOME="$HOME/development/tools/tomcat/apache-tomcat-11.0.18/"
+		# set DRAGON to use Corretto25 for Java
+		echo "corretto64-25.0.2" > $DRAGON_HOME/.java-version
+
+		# pom.xml in this branch targets v25
+	else
+		echo "----- SPLIT CONFIG (icf.bash); falling back to Java 11 / Tomcat 8.5 work. On the '${current_dragon_branch}' branch."
+		echo "( git checkout feature/capex26_ls614_balerion_aka_java_tomcat_etc_version_bumps ) and reopen the window if you want to work on the upgrade..."
+
+		declare -x TOMCAT_HOME="$HOME/development/tools/tomcat/apache-tomcat-8.5.100/"
+		
+		# set DRAGON to use Corretto11 for Java
+		echo "corretto64-11.0.23" > $DRAGON_HOME/.java-version
+	fi
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 alias gotomcat="cd $TOMCAT_HOME"
 
 # GCLOUD SDK - installed in ~/development/tools/google-cloud-sdk
@@ -519,6 +580,7 @@ alias javaHomeReset='declare -x JAVA_HOME=$(jenv javahome)'
 # alias jenv16="jenv global openjdk64-16.0.2 && javaHomeReset"
 alias jenv11="jenv global corretto64-11.0.23 && javaHomeReset"
 alias jenv22="jenv global openjdk64-22.0.1 && javaHomeReset"
+alias jenv25="jenv global corretto64-25.0.2 && javaHomeReset"
 
 declare -x LAPTOP_OLD="10.0.1.190"
 alias ssh_old_laptop="ssh $LAPTOP_OLD"
@@ -543,6 +605,7 @@ javaHomeReset
 # installed "homebrew install java11"
 # then did "jenv add /usr/local/opt/openjdk@11
 # then did "jenv add /Library/Java/JavaVirtualMachines/amazon-corretto-11.jdk/Contents/Home
+# then did "jenv add /Library/Java/JavaVirtualMachines/amazon-corretto-25.jdk/Contents/Home"
 # jenv global corretto64-11.0.12 # using this as global default on my new machine
 # etc.
 # 
@@ -625,7 +688,8 @@ if [ 1 -eq 1 ]; then
 	# export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
 	export PYENV_SHELL=bash
 	# see "brew --cellar pyenv" for base path, then poke around
-	source '/opt/homebrew/Cellar/pyenv/2.4.22/completions/pyenv.bash'
+	# source '/opt/homebrew/Cellar/pyenv/2.4.22/completions/pyenv.bash'
+	source '/opt/homebrew/Cellar/pyenv/2.6.26/completions/pyenv.bash'
 	eval "$(pyenv init -)"
 fi
 

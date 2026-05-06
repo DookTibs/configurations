@@ -201,3 +201,26 @@ gitDiffIndividualFileHelper () {
 # 2. Pick the subscription you want and use it in the command below.
 #
 #	az account set --subscription <subscription_id>
+
+# problem
+# "uv" installed a version of "just" here:
+# /Users/38593/.local/bin/just -> /Users/38593/.local/share/uv/tools/rust-just/bin/just
+#
+# but it's out of date and I can't seem to upgrade it via uv.
+#
+# I installed one using homebrew here:
+# /opt/homebrew/bin/just -> /opt/homebrew/Cellar/just/1.49.0/bin/just
+# but the uv version appears in the PATH first!
+#
+# Tried this to get homebrew at top of path:
+# declare -x PATH="/opt/homebrew/bin:/opt/homebrew/sbin:`echo $PATH | sed 's-:/opt/homebrew/s*bin--g'`"
+#
+# but didn't work, instead let's just link the one in ~/.local/bin to my homebrew version
+# e.g.
+#			cd ~/.local/bin/
+#			rm just
+#			ln -s /opt/homebrew/bin/just just
+#			ln -s /Users/38593/.local/share/uv/tools/rust-just/bin/just _just_from_uv
+
+
+alias jiggle="~/development/jiggler/jiggler.py"

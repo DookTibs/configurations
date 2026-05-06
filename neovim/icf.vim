@@ -85,7 +85,8 @@ elseif stridx(currentDir, "/Users/38593/development/hawc_project/hawc2025") == 0
 		"autocmd BufWritePost *.py echo "write pythong!" . "(" . getcwd() . ")"
 
 		" https://vimtricks.com/p/get-the-current-file-path/
-		echo "ruff/djhtml active...can also 'make lint' & 'make format' & 'make lint-html' (or 'pre-commit run --all-files') and run tests before pushing to Github"
+		" echo "ruff/djhtml active...can also 'make lint' & 'make format' & 'make lint-html' (or 'pre-commit run --all-files') and run tests before pushing to Github"
+		echo "ruff/djhtml active...can also 'poe lint' / 'poe format' (as-is, or suffixed '-py','-js'/'-html') and run tests before pushing to Github"
 		autocmd BufWritePost *.py silent !/Users/38593/development/configurations/neovim/hawc_ruff_helper.sh %:p
 		autocmd BufWritePost *.html silent !/Users/38593/development/configurations/neovim/hawc_djhtml_helper.sh %:p
 
