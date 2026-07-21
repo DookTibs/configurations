@@ -107,20 +107,30 @@ declare -x DOCTER_HOME="$HOME/development/docterOnline/"
 alias godocter="cd ${DOCTER_HOME}"
 # alias godocterVM="cd ${DOCTER_VM_HOME}"
 
-declare -x HAWC_HOME="$HOME/development/hawc_project/hawc2025/"
+declare -x HAWC_HOME_2025="$HOME/development/hawc_project/hawc2025/"
+declare -x HAWC_HOME_2026usepa="$HOME/development/hawc_project/hawc2026usepa/"
 
 alias dj='source $HOME/development/shellScripts/special/djs.sh'
 alias djj='source $HOME/development/shellScripts/special/djs.sh javascript'
 alias djt='source $HOME/development/shellScripts/special/djs.sh templates'
 alias djp='source $HOME/development/shellScripts/special/djs.sh python'
 
-alias gohawc="cd ${HAWC_HOME}"
+alias gohawc2025="cd ${HAWC_HOME_2025}"
+alias gohawc2026usepa="cd ${HAWC_HOME_2026usepa}"
+
 # alias activatehawc="initConda && conda activate hawc2021"
 # alias activatehawc="workon hawc2021"
 # alias activatehawc="workon hawc2025_py313 && declare -x SKIP_BMDS_TESTS=True"
-alias activatehawc="workon hawc2026_py314_editable && declare -x SKIP_BMDS_TESTS=True"
+alias activatehawc2025="workon hawc2026_py314_editable && declare -x SKIP_BMDS_TESTS=True"
+alias activatehawc2026usepa="workon hawc2026_py313_editable_usepa && declare -x SKIP_BMDS_TESTS=True"
 # alias psql_hawc_local="psql -h localhost -p 5432 -d hawc_localdev -U hawc_user"
-alias psql_hawc_local="psql -h localhost -p 5432 -d hawc -U hawc"
+
+# old shapiromatron HAWC
+alias psql_hawc2025_local="psql -h localhost -p 5432 -d hawc -U hawc"
+
+# new usepa-based db
+alias psql_hawc2026usepa_local="psql -h localhost -p 5432 -d hawc2026usepa -U hawc"
+
 # alias psql_hawc_icfaws="psql -h hawc-internal-icf-dev-db.cotmuxecedep.us-east-1.rds.amazonaws.com -p 5432 -d icf_hawc_dev -U hawc_admin"
 # alias psql_hawc_icfaws="psql -h ec2-3-228-3-19.compute-1.amazonaws.com -p 5432 -d hawc -U hawc"
 alias psql_hawc_icfaws="ssh -tt hawc_icfaws '/home/ubuntu/psql_to_hawc.sh'"
@@ -293,7 +303,17 @@ alias psql_litstream_prod="psql -h localhost -p 4432 -d litstream_prod -U litstr
 alias redis_litstream_prod="redis-cli -h localhost -p 9752"
 # alias mongo_litstream_prod="mongo --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
 # alias mongosh_litstream_prod="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
-alias mongo_litstream_prod="mongosh ${MONGO_PROD_PRIMARY_CONN}"
+alias mongo_litstream_prod2023="mongosh ${MONGO_PROD_PRIMARY_CONN}"
+
+# BALERION START
+alias tunnel_litstream_prod2026="tunnel_python -e litstream_prod2026"
+alias psql_litstream_prod2026="psql -h localhost -p 7432 -d litstream_prod2026 -U litstream_prod2026_admin"
+alias redis_litstream_prod2026="redis-cli -h localhost -p 7752"
+alias mongo_litstream_prod2026="mongosh ${MONGO_PROD2026_PRIMARY_CONN}"
+
+alias psql_litstream_prod2026_keepalive="watch -r -n 300 -x psql -h localhost -p 7432 -d litstream_prod2026 -U litstream_prod2026_admin -c 'SELECT NOW();'"
+alias redis_litstream_prod2026_keepalive="watch -r -n 300 -x redis-cli -h localhost -p 7752 -n 0 ACL WHOAMI"
+# BALERION END
 
 alias psql_litstream_prod_keepalive="watch -r -n 300 -x psql -h localhost -p 4432 -d litstream_prod -U litstream_prod_admin -c 'SELECT NOW();'"
 alias redis_litstream_prod_keepalive="watch -r -n 300 -x redis-cli -h localhost -p 9752 -n 0 ACL WHOAMI"
@@ -707,3 +727,7 @@ alias aws_whoami="aws sts get-caller-identity"
 
 alias q=~/bin/macos-q
 # echo "SPEEDCHECK-Z `date`"
+
+# alias claudecoderemote="echo 'Do not forget to SSO login. Once in, do \"source ~/startmeup.sh\".' && aws ssm start-session --target i-0fdbd272563b69604 --region us-east-2 --reason 'claudecode'"
+alias claudecoderemote="echo 'Do not forget to SSO login. Once in, do \"source ~/.bashrc\".' && aws ssm start-session --target i-0fdbd272563b69604 --region us-east-2 --reason 'claudecode'"
+

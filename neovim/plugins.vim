@@ -60,6 +60,9 @@ if (1 == 1)
 		Plug 'vim-scripts/taglist.vim'
 		Plug 'tpope/vim-unimpaired'
 
+		" May 2026 - trying Vim-Abolish while making new HAWC modules
+		Plug 'tpope/vim-abolish'
+
 		" do I still use these?
 		Plug 'mileszs/ack.vim'
 		Plug 'scrooloose/nerdtree'
@@ -72,12 +75,12 @@ if (1 == 1)
 		" 20240616 - new laptop and alternate CoPilot setup (integrating with cmp)
 		" https://github.com/zbirenbaum/copilot.lua
 		" https://tamerlan.dev/setting-up-copilot-in-neovim-with-sane-settings/
-		Plug 'zbirenbaum/copilot.lua'
-		Plug 'zbirenbaum/copilot-cmp'
+		" Plug 'zbirenbaum/copilot.lua'
+		" Plug 'zbirenbaum/copilot-cmp'
 
 		" Copilot Chat
-		Plug 'nvim-lua/plenary.nvim' " needed for async lua or something?
-		Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
+		" Plug 'nvim-lua/plenary.nvim' " needed for async lua or something?
+		" Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
 
 		" NONE OF THESE WORK RIGHT
 		"Plug 'gptlang/CopilotChat.nvim'
@@ -95,7 +98,9 @@ if (1 == 1)
 			" https://github.com/averms/black-nvim
 			" let g:python3_host_prog = "/Users/tfeiler/.virtualenvs/hawc2023/bin/python"
 			" Plug 'averms/black-nvim', {'do': ':UpdateRemotePlugins'}
-			Plug 'dense-analysis/ale'
+
+			" May 2026- disabling ALE
+			" Plug 'dense-analysis/ale'
 		endif
 
 		" July 2022 - try https://github.com/mfussenegger/nvim-dap for using jdb.

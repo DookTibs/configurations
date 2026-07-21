@@ -46,97 +46,115 @@ elseif stridx(currentDir, "/Users/38593/development/llr/llrsim") == 0
 		" autocmd BufWritePost *.py silent! !black -q --config /Users/38593/development/llr/llrsim/pyproject.toml %
 	" endif
 	map \ :call LlrSimDevUtil(1)<enter>
-elseif stridx(currentDir, "/Users/38593/development/hawc_project/hawc2025") == 0
-	" let &tags = "tags," . "/Users/38593/development/hawc_project/hawc2025/.hawcTags"
-	let &tags = "tags," . "/Users/38593/development/hawc_project/hawc2025/.hawcTags," . "/Users/38593/development/hawc_project/hawc2025/.hawcVirtualEnvInstalledPackagesTags"
+elseif stridx(currentDir, "/Users/38593/development/hawc_project") == 0
+	" as of 2026 we have several HAWC dev environments hanging off of here:
+	" ./hawc2025: old EPA, pointing at shapiromatron remote
+	" ./hawc2026usepa: new EPA after Andy left, pointing at USEPA remote
+	" ./hawc2026nih?: doesn't exist yet but we might add this, pointing at NIH's HAWC instance and maybe yet another repo!
+	" So this is an attempt at trying to make neovim/ruff/etc. configuration cleaner.
+	"
+	" Also required changes to helper scripts like regenHawcTags.sh, hawc_ruff_helper.sh, etc.
+	let legal_hawc_parent_dirs=['hawc2025', 'hawc2026usepa']
+	
+	let hawc_local_parent_dir = substitute(currentDir, "/Users/38593/development/hawc_project/", "", "")
+	let hawc_local_parent_dir = substitute(hawc_local_parent_dir, "/.*", "", "")
 
-
-	" 2023 - HAWC switched linters from flake8 -> ruff
-	" let hawcLinter="flake8"
-	let hawcLinter="ruff"
-
-	" CONSIDER MOVING SOME/ALL OF THIS OUT OF HAWC-SPECIFIC CONFIG AND INTO MAIN - ALE SEEMS MIGHTY USEFUL!!!
-	" right now I'm just using a small part of ALE; my attempts to get things like symbol definition/autocomplete
-	" were kind of annoying. Sticking with ctags for now; it's fast, good enough, and I understand it.
-	if executable(hawcLinter) == 0
-		echo "WARNING - cannot find " . hawcLinter . "/etc. on PATH; probably not in right venv."
-		echo "Consider quitting and run 'activatehawc' before re-opening Vim"
+	if index(legal_hawc_parent_dirs, hawc_local_parent_dir) == -1
+		echo "HAWC but not a legal parent dir (" . hawc_local_parent_dir . "); not doing neovim HAWC prep work..."
 	else
-		" see https://github.com/dense-analysis/ale/tree/master/doc
-		" let g:ale_linters = {'javascript': ['eslint'], 'python': [hawcLinter]}
-		" let g:ale_fixers = {'javascript': ['eslint'], 'python': ['black', hawcLinter]}
-		" this .flake8 file coems with the HAWC repo...
+		" hawc_local_parent_dir should be e.g. 'hawc2025', 'hawc2026usepa', etc.
+		" echo "reworked, LEGAL hawc_local_parent_dir is '" . hawc_local_parent_dir . "'"
+		
+		let &tags = "tags," . "/Users/38593/development/hawc_project/" . hawc_local_parent_dir . "/.hawcTags," . "/Users/38593/development/hawc_project/" . hawc_local_parent_dir . "/.hawcVirtualEnvInstalledPackagesTags"
+		
+		" 2023 - HAWC switched linters from flake8 -> ruff
+		" let hawcLinter="flake8"
+		let hawcLinter="ruff"
 
-		" 2023-10 changes
-		" I can't get Black working properly so let's go old school instead:
-		" (see plugins.vim; official psf/black doesn't work with neovim, and the alternate I found
-		" doesn't seem to work either)
-		" 1. disable it from ALE config...
-		"
-		" as of June 2024 we're not using ALE
-		" let g:ale_linters = {'javascript': ['eslint'], 'python': []}
-		" let g:ale_fixers = {'javascript': ['eslint'], 'python': []}
+		" CONSIDER MOVING SOME/ALL OF THIS OUT OF HAWC-SPECIFIC CONFIG AND INTO MAIN - ALE SEEMS MIGHTY USEFUL!!!
+		" right now I'm just using a small part of ALE; my attempts to get things like symbol definition/autocomplete
+		" were kind of annoying. Sticking with ctags for now; it's fast, good enough, and I understand it.
+		if executable(hawcLinter) == 0
+			echo "WARNING - cannot find " . hawcLinter . "/etc. on PATH; probably not in right venv."
+			echo "Consider quitting and run 'activatehawc202*' before re-opening Vim"
+		else
+			" see https://github.com/dense-analysis/ale/tree/master/doc
+			" let g:ale_linters = {'javascript': ['eslint'], 'python': [hawcLinter]}
+			" let g:ale_fixers = {'javascript': ['eslint'], 'python': ['black', hawcLinter]}
+			" this .flake8 file coems with the HAWC repo...
 
-		" echo "RUFF disabled; run 'make format' manually before committing/pushing..."
+			" 2023-10 changes
+			" I can't get Black working properly so let's go old school instead:
+			" (see plugins.vim; official psf/black doesn't work with neovim, and the alternate I found
+			" doesn't seem to work either)
+			" 1. disable it from ALE config...
+			"
+			" as of June 2024 we're not using ALE
+			" let g:ale_linters = {'javascript': ['eslint'], 'python': []}
+			" let g:ale_fixers = {'javascript': ['eslint'], 'python': []}
 
-		" echo "stuff runs on save...run 'cd $HAWC_HOME && \"make lint\" (to check) / \"make format\" (to fix)' before push to Github"
-		" autocmd BufWritePost *.py silent! !black -q --config /Users/38593/development/hawc_project/hawc/pyproject.toml %
-		" autocmd BufWritePost *.py silent! !ruff format %
-		"autocmd BufWritePost *.py echo "write pythong!" . "(" . getcwd() . ")"
+			" echo "RUFF disabled; run 'make format' manually before committing/pushing..."
 
-		" https://vimtricks.com/p/get-the-current-file-path/
-		" echo "ruff/djhtml active...can also 'make lint' & 'make format' & 'make lint-html' (or 'pre-commit run --all-files') and run tests before pushing to Github"
-		echo "ruff/djhtml active...can also 'poe lint' / 'poe format' (as-is, or suffixed '-py','-js'/'-html') and run tests before pushing to Github"
-		autocmd BufWritePost *.py silent !/Users/38593/development/configurations/neovim/hawc_ruff_helper.sh %:p
-		autocmd BufWritePost *.html silent !/Users/38593/development/configurations/neovim/hawc_djhtml_helper.sh %:p
+			" echo "stuff runs on save...run 'cd $HAWC_HOME && \"make lint\" (to check) / \"make format\" (to fix)' before push to Github"
+			" autocmd BufWritePost *.py silent! !black -q --config /Users/38593/development/hawc_project/hawc/pyproject.toml %
+			" autocmd BufWritePost *.py silent! !ruff format %
+			"autocmd BufWritePost *.py echo "write pythong!" . "(" . getcwd() . ")"
 
+			" https://vimtricks.com/p/get-the-current-file-path/
+			" echo "ruff/djhtml active...can also 'make lint' & 'make format' & 'make lint-html' (or 'pre-commit run --all-files') and run tests before pushing to Github"
+			echo "ruff/djhtml active...can also 'poe lint' / 'poe format' (as-is, or suffixed '-py','-js'/'-html') and run tests before pushing to Github"
+			" doesn't work - doesn't expand "hawc_local_parent_dir", just passes it as a literal string!
+			" autocmd BufWritePost *.py silent !/Users/38593/development/configurations/neovim/hawc_ruff_helper.sh hawc_local_parent_dir %:p
+			autocmd BufWritePost *.py silent exe "!/Users/38593/development/configurations/neovim/hawc_ruff_helper.sh " . hawc_local_parent_dir . " " . expand("%:p")
 
+			autocmd BufWritePost *.html silent exe "!/Users/38593/development/configurations/neovim/hawc_djhtml_helper.sh " . hawc_local_parent_dir . " " . expand("%:p")
 
-		if hawcLinter == "flake8"
-			let g:ale_python_flake8_options = '--config=/Users/38593/development/hawc_project/hawc2025/.flake8'
-		elseif hawcLinter == "ruff"
-			" let g:ale_python_ruff_options = '--fix --show-fixes --config=/Users/38593/development/hawc_project/hawc/pyproject.toml'
-			" let g:ale_python_ruff_options = '--fix'
+			if hawcLinter == "flake8"
+				" NB -- NEVER UPDATED FOR hawc_local_parent_dir AS WAS UNUSED AT THE TIME!!!!
+				let g:ale_python_flake8_options = '--config=/Users/38593/development/hawc_project/hawc2025/.flake8'
+			elseif hawcLinter == "ruff"
+				" let g:ale_python_ruff_options = '--fix --show-fixes --config=/Users/38593/development/hawc_project/hawc/pyproject.toml'
+				" let g:ale_python_ruff_options = '--fix'
+			endif
+			" let g:ale_linters_explicit = 1
+			
+			" I'd rather use the quickfix window; lets me use "unimpaired" to quickly move through any errors
+			let g:ale_set_loclist = 0
+			let g:ale_set_quickfix = 1
+			let g:ale_open_list = 1
+
+			" wheneer we save, ALE will attempt to fix simple errors (extra whitespace, etc.)
+			let g:ale_fix_on_save = 1
+			" can also use :ALEFix to fix code on demand
+			
+			" TODO - install a language server and try to get autocomplete / codehinting / etc. working with ALE!
+			" this gets us at least some autocompletion but I'm not really digging it...it pops up automatically, 
+			" is not working right with things I define, etc. I'd rather just use ctags for now.
+			if 1 == 0
+				let g:ale_linters = {'javascript': ['eslint'], 'python': ['pyls','flake8']}
+				let g:ale_completion_delay = 100
+				let g:ale_completion_enabled = 1
+			endif
 		endif
-		" let g:ale_linters_explicit = 1
 		
-		" I'd rather use the quickfix window; lets me use "unimpaired" to quickly move through any errors
-		let g:ale_set_loclist = 0
-		let g:ale_set_quickfix = 1
-		let g:ale_open_list = 1
-
-		" wheneer we save, ALE will attempt to fix simple errors (extra whitespace, etc.)
-		let g:ale_fix_on_save = 1
-		" can also use :ALEFix to fix code on demand
-		
-		" TODO - install a language server and try to get autocomplete / codehinting / etc. working with ALE!
-		" this gets us at least some autocompletion but I'm not really digging it...it pops up automatically, 
-		" is not working right with things I define, etc. I'd rather just use ctags for now.
+		" prior to discovering ALE I was using vim-flake8 plugin. Disabled for now.
 		if 1 == 0
-			let g:ale_linters = {'javascript': ['eslint'], 'python': ['pyls','flake8']}
-			let g:ale_completion_delay = 100
-			let g:ale_completion_enabled = 1
+			" when saving a python file, fire flake8 linter. Note you need the hawc2020 Conda
+			" environment running (like via 'activatehawc' alias).
+			autocmd BufWritePost *.py call flake8#Flake8()
+
+			" show markers in the gutter and in the exact position, where problems occur
+			let g:flake8_show_in_gutter=1
+			let g:flake8_show_in_file=1
+
+			" the vim-flake8 plugin doesn't respect project specific .flake8 files by default, we need to force it
+			let g:flake8_cmd="/Users/38593/opt/anaconda3/envs/hawc2020/bin/flake8\ --config=/Users/38593/development/hawc_project/hawc2025/.flake8"
+			
+			" I use tpope's "unimpaired" plugin; can use [q / ]q to go to prev/next error. [Q to go to the first.
+			" Then you can use spacebar+q / spacebar+Q to navigate quickly through the quickfix list
+			" nnoremap <silent> <buffer> <leader>q :cn<enter>
+			" nnoremap <silent> <buffer> <leader>Q :cp<enter>
 		endif
-	endif
-	
-	
-	" prior to discovering ALE I was using vim-flake8 plugin. Disabled for now.
-	if 1 == 0
-		" when saving a python file, fire flake8 linter. Note you need the hawc2020 Conda
-		" environment running (like via 'activatehawc' alias).
-		autocmd BufWritePost *.py call flake8#Flake8()
-
-		" show markers in the gutter and in the exact position, where problems occur
-		let g:flake8_show_in_gutter=1
-		let g:flake8_show_in_file=1
-
-		" the vim-flake8 plugin doesn't respect project specific .flake8 files by default, we need to force it
-		let g:flake8_cmd="/Users/38593/opt/anaconda3/envs/hawc2020/bin/flake8\ --config=/Users/38593/development/hawc_project/hawc2025/.flake8"
-		
-		" I use tpope's "unimpaired" plugin; can use [q / ]q to go to prev/next error. [Q to go to the first.
-		" Then you can use spacebar+q / spacebar+Q to navigate quickly through the quickfix list
-		" nnoremap <silent> <buffer> <leader>q :cn<enter>
-		" nnoremap <silent> <buffer> <leader>Q :cp<enter>
 	endif
 
 elseif stridx(currentDir, "/Users/38593/development/hawc/epahawc") == 0
