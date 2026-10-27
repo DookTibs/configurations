@@ -508,3 +508,42 @@ dockercont() {
 		fi
 	fi
 }
+
+glowy () {
+	if [ -z $1 ]; then
+		echo "No markdown file specified..."
+	else
+		clear
+
+		glow $1
+
+		echo "Hey Tom - press enter to continue...use plain 'glow' for more options"
+
+		read ignoreme
+	fi
+}
+
+
+# takes the output of the generic rgb2hex script -- and looks for it
+# in litstream (ls) colors definition!
+rgb2hexls () {
+	readable=`python ~/development/shellScripts/rgb2hex.py $1 $2 $3`
+	if [ $? -eq 0 ]; then
+		echo "$readable"
+		just_hex=`echo "$readable" | sed 's-.*hex --'`
+		matching_css_line=`grep -i "$just_hex" ~/development/icf_dragon/src/main/webapp/css2026/sass/_colors.scss`
+
+		if [ $? -eq 0 ]; then
+			echo "FOUND MATCHING CSS LINE(S):"
+			echo ""
+			echo "$matching_css_line"
+			echo ""
+			echo "-----"
+
+		else
+			echo "There does not appear to be a matching hex code in _colors.scss..."
+		fi
+	else
+		echo "$1 / $2 / $3 don't seem to be valid RGB codes..."
+	fi
+}

@@ -44,6 +44,16 @@ declare -x DRAGON_JAVA_HOME="${DRAGON_HOME}src/main/java/com/icfi/dragon/web/"
 declare -x DRAGON_CSS_HOME="${DRAGON_HOME}src/main/webapp/css/"
 declare -x DRAGON_TEMPLATES_HOME="${DRAGON_HOME}src/main/webapp/templates/"
 declare -x DRAGON_JS_HOME="${DRAGON_HOME}src/main/webapp/js/"
+
+# proxy for "are we on a UI/UX upgrade branch; eventually this should be permanent...
+if [ -e "${DRAGON_HOME}src/main/webapp/js2026/litstream/pages/dashboard.js" ]; then
+	declare -x DRAGON_CSS_HOME="${DRAGON_HOME}src/main/webapp/css2026/"
+	declare -x DRAGON_TEMPLATES_HOME="${DRAGON_HOME}src/main/webapp/templates2026/"
+	declare -x DRAGON_JS_HOME="${DRAGON_HOME}src/main/webapp/js2026/"
+fi
+
+
+
 alias godragon="cd $DRAGON_HOME"
 alias godragonjava="cd ${DRAGON_JAVA_HOME}"
 alias godragontemplates="cd ${DRAGON_TEMPLATES_HOME}"
@@ -109,6 +119,7 @@ alias godocter="cd ${DOCTER_HOME}"
 
 declare -x HAWC_HOME_2025="$HOME/development/hawc_project/hawc2025/"
 declare -x HAWC_HOME_2026usepa="$HOME/development/hawc_project/hawc2026usepa/"
+declare -x HAWC_HOME_2026dtt="$HOME/development/hawc_project/hawc2026dtt/"
 
 alias dj='source $HOME/development/shellScripts/special/djs.sh'
 alias djj='source $HOME/development/shellScripts/special/djs.sh javascript'
@@ -117,12 +128,14 @@ alias djp='source $HOME/development/shellScripts/special/djs.sh python'
 
 alias gohawc2025="cd ${HAWC_HOME_2025}"
 alias gohawc2026usepa="cd ${HAWC_HOME_2026usepa}"
+alias gohawc2026dtt="cd ${HAWC_HOME_2026dtt}"
 
 # alias activatehawc="initConda && conda activate hawc2021"
 # alias activatehawc="workon hawc2021"
 # alias activatehawc="workon hawc2025_py313 && declare -x SKIP_BMDS_TESTS=True"
 alias activatehawc2025="workon hawc2026_py314_editable && declare -x SKIP_BMDS_TESTS=True"
 alias activatehawc2026usepa="workon hawc2026_py313_editable_usepa && declare -x SKIP_BMDS_TESTS=True"
+alias activatehawc2026dtt="workon hawc2026_py314_editable_dtt && declare -x SKIP_BMDS_TESTS=True"
 # alias psql_hawc_local="psql -h localhost -p 5432 -d hawc_localdev -U hawc_user"
 
 # old shapiromatron HAWC
@@ -130,6 +143,9 @@ alias psql_hawc2025_local="psql -h localhost -p 5432 -d hawc -U hawc"
 
 # new usepa-based db
 alias psql_hawc2026usepa_local="psql -h localhost -p 5432 -d hawc2026usepa -U hawc"
+
+# DTT db
+alias psql_hawc2026dtt_local="psql -h localhost -p 5432 -d hawc2026dtt -U hawc"
 
 # alias psql_hawc_icfaws="psql -h hawc-internal-icf-dev-db.cotmuxecedep.us-east-1.rds.amazonaws.com -p 5432 -d icf_hawc_dev -U hawc_admin"
 # alias psql_hawc_icfaws="psql -h ec2-3-228-3-19.compute-1.amazonaws.com -p 5432 -d hawc -U hawc"
@@ -298,25 +314,25 @@ alias redis_litstream_dev_keepalive="watch -r -n 300 -x redis-cli -h localhost -
 
 # alias tunnel_litstream_prod_start="tunneler.py -e prod -o start_tunnel"
 # alias tunnel_litstream_prod_stop="tunneler.py -e prod -o stop_tunnel"
-alias tunnel_litstream_prod="tunnel_python -e litstream_prod"
-alias psql_litstream_prod="psql -h localhost -p 4432 -d litstream_prod -U litstream_prod_admin"
-alias redis_litstream_prod="redis-cli -h localhost -p 9752"
-# alias mongo_litstream_prod="mongo --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
-# alias mongosh_litstream_prod="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_PROD_PRIMARY_CONN}"
-alias mongo_litstream_prod2023="mongosh ${MONGO_PROD_PRIMARY_CONN}"
+alias tunnel_litstream_prodold="tunnel_python -e litstream_prodOLD"
+alias psql_litstream_prodold="psql -h localhost -p 7432 -d litstream_prod -U litstream_prod_admin"
+alias redis_litstream_prodold="redis-cli -h localhost -p 7752"
+# alias mongo_litstream_prodOLD="mongo --tls --tlsAllowInvalidCertificates ${MONGO_PRODOLD_PRIMARY_CONN}"
+# alias mongosh_litstream_prodOLD="mongosh --tls --tlsAllowInvalidCertificates ${MONGO_PRODOLD_PRIMARY_CONN}"
+alias psql_litstream_prodold_keepalive="watch -r -n 300 -x psql -h localhost -p 7432 -d litstream_prod -U litstream_prod_admin -c 'SELECT NOW();'"
+alias redis_litstream_prodold_keepalive="watch -r -n 300 -x redis-cli -h localhost -p 7752 -n 0 ACL WHOAMI"
+alias mongo_litstream_prodOLD="mongosh ${MONGO_PRODOLD_PRIMARY_CONN}"
 
 # BALERION START
-alias tunnel_litstream_prod2026="tunnel_python -e litstream_prod2026"
-alias psql_litstream_prod2026="psql -h localhost -p 7432 -d litstream_prod2026 -U litstream_prod2026_admin"
-alias redis_litstream_prod2026="redis-cli -h localhost -p 7752"
-alias mongo_litstream_prod2026="mongosh ${MONGO_PROD2026_PRIMARY_CONN}"
+alias tunnel_litstream_prod="tunnel_python -e litstream_prod"
+alias psql_litstream_prod="psql -h localhost -p 4432 -d litstream_prod2026 -U litstream_prod2026_admin"
+alias redis_litstream_prod="redis-cli -h localhost -p 9752"
+alias mongo_litstream_prod="mongosh ${MONGO_PROD_PRIMARY_CONN}"
 
-alias psql_litstream_prod2026_keepalive="watch -r -n 300 -x psql -h localhost -p 7432 -d litstream_prod2026 -U litstream_prod2026_admin -c 'SELECT NOW();'"
-alias redis_litstream_prod2026_keepalive="watch -r -n 300 -x redis-cli -h localhost -p 7752 -n 0 ACL WHOAMI"
+alias psql_litstream_prod_keepalive="watch -r -n 300 -x psql -h localhost -p 4432 -d litstream_prod2026 -U litstream_prod2026_admin -c 'SELECT NOW();'"
+alias redis_litstream_prod_keepalive="watch -r -n 300 -x redis-cli -h localhost -p 9752 -n 0 ACL WHOAMI"
 # BALERION END
 
-alias psql_litstream_prod_keepalive="watch -r -n 300 -x psql -h localhost -p 4432 -d litstream_prod -U litstream_prod_admin -c 'SELECT NOW();'"
-alias redis_litstream_prod_keepalive="watch -r -n 300 -x redis-cli -h localhost -p 9752 -n 0 ACL WHOAMI"
 
 # alias tunnel_litstream_unittest_start="tunneler.py -e unittest -o start_tunnel"
 # alias tunnel_litstream_unittest_stop="tunneler.py -e unittest -o stop_tunnel"

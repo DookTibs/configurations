@@ -224,3 +224,9 @@ gitDiffIndividualFileHelper () {
 
 
 alias jiggle="~/development/jiggler/jiggler.py"
+
+# alias glowy="clear && glow $1 && read ignoreme"
+
+
+alias rgb2hex="python ~/development/shellScripts/rgb2hex.py"
+

@@ -54,7 +54,7 @@ elseif stridx(currentDir, "/Users/38593/development/hawc_project") == 0
 	" So this is an attempt at trying to make neovim/ruff/etc. configuration cleaner.
 	"
 	" Also required changes to helper scripts like regenHawcTags.sh, hawc_ruff_helper.sh, etc.
-	let legal_hawc_parent_dirs=['hawc2025', 'hawc2026usepa']
+	let legal_hawc_parent_dirs=['hawc2025', 'hawc2026usepa', 'hawc2026dtt']
 	
 	let hawc_local_parent_dir = substitute(currentDir, "/Users/38593/development/hawc_project/", "", "")
 	let hawc_local_parent_dir = substitute(hawc_local_parent_dir, "/.*", "", "")
@@ -368,9 +368,13 @@ function! DragonOnlineDevUtil(userInteraction)
 	if stridx(currentDir, "/Users/38593/development/icf_dragon/src/main/webapp/css") == 0
 		if (a:userInteraction == 1)
 			" let copyCmd = 'cp /Users/38593/development/icf_dragon/src/main/webapp/css/main.css /Users/38593/development/tools/tomcat/apache-tomcat-9.0.0.M18/webapps/ROOT/css/'
-			let copyCmd = 'cp /Users/38593/development/icf_dragon/src/main/webapp/css/main.css $TOMCAT_HOME/webapps/ROOT/css/'
+			" let copyCmd = 'cp /Users/38593/development/icf_dragon/src/main/webapp/css/main.css $TOMCAT_HOME/webapps/ROOT/css/'
+			" call system(copyCmd)
+			" echo "copied main.css to TOMCAT_HOME (did you have gulp running?)..."
+
+			let copyCmd = 'cp /Users/38593/development/icf_dragon/src/main/webapp/css2026/main.css $TOMCAT_HOME/webapps/ROOT/css2026/'
 			call system(copyCmd)
-			echo "copied main.css to TOMCAT_HOME (did you have gulp running?)..."
+			echo "copied main.css (2026!) to TOMCAT_HOME (did you have gulp running?)..."
 		endif
 	elseif stridx(currentDir, "/Users/38593/development/icf_dragon/src/main/webapp") == 0
 		" let fullPath = currentDir . "/" . @%
